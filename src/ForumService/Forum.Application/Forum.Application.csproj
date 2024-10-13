@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Answers\Commands\" />
+    <Folder Include="Answers\Queries\" />
+    <Folder Include="Questions\Commands\" />
+    <Folder Include="Questions\Queries\" />
+    <Folder Include="Shared\" />
+  </ItemGroup>
+
 </Project>
