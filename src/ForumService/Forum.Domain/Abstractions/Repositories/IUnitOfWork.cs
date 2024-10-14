@@ -5,5 +5,5 @@ public interface IUnitOfWork
 
     IAnswerRepository AnswerRepository { get; }
 
-    public Task SaveChangesAsync();
+    public Task SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -9,9 +9,17 @@
   <ItemGroup>
     <Folder Include="Answers\Commands\" />
     <Folder Include="Answers\Queries\" />
-    <Folder Include="Questions\Commands\" />
-    <Folder Include="Questions\Queries\" />
-    <Folder Include="Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Forum.Domain\Forum.Domain.csproj" />
   </ItemGroup>
 
 </Project>
