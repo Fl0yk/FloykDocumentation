@@ -17,7 +17,7 @@ public class CloseQuestionCommandHandler : IRequestHandler<CloseQuestionCommand,
 
     public async Task<Guid> Handle(CloseQuestionCommand request, CancellationToken cancellationToken)
     {
-        Question? dbQuestion = await _questionRepository.FirstOrDefaultAsync(q => q.Id == request.Id);
+        Question? dbQuestion = await _questionRepository.FirstOrDefaultByIdAsync(request.Id);
 
         if (dbQuestion is null)
             throw new NotFoundException($"Question with id {request.Id} not found");

@@ -20,7 +20,7 @@ public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionComman
 
     public async Task<Guid> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
     {
-        Question? dbQuestion = await _questionRepository.FirstOrDefaultAsync(q => q.Id == request.Id, cancellationToken);
+        Question? dbQuestion = await _questionRepository.FirstOrDefaultByIdAsync(request.Id, cancellationToken);
 
         if (dbQuestion is null)
             throw new NotFoundException($"Question with id {request.Id} not found");

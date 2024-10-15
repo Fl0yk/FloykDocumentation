@@ -12,4 +12,6 @@ public class QuestionDTO
     public bool IsClosed { get; set; }
 
     public DateTime DateOfCreation { get; set; }
+
+    public IEnumerable<InnerAnswerDTO> Answers { get; set; } = [];
 }

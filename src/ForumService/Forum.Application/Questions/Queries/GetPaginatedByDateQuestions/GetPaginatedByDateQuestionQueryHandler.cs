@@ -19,7 +19,8 @@ public class GetPaginatedByDateQuestionQueryHandler
         _mapper = mapper;
     }
 
-    public async Task<PaginatedResult<QuestionDTO>> Handle(GetPaginatedByDateQuestionsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<QuestionDTO>> Handle(GetPaginatedByDateQuestionsQuery request, 
+                                                        CancellationToken cancellationToken)
     {
         IQueryable<Question> questionQuery = await _questionRepository
                                                         .GetQuestionsByDateAsync(cancellationToken);

@@ -1,4 +1,5 @@
 ﻿namespace Forum.Domain.Entities;
+
 public class Question
 {
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -9,9 +10,9 @@ public class Question
 
     public string Description { get; set; } = string.Empty;
 
-    public bool IsClosed { get; set; }
+    public bool IsClosed { get; set; } = false;
 
-    public DateTime DateOfCreation { get; set; }
+    public DateTime DateOfCreation { get; set; } = DateTime.UtcNow.Date;
 
-    ICollection<Answer> Answers { get; set; } = [];
+    public ICollection<Answer> Answers { get; set; } = [];
 }

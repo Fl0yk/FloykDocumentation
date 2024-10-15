@@ -17,7 +17,7 @@ public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionComman
 
     public async Task Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
     {
-        Question? dbQuestion = await _questionRepository.FirstOrDefaultAsync(q =>  q.Id == request.Id, cancellationToken);
+        Question? dbQuestion = await _questionRepository.FirstOrDefaultByIdAsync(request.Id, cancellationToken);
 
         if (dbQuestion is null)
             throw new NotFoundException($"Question with id {request.Id} not found");
