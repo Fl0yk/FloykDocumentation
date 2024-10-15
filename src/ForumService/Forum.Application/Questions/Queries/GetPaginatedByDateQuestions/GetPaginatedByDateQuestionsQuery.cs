@@ -1,5 +1,5 @@
-﻿using Forum.Application.Shared.Models.DTOs;
-using Forum.Domain.Models;
+﻿using Forum.Application.Shared.Models;
+using Forum.Application.Shared.Models.DTOs;
 using MediatR;
 
 namespace Forum.Application.Questions.Queries.GetPaginatedByDateQuestions;

@@ -1,4 +1,5 @@
-﻿namespace Forum.Domain.Models;
+﻿namespace Forum.Application.Shared.Models;
+
 public class PaginatedResult<T>
 {
     public required IEnumerable<T> Items { get; init; }

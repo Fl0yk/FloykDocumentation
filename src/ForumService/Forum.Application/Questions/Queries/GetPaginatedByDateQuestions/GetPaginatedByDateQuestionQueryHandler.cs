@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using Forum.Application.Shared.Exceptions;
+using Forum.Application.Shared.Models;
 using Forum.Application.Shared.Models.DTOs;
 using Forum.Domain.Abstractions.Repositories;
 using Forum.Domain.Entities;
-using Forum.Domain.Models;
 using MediatR;
 
 namespace Forum.Application.Questions.Queries.GetPaginatedByDateQuestions;
@@ -20,15 +21,25 @@ public class GetPaginatedByDateQuestionQueryHandler
 
     public async Task<PaginatedResult<QuestionDTO>> Handle(GetPaginatedByDateQuestionsQuery request, CancellationToken cancellationToken)
     {
-        PaginatedResult<Question> paginatedQuestion = await _questionRepository
-                                                                .GetPaginetedByDateQuestionsAsync(
-                                                                                request.PageSize, 
-                                                                                request.PageNumber, 
-                                                                                cancellationToken);
+        IQueryable<Question> questionQuery = await _questionRepository
+                                                        .GetQuestionsByDateAsync(cancellationToken);
 
-        if (!paginatedQuestion.Items.Any())
-            throw new InvalidOperationException("Get an empty questions page");
+        Question[] questions = questionQuery
+            .Skip(request.PageNumber * request.PageSize)
+            .Take(request.PageSize).ToArray();
 
-        return _mapper.Map<PaginatedResult<QuestionDTO>>(paginatedQuestion);
+        if (questions.Length == 0)
+            throw new BadRequestException("Get an empty questions page");
+
+        int count = questionQuery.Count();
+
+        return new()
+        {
+            Items = _mapper.Map<IEnumerable<QuestionDTO>>(questions),
+            TotalPages = (int)Math.Ceiling((double)count / request.PageSize),
+            CurrentPage = request.PageNumber,
+            PageSize = request.PageSize
+        };
+
     }
 }
