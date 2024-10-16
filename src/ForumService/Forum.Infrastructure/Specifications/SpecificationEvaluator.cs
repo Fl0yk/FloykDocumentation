@@ -25,6 +25,10 @@ public static class SpecificationEvaluator
         {
             querable = querable.OrderBy(specification.OrderByExpression);
         }
+        else if (specification.OrderByDescendingExpression is not null)
+        {
+            querable = querable.OrderByDescending(specification.OrderByDescendingExpression);
+        }
 
         return querable;
     }

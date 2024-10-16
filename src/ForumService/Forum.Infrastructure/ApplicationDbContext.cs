@@ -1,4 +1,5 @@
 ﻿using Forum.Domain.Entities;
+using Forum.Infrastructure.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Infrastructure;
@@ -13,12 +14,13 @@ public class ApplicationDbContext : DbContext
         : base(options)
     {
         //Database.EnsureDeleted();
-        Database.EnsureCreated();
+        //Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        modelBuilder.ApplyConfiguration(new AnswerEntityTypeConfigurator());
+        modelBuilder.ApplyConfiguration(new  QuestionEntityTypeConfigurator());
 
         base.OnModelCreating(modelBuilder);
     }

@@ -16,6 +16,8 @@ public abstract class Specification<TEntity>
 
     public Expression<Func<TEntity, object>>? OrderByExpression { get; private set; }
 
+    public Expression<Func<TEntity, object>>? OrderByDescendingExpression { get; private set; }
+
     protected void AddInclude(Expression<Func<TEntity, object>> include)
     {
         IncludeExpressions.Add(include);
@@ -24,5 +26,10 @@ public abstract class Specification<TEntity>
     protected void AddOrderBy(Expression<Func<TEntity, object>> orderByExpression)
     {
         OrderByExpression = orderByExpression;
+    }
+
+    protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDescendingExpression)
+    {
+        OrderByDescendingExpression = orderByDescendingExpression;
     }
 }

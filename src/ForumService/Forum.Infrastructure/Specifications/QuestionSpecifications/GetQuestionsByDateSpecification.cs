@@ -8,6 +8,6 @@ public class GetQuestionsByDateSpecification
     public GetQuestionsByDateSpecification()
         : base(null)
     {
-        AddOrderBy(question => question.DateOfCreation);
+        AddOrderByDescending(question => question.DateOfCreation);
     }
 }

@@ -13,6 +13,12 @@ public class AnswerEntityTypeConfigurator : IEntityTypeConfiguration<Answer>
         builder.Property(a => a.Text).IsRequired();
         builder.Property(a => a.TimeOfCreation).IsRequired();
 
+        builder
+            .HasOne(a => a.Parent)
+            .WithMany(a => a.Childrens)
+            .HasForeignKey(a => a.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.SeedAnswer();
     }
 }

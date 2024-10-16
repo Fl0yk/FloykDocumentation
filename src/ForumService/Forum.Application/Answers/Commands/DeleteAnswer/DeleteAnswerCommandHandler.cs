@@ -17,7 +17,7 @@ public class DeleteAnswerCommandHandler : IRequestHandler<DeleteAnswerCommand>
 
     public async Task Handle(DeleteAnswerCommand request, CancellationToken cancellationToken)
     {
-        Answer? dbAnswer = await _answerRepository.FirstOrDefaultByIdAsync(request.Id, cancellationToken);
+        Answer? dbAnswer = await _answerRepository.FirstOrDefaultByIdWithChildrenAsync(request.Id, cancellationToken);
 
         if (dbAnswer is null)
             throw new NotFoundException($"Answer with id {request.Id} not found");

@@ -26,7 +26,7 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, G
         if (dbAnswer is null)
             throw new NotFoundException($"Answer with id {request.Id} is not found");
 
-        _mapper.Map(dbAnswer, request);
+        _mapper.Map(request, dbAnswer);
 
         Guid id = await _answerRepository.UpdateAnswerAsync(dbAnswer, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

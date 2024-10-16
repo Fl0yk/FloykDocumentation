@@ -29,7 +29,7 @@ public class GetQuestionByIdQueryHandler : IRequestHandler<GetQuestionByIdQuery,
         if (dbQuestion is null)
             throw new NotFoundException($"Question with id {request.Id} not found");
 
-        dbQuestion.Answers.Order(new AnswerComparator());
+        dbQuestion.Answers = [.. dbQuestion.Answers.Order(new AnswerComparator())];
 
         return _mapper.Map<QuestionDTO>(dbQuestion);
     }

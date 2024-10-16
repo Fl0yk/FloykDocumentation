@@ -73,7 +73,7 @@ public class QuestionsController : ControllerBase
         return Ok(questionId);
     }
 
-    [HttpDelete("/{id:guid}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteQuestion(
                             [FromRoute] Guid id,
                             CancellationToken cancellationToken = default)

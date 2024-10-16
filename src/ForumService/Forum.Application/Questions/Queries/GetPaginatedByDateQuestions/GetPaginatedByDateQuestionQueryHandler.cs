@@ -26,7 +26,7 @@ public class GetPaginatedByDateQuestionQueryHandler
                                                         .GetQuestionsByDateAsync(cancellationToken);
 
         Question[] questions = questionQuery
-            .Skip(request.PageNumber * request.PageSize)
+            .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize).ToArray();
 
         if (questions.Length == 0)

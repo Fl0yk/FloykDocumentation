@@ -18,6 +18,9 @@ public class AnswerRepository : IAnswerRepository
     public Task<Answer?> FirstOrDefaultByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
                             ApplySpecification(new GetAnswerByIdSpecification(id)).FirstOrDefaultAsync(cancellationToken);
 
+    public Task<Answer?> FirstOrDefaultByIdWithChildrenAsync(Guid id, CancellationToken cancellationToken = default) =>
+                            ApplySpecification(new GetAnswerByIdWithChildrenSpecification(id)).FirstOrDefaultAsync(cancellationToken);
+
     public Task<Guid> CreateAswerAsync(Answer answer, CancellationToken cancellationToken)
     {
         _answers.Add(answer);
@@ -27,7 +30,7 @@ public class AnswerRepository : IAnswerRepository
 
     public Task DeleteAnswerAsync(Answer answer, CancellationToken cancellationToken)
     {
-        _answers.Remove(answer);
+        DeleteNode(answer);
 
         return Task.CompletedTask;
     }
@@ -42,5 +45,16 @@ public class AnswerRepository : IAnswerRepository
     private IQueryable<Answer> ApplySpecification(Specification<Answer> specification)
     {
         return SpecificationEvaluator.GetQuery(_answers, specification);
+    }
+
+    private void DeleteNode(Answer node)
+    {
+        if (node.Childrens.Any())
+        {
+            foreach (var child in node.Childrens) 
+                DeleteNode(child);
+        }
+
+        _answers.Remove(node);
     }
 }

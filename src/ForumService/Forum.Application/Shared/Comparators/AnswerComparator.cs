@@ -9,16 +9,16 @@ public class AnswerComparator : IComparer<Answer>
             return 0;
         
         if (x is null)
-            return -1;
+            return 1;
 
         if (y is null)
-            return 1;
+            return -1;
 
         if (x.ParentId is null && y.ParentId is not null)
-            return 1;
+            return -1;
 
         if (y.ParentId is null && x.ParentId is not null)
-            return -1;
+            return 1;
 
         return x.TimeOfCreation.CompareTo(y.TimeOfCreation);
     }

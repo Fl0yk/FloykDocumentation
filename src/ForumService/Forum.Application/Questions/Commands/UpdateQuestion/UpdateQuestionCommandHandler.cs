@@ -25,6 +25,9 @@ public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionComman
         if (dbQuestion is null)
             throw new NotFoundException($"Question with id {request.Id} not found");
 
+        if (dbQuestion.IsClosed)
+            throw new BadRequestException($"Question with id {request.Id} closed");
+
         _mapper.Map(request, dbQuestion);
 
         Guid id = await _questionRepository.UpdateQuestionAsync(dbQuestion, cancellationToken);
