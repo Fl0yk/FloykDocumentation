@@ -9,5 +9,6 @@ public class GetAnswerByIdWithChildrenSpecification
         : base (answer => answer.Id == answerId)
     {
         AddInclude(answer => answer.Childrens);
+        AddInclude(answer => answer.Question!);
     }
 }

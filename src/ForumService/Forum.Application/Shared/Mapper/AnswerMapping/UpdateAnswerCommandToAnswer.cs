@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Forum.Application.Answers.Commands.UpdateAnswer;
+using Forum.Application.UseCase.Command.Answer;
 using Forum.Domain.Entities;
 
 namespace Forum.Application.Shared.Mapper.AnswerMapping;

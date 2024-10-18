@@ -6,6 +6,8 @@ public class Answer
 
     public Guid QuestionId { get; set; }
 
+    public Question? Question { get; set; }
+
     public Guid? ParentId { get; set; }
 
     public Answer? Parent { get; set; }

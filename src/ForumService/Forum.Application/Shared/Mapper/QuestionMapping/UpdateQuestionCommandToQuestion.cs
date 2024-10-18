@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Forum.Application.Questions.Commands.UpdateQuestion;
+using Forum.Application.UseCase.Command.Question;
 using Forum.Domain.Entities;
 
 namespace Forum.Application.Shared.Mapper.QuestionMapping;

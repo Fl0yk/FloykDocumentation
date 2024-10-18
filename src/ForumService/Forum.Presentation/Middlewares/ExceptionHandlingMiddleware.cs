@@ -44,24 +44,6 @@ public class ExceptionHandlingMiddleware
 
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
-        catch (ValidationException ex)
-        {
-            var problemDetails = new ProblemDetails
-            {
-                Status = StatusCodes.Status400BadRequest,
-                Title = "Validation error",
-                Detail = "One or more validation errors has occurred"
-            };
-
-            if (ex.ValidationErrors is not null)
-            {
-                problemDetails.Extensions["errors"] = ex.ValidationErrors;
-            }
-
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            await context.Response.WriteAsJsonAsync(problemDetails);
-        }
         catch(Exception)
         {
             var problemDetails = new ProblemDetails

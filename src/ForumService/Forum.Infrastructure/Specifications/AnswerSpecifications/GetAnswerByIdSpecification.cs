@@ -8,6 +8,6 @@ public class GetAnswerByIdSpecification
     public GetAnswerByIdSpecification(Guid answerId)
         : base(answer => answer.Id == answerId)
     {
-
+        AddInclude(answer => answer.Question!);
     }
 }

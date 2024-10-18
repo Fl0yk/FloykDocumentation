@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Forum.Application.UseCase.Command.Answer;
-using Forum.Domain.Entities;
+using Forum.Presentation.Shared.Models.DTOs.Answer;
 
-namespace Forum.Application.Shared.Mapper.AnswerMapping;
-public class CreateAnswerCommandToAnswer : Profile
+namespace Forum.Presentation.Shared.Mapper.AnswerMapping;
+
+public class AddAnswerRequestToCommand : Profile
 {
-    public CreateAnswerCommandToAnswer()
+    public AddAnswerRequestToCommand()
     {
-        CreateMap<AddAnswerCommand, Answer>()
+        CreateMap<AddAnswerRequestDTO, AddAnswerCommand>()
             .ForMember(d => d.ParentId, opt => opt.MapFrom(src => src.ParentId))
             .ForMember(d => d.QuestionId, opt => opt.MapFrom(src => src.QuestionId))
             .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text));

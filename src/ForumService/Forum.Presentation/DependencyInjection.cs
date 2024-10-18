@@ -1,11 +1,19 @@
-﻿namespace Forum.Presentation
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using System.Reflection;
+
+namespace Forum.Presentation
 {
     public static class DependencyInjection
     {
         public static IServiceCollection AddPresentetionServices(this IServiceCollection services)
         {
             services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            services.AddFluentValidationAutoValidation();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
@@ -18,6 +26,8 @@
                         .AllowAnyHeader();
                 });
             });
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }

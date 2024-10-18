@@ -1,11 +1,9 @@
-﻿using Forum.Application.Questions.Commands.CloseQuestion;
-using Forum.Application.Questions.Commands.CreateQuestion;
-using Forum.Application.Questions.Commands.DeleteQuestion;
-using Forum.Application.Questions.Commands.UpdateQuestion;
-using Forum.Application.Questions.Queries.GetPaginatedByDateQuestions;
-using Forum.Application.Questions.Queries.GetQuestionById;
+﻿using AutoMapper;
 using Forum.Application.Shared.Models;
 using Forum.Application.Shared.Models.DTOs;
+using Forum.Application.UseCase.Command.Question;
+using Forum.Application.UseCase.Query.Question;
+using Forum.Presentation.Shared.Models.DTOs.Question;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,20 +14,19 @@ namespace Forum.Presentation.Controllers;
 public class QuestionsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public QuestionsController(IMediator mediator)
+    public QuestionsController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetPaginatedByDateQuestions(
-                            [FromQuery] int pageNumber = 1, 
-                            [FromQuery] int pageSize = 3, 
-                            CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetPaginatedByDateQuestions([FromQuery] GetPaginatedByDateQuestionsRequestDTO paginatedRequest , CancellationToken cancellationToken = default)
     {
         PaginatedResult<QuestionDTO> response = await _mediator.Send(
-                    new GetPaginatedByDateQuestionsQuery(pageSize, pageNumber), 
+                    _mapper.Map<GetPaginatedByDateQuestionsQuery>(paginatedRequest), 
                     cancellationToken);
 
         return Ok(response);
@@ -44,19 +41,17 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateQuestion(
-                            [FromBody] CreateQuestionCommand createQuestionCommand,
-                            CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequestDTO createQuestionRequest, CancellationToken cancellationToken = default)
     {
-        Guid questionId = await _mediator.Send(createQuestionCommand, cancellationToken);
+        Guid questionId = await _mediator.Send(
+            _mapper.Map<CreateQuestionCommand>(createQuestionRequest), 
+            cancellationToken);
 
         return Ok(questionId);
     }
 
     [HttpPost("close/{id:guid}")]
-    public async Task<IActionResult> CloseQuestion(
-                            [FromRoute] Guid id, 
-                            CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CloseQuestion([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         Guid questionId = await _mediator.Send(new CloseQuestionCommand(id), cancellationToken);
 
@@ -64,19 +59,17 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateQuestion(
-                            [FromBody] UpdateQuestionCommand updateQuestionCommand,
-                            CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionRequestDTO updateQuestionRequest, CancellationToken cancellationToken = default)
     {
-        Guid questionId = await _mediator.Send(updateQuestionCommand, cancellationToken);
+        Guid questionId = await _mediator.Send(
+            _mapper.Map<UpdateQuestionCommand>(updateQuestionRequest), 
+            cancellationToken);
 
         return Ok(questionId);
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteQuestion(
-                            [FromRoute] Guid id,
-                            CancellationToken cancellationToken = default)
+    public async Task<IActionResult> DeleteQuestion([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         await _mediator.Send(new DeleteQuestionCommand(id));
 

@@ -18,7 +18,7 @@ public class QuestionEntityTypeConfigurator : IEntityTypeConfiguration<Question>
 
         builder
             .HasMany(q => q.Answers)
-            .WithOne()
+            .WithOne(a => a.Question)
             .HasForeignKey(a => a.QuestionId)
             .OnDelete(DeleteBehavior.Cascade);
 
