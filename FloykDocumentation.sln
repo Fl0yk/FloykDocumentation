@@ -9,31 +9,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{36457B72
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityService", "IdentityService", "{452DFECB-7C0A-49CC-9D8C-11D5D1645A6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.DataAccess", "src\IdentityService\Identity.DataAccess\Identity.DataAccess.csproj", "{5323D3C4-3402-42E4-9BB1-B90E70BBD7DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.DataAccess", "src\IdentityService\Identity.DataAccess\Identity.DataAccess.csproj", "{5323D3C4-3402-42E4-9BB1-B90E70BBD7DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "src\IdentityService\Identity.Application\Identity.Application.csproj", "{BFF7B778-4B4A-4E0E-B6C7-18514149DA25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Application", "src\IdentityService\Identity.Application\Identity.Application.csproj", "{BFF7B778-4B4A-4E0E-B6C7-18514149DA25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ArticleSevice", "ArticleSevice", "{8F20FBDD-9D11-4C18-974A-D63CB2707993}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Article.Domain", "src\ArticleService\Article.Domain\Article.Domain.csproj", "{158C23B2-A35F-4F5A-B036-4066E6DCA01B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Article.Domain", "src\ArticleService\Article.Domain\Article.Domain.csproj", "{158C23B2-A35F-4F5A-B036-4066E6DCA01B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Article.Application", "src\ArticleService\Article.Application\Article.Application.csproj", "{73F591D5-5C39-4F23-B132-030141936071}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Article.Application", "src\ArticleService\Article.Application\Article.Application.csproj", "{73F591D5-5C39-4F23-B132-030141936071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Article.Infrastructure", "src\ArticleService\Article.Infrastructure\Article.Infrastructure.csproj", "{4B4368FD-E2CE-4E35-987E-D729968C1C04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Article.Infrastructure", "src\ArticleService\Article.Infrastructure\Article.Infrastructure.csproj", "{4B4368FD-E2CE-4E35-987E-D729968C1C04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Article.Presentation", "src\ArticleService\Article.Presentation\Article.Presentation.csproj", "{8787076C-827B-4230-87A3-49A1918B52DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Article.Presentation", "src\ArticleService\Article.Presentation\Article.Presentation.csproj", "{8787076C-827B-4230-87A3-49A1918B52DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ForumService", "ForumService", "{A318EFFA-9C56-4647-B835-38F3B2B30804}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.Domain", "src\ForumService\Forum.Domain\Forum.Domain.csproj", "{8E840867-3487-4A2F-9D3A-A55179930F9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forum.Domain", "src\ForumService\Forum.Domain\Forum.Domain.csproj", "{8E840867-3487-4A2F-9D3A-A55179930F9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.Application", "src\ForumService\Forum.Application\Forum.Application.csproj", "{09C8EF60-ACB3-45F1-92BE-5A2DAADCB259}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forum.Application", "src\ForumService\Forum.Application\Forum.Application.csproj", "{09C8EF60-ACB3-45F1-92BE-5A2DAADCB259}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.Infrastructure", "src\ForumService\Forum.Infrastructure\Forum.Infrastructure.csproj", "{FA863C48-C4EB-45E7-B4EA-20A8DD5005AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forum.Infrastructure", "src\ForumService\Forum.Infrastructure\Forum.Infrastructure.csproj", "{FA863C48-C4EB-45E7-B4EA-20A8DD5005AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forum.Presentation", "src\ForumService\Forum.Presentation\Forum.Presentation.csproj", "{16585710-0B20-4431-B586-F92271EE0C9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forum.Presentation", "src\ForumService\Forum.Presentation\Forum.Presentation.csproj", "{16585710-0B20-4431-B586-F92271EE0C9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Presentation", "src\IdentityService\Identity.Presentation\Identity.Presentation.csproj", "{6CDE1E8B-766C-436E-9640-4B8F4E972052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Presentation", "src\IdentityService\Identity.Presentation\Identity.Presentation.csproj", "{6CDE1E8B-766C-436E-9640-4B8F4E972052}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
