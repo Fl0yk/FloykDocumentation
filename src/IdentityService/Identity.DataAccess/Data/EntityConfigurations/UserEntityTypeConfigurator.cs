@@ -1,6 +1,20 @@
-﻿namespace Identity.DataAccess.Data.EntityConfigurations;
+﻿using Identity.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-//TO DO
-internal class UserEntityTypeConfigurator
+namespace Identity.DataAccess.Data.EntityConfigurations;
+
+internal class UserEntityTypeConfigurator : IEntityTypeConfiguration<User>
 {
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.HasMany(u => u.SavedArticles)
+            .WithOne(a => a.User)
+            .HasForeignKey(a => a.UserId);
+
+        builder.HasMany(u => u.Followings)
+            .WithOne(f => f.Author)
+            .HasForeignKey(f => f.AuthorId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }
