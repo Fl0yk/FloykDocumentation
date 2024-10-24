@@ -8,6 +8,6 @@ public interface IUserRepository
 
     public Task<User?> FirstOrDefaultFullUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    public Task<IQueryable<User>> GetAllAsync(CancellationToken cancellationToken = default);
+    public Task<User?> FirstOrDefaultFullUserByNameAsync(string username, CancellationToken cancellationToken = default);
 
 }

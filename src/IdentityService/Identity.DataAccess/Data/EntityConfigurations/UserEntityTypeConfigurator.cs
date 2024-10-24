@@ -1,4 +1,5 @@
-﻿using Identity.DataAccess.Entities;
+﻿using Identity.DataAccess.Data.Seeders;
+using Identity.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,8 +14,10 @@ internal class UserEntityTypeConfigurator : IEntityTypeConfiguration<User>
             .HasForeignKey(a => a.UserId);
 
         builder.HasMany(u => u.Followings)
-            .WithOne(f => f.Author)
-            .HasForeignKey(f => f.AuthorId)
+            .WithOne()
+            .HasForeignKey(f => f.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.SeedUsers();
     }
 }

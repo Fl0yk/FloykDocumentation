@@ -18,6 +18,6 @@ public class RegistrationUserRequestDTOValidator : AbstractValidator<Registratio
         RuleFor(r => r.Password)
             .NotEmpty()
             .Length(8, 128)
-            .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])$");
+            .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
     }
 }

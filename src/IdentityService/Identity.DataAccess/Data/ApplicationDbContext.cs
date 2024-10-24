@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Identity.DataAccess.Data.EntityConfigurations;
+using Identity.DataAccess.Data.Seeders;
 using Identity.DataAccess.Entities;
-using Identity.DataAccess.Data.EntityConfigurations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DataAccess.Data;
 
@@ -23,5 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, 
         builder.ApplyConfiguration(new RoleEntityTypeConfigurator());
         builder.ApplyConfiguration(new SavedArticleEntityTypeConfigurator());
         builder.ApplyConfiguration(new UserEntityTypeConfigurator());
+
+        builder.Entity<IdentityUserRole<Guid>>().SeedUserRole();
     }
 }

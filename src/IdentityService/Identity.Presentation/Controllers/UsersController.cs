@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Services;
+using Identity.Application.Services.Requests.UserRequests;
 using Identity.Application.Shared.Models.DTOs;
+using Identity.Presentation.Shared.Models.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +21,11 @@ public class UsersController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet]
+    [HttpGet("{username}")]
     [Authorize]
-    public async Task<IActionResult> GetUser(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserByName([FromRoute] string username, CancellationToken cancellationToken)
     {
-        UserDTO result = await _userService.GetUserByIdAsync(cancellationToken);
+        UserDTO result = await _userService.GetUserByNameAsync(username, cancellationToken);
 
         return Ok(result);
     }
@@ -42,6 +44,26 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UnfollowPost([FromRoute] Guid authorId, CancellationToken cancellationToken)
     {
         await _userService.UnfollowAsync(authorId, cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> UpdateUserPost([FromBody] UpdateUserRequestDTO request, CancellationToken cancellationToken)
+    {
+        await _userService.UpdateUserAsync(
+            _mapper.Map<UpdateUserRequest>(request), 
+            cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpPost("avatar")]
+    [Authorize]
+    public async Task<IActionResult> UpdateAvatarAsync(IFormFile formFile, CancellationToken cancellationToken)
+    {
+        await _userService.UpdateAvatarAsync(new(formFile.FileName, formFile.OpenReadStream()), cancellationToken);
 
         return NoContent();
     }

@@ -14,6 +14,6 @@ public class LoginUserRequestDTOValidator : AbstractValidator<LoginUserRequest>
         RuleFor(r => r.Password)
             .NotEmpty()
             .Length(8, 128)
-            .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])$");
+            .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
     }
 }

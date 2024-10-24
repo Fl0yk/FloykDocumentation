@@ -7,5 +7,5 @@ public class Following
 
     public Guid UserId { get; set; }
 
-    public DateTime DateOfFollow { get; set; }
+    public DateTime DateOfFollow { get; set; } = DateTime.UtcNow;
 }

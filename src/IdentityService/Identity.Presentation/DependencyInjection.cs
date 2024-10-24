@@ -1,14 +1,15 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Identity.Application.Abstractions.Managers;
 using Identity.Application.Abstractions.Providers;
 using Identity.DataAccess.Data;
 using Identity.DataAccess.Entities;
+using Identity.Presentation.Managers;
 using Identity.Presentation.Options.Models;
 using Identity.Presentation.Options.Setups;
 using Identity.Presentation.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -22,7 +23,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
-        
+        services.AddScoped<IImageManager, ImageManager>();
 
         services.ConfigureOptions();
 

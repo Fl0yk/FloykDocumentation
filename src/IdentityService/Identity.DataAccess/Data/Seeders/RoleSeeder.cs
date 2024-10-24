@@ -17,7 +17,7 @@ public static class RoleSeeder
             new(Roles.Admin)
             {
                 Id = Guid.Parse("ba74ad5b-68da-4823-9a77-a424b56dac04"),
-                NormalizedName= Roles.Admin.ToUpper()
+                NormalizedName = Roles.Admin.ToUpper()
             }]);
     }
 }

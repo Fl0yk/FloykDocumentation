@@ -9,5 +9,11 @@ public class FollowingEntityTypeConfigurator : IEntityTypeConfiguration<Followin
     public void Configure(EntityTypeBuilder<Following> builder)
     {
         builder.HasKey(f => new { f.UserId, f.AuthorId });
+
+        builder
+            .HasOne(f => f.Author)
+            .WithMany()
+            .HasForeignKey(f => f.AuthorId)
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

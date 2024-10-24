@@ -5,7 +5,7 @@ namespace Identity.Application.Abstractions.Services;
 
 public interface IUserService
 {
-    public Task<UserDTO> GetUserByIdAsync(CancellationToken cancellationToken = default);
+    public Task<UserDTO> GetUserByNameAsync(string username, CancellationToken cancellationToken = default);
 
     public Task FollowAsync(Guid authorId, CancellationToken cancellationToken = default);
 
