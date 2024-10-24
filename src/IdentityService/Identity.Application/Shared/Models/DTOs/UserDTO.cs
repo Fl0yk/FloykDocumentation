@@ -1,4 +1,5 @@
 ﻿namespace Identity.Application.Shared.Models.DTOs;
+
 public class UserDTO
 {
     public Guid Id { get; set; }

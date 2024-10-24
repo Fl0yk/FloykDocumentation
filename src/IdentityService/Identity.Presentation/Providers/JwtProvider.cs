@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Identity.Presentation.Implementatios.Providers;
+namespace Identity.Presentation.Providers;
 
 public class JwtProvider : IJwtProvider
 {

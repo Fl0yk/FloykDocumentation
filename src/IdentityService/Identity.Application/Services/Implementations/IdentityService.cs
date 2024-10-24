@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Providers;
 using Identity.Application.Abstractions.Services;
+using Identity.Application.Services.Requests.IdentityRequests;
 using Identity.Application.Shared.Exceptions;
 using Identity.Application.Shared.Models;
-using Identity.Application.Shared.Models.Requests;
 using Identity.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Identity.Application.Implementations.Services;
+namespace Identity.Application.Services.Implementations;
 
 public class IdentityService : IIdentityService
 {
@@ -18,10 +18,10 @@ public class IdentityService : IIdentityService
     private readonly IJwtProvider _jwtProvider;
     private readonly ICurrentUserProvider _currentUserProvider;
 
-    public IdentityService(UserManager<User> userManager, 
-                            SignInManager<User> signInManager, 
-                            RoleManager<IdentityRole<Guid>> roleManager, 
-                            IMapper mapper, IJwtProvider jwtProvider, 
+    public IdentityService(UserManager<User> userManager,
+                            SignInManager<User> signInManager,
+                            RoleManager<IdentityRole<Guid>> roleManager,
+                            IMapper mapper, IJwtProvider jwtProvider,
                             ICurrentUserProvider currentUserProvider)
     {
         _userManager = userManager;
@@ -32,7 +32,7 @@ public class IdentityService : IIdentityService
         _currentUserProvider = currentUserProvider;
     }
 
-    public async Task RegistrationAsync(RegistrationUserRequest registrationRequest, CancellationToken cancellationToken)
+    public async Task<AccessToken> RegistrationAsync(RegistrationUserRequest registrationRequest, CancellationToken cancellationToken)
     {
         var dbUser = await _userManager.FindByEmailAsync(registrationRequest.Email);
 
@@ -40,7 +40,7 @@ public class IdentityService : IIdentityService
         {
             throw new BadRequestException($"User with email {registrationRequest.Email} already exists");
         }
-
+        
         dbUser = await _userManager.FindByNameAsync(registrationRequest.Username);
 
         if (dbUser is not null)
@@ -56,6 +56,21 @@ public class IdentityService : IIdentityService
         {
             throw new BadRequestException(string.Join('\n', result.Errors));
         }
+
+        var principals = await _signInManager.CreateUserPrincipalAsync(user);
+
+        string jwt = _jwtProvider.GenerateJwt(user, principals.Claims);
+
+        UpdateRefresh(user);
+
+        await _userManager.UpdateAsync(user);
+
+        return new()
+        {
+            JwtToken = jwt,
+            RefreshToken = user.RefreshToken!,
+            RefreshTokenExpiry = user.RefreshTokenExpiry!.Value,
+        };
     }
 
     public async Task<AccessToken> LoginAsync(LoginUserRequest loginRequest, CancellationToken cancellationToken = default)
@@ -106,8 +121,8 @@ public class IdentityService : IIdentityService
             throw new BadRequestException("Invalid user for refresh");
         }
 
-        if (dbUser.RefreshTokenExpiry is null 
-            || dbUser.RefreshTokenExpiry <= DateTime.UtcNow 
+        if (dbUser.RefreshTokenExpiry is null
+            || dbUser.RefreshTokenExpiry <= DateTime.UtcNow
             || dbUser.RefreshToken is null)
         {
             throw new BadRequestException("Invalid refresh token");
@@ -136,8 +151,6 @@ public class IdentityService : IIdentityService
         }
 
         var role = await _roleManager.FindByNameAsync(userToRoleRequest.RoleName);
-
-        var roles = _roleManager.Roles.ToArray();
 
         if (role is null)
         {

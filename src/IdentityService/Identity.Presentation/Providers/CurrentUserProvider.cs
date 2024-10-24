@@ -2,7 +2,7 @@
 using Identity.Application.Shared.Models;
 using System.Security.Claims;
 
-namespace Identity.Presentation.Implementatios.Providers;
+namespace Identity.Presentation.Providers;
 
 public class CurrentUserProvider : ICurrentUserProvider
 {

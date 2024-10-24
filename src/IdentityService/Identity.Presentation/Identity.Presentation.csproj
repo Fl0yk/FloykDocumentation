@@ -16,4 +16,11 @@
     <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Shared\Mapper\UserMapping\" />
+    <Folder Include="Shared\Models\DTOs\User\" />
+    <Folder Include="Shared\Validators\User\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

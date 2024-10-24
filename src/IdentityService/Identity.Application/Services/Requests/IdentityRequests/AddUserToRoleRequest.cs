@@ -1,3 +1,3 @@
-﻿namespace Identity.Application.Shared.Models.Requests;
+﻿namespace Identity.Application.Services.Requests.IdentityRequests;
 
 public record class AddUserToRoleRequest(string Username, string RoleName);
