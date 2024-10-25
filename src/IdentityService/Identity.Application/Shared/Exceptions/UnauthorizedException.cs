@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Shared.Exceptions;
 
-class UnauthorizedException : Exception
+public class UnauthorizedException : Exception
 {
     public UnauthorizedException() : base() { }
 

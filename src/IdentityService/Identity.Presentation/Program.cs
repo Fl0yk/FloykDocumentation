@@ -1,6 +1,7 @@
 using Identity.Application;
 using Identity.DataAccess;
 using Identity.Presentation;
+using Identity.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
