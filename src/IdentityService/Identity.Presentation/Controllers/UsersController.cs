@@ -39,7 +39,7 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("unfollow/{authorId:guid}")]
+    [HttpDelete("unfollow/{authorId:guid}")]
     [Authorize]
     public async Task<IActionResult> UnfollowPost([FromRoute] Guid authorId, CancellationToken cancellationToken)
     {
@@ -48,22 +48,38 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost]
+    [HttpPut]
     [Authorize]
     public async Task<IActionResult> UpdateUserPost([FromBody] UpdateUserRequestDTO request, CancellationToken cancellationToken)
     {
-        await _userService.UpdateUserAsync(
-            _mapper.Map<UpdateUserRequest>(request), 
-            cancellationToken);
+        await _userService.UpdateUserAsync(_mapper.Map<UpdateUserRequest>(request), cancellationToken);
 
         return NoContent();
     }
 
-    [HttpPost("avatar")]
+    [HttpPut("avatar")]
     [Authorize]
     public async Task<IActionResult> UpdateAvatarAsync(IFormFile formFile, CancellationToken cancellationToken)
     {
         await _userService.UpdateAvatarAsync(new(formFile.FileName, formFile.OpenReadStream()), cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpPost("saved-article")]
+    [Authorize]
+    public async Task<IActionResult> SaveArticlePost([FromBody] SaveArticleRequestDTO request, CancellationToken cancellationToken)
+    {
+        await _userService.SaveArticleAsync(_mapper.Map<SaveArticleRequest>(request), cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpDelete("saved-article/{articleId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteSavedArticle([FromRoute] Guid articleId, CancellationToken cancellationToke)
+    {
+        await _userService.RemoveSavedArticleAsync(articleId, cancellationToke);
 
         return NoContent();
     }

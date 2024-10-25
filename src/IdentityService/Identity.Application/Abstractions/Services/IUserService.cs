@@ -11,9 +11,9 @@ public interface IUserService
 
     public Task UnfollowAsync(Guid authorId, CancellationToken cancellationToken = default);
 
-    public Task AddSavedArticleAsync(ArticleRequest articleRequest, CancellationToken cancellationToken = default);
+    public Task SaveArticleAsync(SaveArticleRequest articleRequest, CancellationToken cancellationToken = default);
 
-    public Task RemoveSavedArticleAsync(ArticleRequest articleRequest, CancellationToken cancellationToken = default);
+    public Task RemoveSavedArticleAsync(Guid articleId, CancellationToken cancellationToken = default);
 
     public Task UpdateAvatarAsync(UpdateAvatarRequest updateAvatarRequest, CancellationToken cancellationToken = default);
 
