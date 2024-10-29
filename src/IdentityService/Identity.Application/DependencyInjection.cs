@@ -1,5 +1,5 @@
 ﻿using Identity.Application.Abstractions.Services;
-using Identity.Application.Services.Implementations;
+using Identity.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 

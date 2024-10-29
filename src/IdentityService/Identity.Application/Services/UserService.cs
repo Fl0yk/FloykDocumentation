@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Identity.Application.Abstractions.Managers;
 using Identity.Application.Abstractions.Providers;
 using Identity.Application.Abstractions.Services;
-using Identity.Application.Services.Requests.UserRequests;
 using Identity.Application.Shared.Exceptions;
-using Identity.Application.Shared.Mapper.UserMapping;
 using Identity.Application.Shared.Models.DTOs;
+using Identity.Application.Shared.Models.Requests.UserRequests;
 using Identity.DataAccess.Entities;
 using Identity.DataAccess.Repositories.Abstractions;
 
-namespace Identity.Application.Services.Implementations;
+namespace Identity.Application.Services;
 
 public class UserService : IUserService
 {
@@ -20,9 +18,9 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
 
     public UserService(
-        IUnitOfWork unitOfWork, 
-        IImageManager imageManager, 
-        ICurrentUserProvider currentUserProvider, 
+        IUnitOfWork unitOfWork,
+        IImageManager imageManager,
+        ICurrentUserProvider currentUserProvider,
         IMapper mapper)
     {
         _unitOfWork = unitOfWork;
@@ -40,11 +38,11 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(user.Id, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException("Invalid token");
+            throw new NotFoundException($"User with id {user.Id} was not found");
         }
 
         if (dbUser.SavedArticles.Any(a => a.ArticleId == articleRequest.Id))
@@ -68,18 +66,18 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(user.Id, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException("Invalid token");
+            throw new NotFoundException($"User with id {user.Id} was not found");
         }
 
-        var dbAuthor = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(authorId, cancellationToken);
+        var dbAuthor = await _unitOfWork.UserRepository.GetUserByIdAsync(authorId, cancellationToken);
 
         if (dbAuthor is null)
         {
-            throw new BadRequestException($"Author with id {authorId} was not found");
+            throw new NotFoundException($"Author with id {authorId} was not found");
         }
 
         if (dbUser.Followings.Any(f => f.AuthorId == authorId))
@@ -94,11 +92,11 @@ public class UserService : IUserService
 
     public async Task<UserDTO> GetUserByNameAsync(string username, CancellationToken cancellationToken = default)
     {
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByNameAsync(username, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByNameAsync(username, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException($"User with username {username} was not found");
+            throw new NotFoundException($"User with username {username} was not found");
         }
 
         return _mapper.Map<UserDTO>(dbUser);
@@ -113,11 +111,11 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(user.Id, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException("Invalid token");
+            throw new NotFoundException($"User with id {user.Id} was not found");
         }
 
         var savedArticle = dbUser.SavedArticles.FirstOrDefault(a => a.ArticleId == articleId);
@@ -143,18 +141,18 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(user.Id, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException("Invalid token");
+            throw new NotFoundException($"User with id {user.Id} was not found");
         }
 
-        var dbAuthor = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(authorId, cancellationToken);
+        var dbAuthor = await _unitOfWork.UserRepository.GetUserByIdAsync(authorId, cancellationToken);
 
         if (dbAuthor is null)
         {
-            throw new BadRequestException($"Author with id {authorId} was not found");
+            throw new NotFoundException($"Author with id {authorId} was not found");
         }
 
         var follow = dbUser.Followings.FirstOrDefault(f => f.AuthorId == authorId);
@@ -178,11 +176,11 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(user.Id, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException("Invalid token");
+            throw new NotFoundException($"User with id {user.Id} was not found");
         }
 
         string imagePath = await _imageManager.SaveImageAsync(updateAvatarRequest.ImageStream, updateAvatarRequest.FileName, dbUser.Avatar, cancellationToken);
@@ -203,14 +201,14 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
-        var dbUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByIdAsync(user.Id, cancellationToken);
+        var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
-            throw new BadRequestException("Invalid token");
+            throw new NotFoundException($"User with id {user.Id} was not found");
         }
 
-        var anotherUser = await _unitOfWork.UserRepository.FirstOrDefaultFullUserByNameAsync(updateUserRequest.NewUsername, cancellationToken);
+        var anotherUser = await _unitOfWork.UserRepository.GetUserByNameAsync(updateUserRequest.NewUsername, cancellationToken);
 
         if (anotherUser is not null)
         {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Services;
-using Identity.Application.Services.Requests.IdentityRequests;
 using Identity.Application.Shared.Models;
+using Identity.Application.Shared.Models.Requests.IdentityRequests;
 using Identity.DataAccess.Constants;
 using Identity.Presentation.Shared.Models.DTOs.Identity;
 using Microsoft.AspNetCore.Authorization;

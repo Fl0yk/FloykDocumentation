@@ -14,7 +14,7 @@ public class UserRepository : IUserRepository
         _users = context.Users;
     }
 
-    public Task<User?> FirstOrDefaultFullUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<User?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return _users
             .Include(u => u.Followings).ThenInclude(f => f.Author)
@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
-    public Task<User?> FirstOrDefaultFullUserByNameAsync(string username, CancellationToken cancellationToken = default)
+    public Task<User?> GetUserByNameAsync(string username, CancellationToken cancellationToken = default)
     {
         return _users
             .Include(u => u.Followings).ThenInclude(f => f.Author)

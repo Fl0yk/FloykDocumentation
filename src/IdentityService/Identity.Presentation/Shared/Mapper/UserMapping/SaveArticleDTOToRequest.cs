@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Identity.Application.Services.Requests.UserRequests;
+using Identity.Application.Shared.Models.Requests.UserRequests;
 using Identity.Presentation.Shared.Models.DTOs.User;
 
 namespace Identity.Presentation.Shared.Mapper.UserMapping;

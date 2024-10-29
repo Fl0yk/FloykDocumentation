@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Services;
-using Identity.Application.Services.Requests.UserRequests;
 using Identity.Application.Shared.Models.DTOs;
+using Identity.Application.Shared.Models.Requests.UserRequests;
 using Identity.Presentation.Shared.Models.DTOs.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +61,13 @@ public class UsersController : ControllerBase
     [Authorize]
     public async Task<IActionResult> UpdateAvatarAsync(IFormFile formFile, CancellationToken cancellationToken)
     {
-        await _userService.UpdateAvatarAsync(new(formFile.FileName, formFile.OpenReadStream()), cancellationToken);
+        UpdateAvatarRequest request = new()
+        {
+            ImageStream = formFile.OpenReadStream(),
+            FileName = formFile.FileName,
+        };
+
+        await _userService.UpdateAvatarAsync(request, cancellationToken);
 
         return NoContent();
     }

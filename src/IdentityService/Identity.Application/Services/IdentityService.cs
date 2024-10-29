@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Identity.Application.Abstractions.Providers;
 using Identity.Application.Abstractions.Services;
-using Identity.Application.Services.Requests.IdentityRequests;
 using Identity.Application.Shared.Exceptions;
 using Identity.Application.Shared.Models;
+using Identity.Application.Shared.Models.Requests.IdentityRequests;
 using Identity.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Identity.Application.Services.Implementations;
+namespace Identity.Application.Services;
 
 public class IdentityService : IIdentityService
 {
@@ -40,7 +40,7 @@ public class IdentityService : IIdentityService
         {
             throw new BadRequestException($"User with email {registrationRequest.Email} already exists");
         }
-        
+
         dbUser = await _userManager.FindByNameAsync(registrationRequest.Username);
 
         if (dbUser is not null)

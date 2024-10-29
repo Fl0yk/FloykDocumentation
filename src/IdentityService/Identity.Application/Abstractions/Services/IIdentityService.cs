@@ -1,5 +1,5 @@
-﻿using Identity.Application.Services.Requests.IdentityRequests;
-using Identity.Application.Shared.Models;
+﻿using Identity.Application.Shared.Models;
+using Identity.Application.Shared.Models.Requests.IdentityRequests;
 
 namespace Identity.Application.Abstractions.Services;
 

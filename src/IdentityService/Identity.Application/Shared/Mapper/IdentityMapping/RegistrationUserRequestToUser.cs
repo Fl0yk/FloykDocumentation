@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Identity.Application.Services.Requests.IdentityRequests;
+using Identity.Application.Shared.Models.Requests.IdentityRequests;
 using Identity.DataAccess.Entities;
 
 namespace Identity.Application.Shared.Mapper.Identity;
