@@ -1,8 +1,11 @@
-﻿namespace Article.Infrastructure.Shared.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Article.Infrastructure.Shared.Models;
 
 public class ArticleDb
 {
-    public Guid Id { get; set; }
+    [BsonId]
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string Title { get; set; } = string.Empty;
 
@@ -10,11 +13,12 @@ public class ArticleDb
 
     public bool IsPublished { get; set; }
 
+    public DateTime DateOfPublication { get; set; } = DateTime.UtcNow.Date;
+
     public Guid CategoryId { get; set; }
 
+    [BsonIgnore]
     public CategoryDb? Category { get; set; }
-
-    public ICollection<Guid> BlockIds { get; set; } = [];
 
     public ICollection<BlockDb> Blocks { get; set; } = [];
 }

@@ -1,8 +1,11 @@
-﻿namespace Article.Infrastructure.Shared.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Article.Infrastructure.Shared.Models;
 
 public class BlockDb
 {
-    public Guid Id { get; set; }
+    [BsonId]
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string Text { get; set; } = string.Empty;
 

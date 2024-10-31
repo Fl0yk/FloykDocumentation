@@ -10,6 +10,8 @@ public class Article
 
     public bool IsPublished { get; set; }
 
+    public DateTime DateOfPublication { get; set; }
+
     public required Category Category { get; set; }
 
     public ICollection<Block> Blocks { get; set; } = [];
