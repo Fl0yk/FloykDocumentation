@@ -7,6 +7,8 @@ public static class BlockType
     public const string Text = "text";
 
     public const string Code = "code";
+
+    public static string[] Types = [Title, Text, Code];
 }
 //    public static BlockType Title => new(1, "title");
 

@@ -14,8 +14,8 @@ public class CategoryDb
     [BsonIgnore]
     public CategoryDb? Parent { get; set; }
 
-    public ICollection<Guid> ArticleIds { get; set; } = [];
+    //public ICollection<Guid> ArticleIds { get; set; } = [];
 
-    [BsonIgnore]
-    public ICollection<ArticleDb> Articles { get; set; } = [];
+    //[BsonIgnore]
+    //public ICollection<ArticleDb> Articles { get; set; } = [];
 }

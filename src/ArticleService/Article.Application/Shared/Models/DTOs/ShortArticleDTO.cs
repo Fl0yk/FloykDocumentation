@@ -1,6 +1,6 @@
-﻿namespace Article.Domain.Entities;
+﻿namespace Article.Application.Shared.Models.DTOs;
 
-public class Article
+public class ShortArticleDTO
 {
     public Guid Id { get; set; }
 
@@ -11,10 +11,4 @@ public class Article
     public bool IsPublished { get; set; }
 
     public DateTime DateOfPublication { get; set; }
-
-    public Guid CategoryId { get; set; }
-
-    public Category? Category { get; set; }
-
-    public ICollection<Block> Blocks { get; set; } = [];
 }

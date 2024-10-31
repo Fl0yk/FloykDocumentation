@@ -1,6 +1,4 @@
-﻿using Article.Domain.Models;
-
-using ArticleModel = Article.Domain.Entities.Article;
+﻿using ArticleModel = Article.Domain.Entities.Article;
 
 namespace Article.Domain.Abstractions.Repositories;
 
