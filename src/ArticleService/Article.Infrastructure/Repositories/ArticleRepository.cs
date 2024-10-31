@@ -7,7 +7,7 @@ using ArticleModel = Article.Domain.Entities.Article;
 
 namespace Article.Infrastructure.Repositories;
 
-public class ArticleRepository :  IArticleRepository
+public class ArticleRepository : IArticleRepository
 {
     private readonly IMongoCollection<ArticleDb> _articles;
     private readonly IMongoCollection<CategoryDb> _categories;
@@ -47,6 +47,11 @@ public class ArticleRepository :  IArticleRepository
         return _mapper.Map<ArticleModel>(dbArticle);
     }
 
+    public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _articles.CountDocumentsAsync("{}", cancellationToken: cancellationToken);
+    }
+
     public async Task<IEnumerable<ArticleModel>> GetPaginatedByCategoryWithoutBlocksArticles(Guid categoryId, int pageNo, int pageSize, CancellationToken cancellationToken = default)
     {
         FilterDefinition<ArticleDb> categoryFilter = Builders<ArticleDb>.Filter.Eq(article => article.CategoryId, categoryId);
@@ -73,11 +78,11 @@ public class ArticleRepository :  IArticleRepository
     public async Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticles(int pageNo, int pageSize, CancellationToken cancellationToken = default)
     {
         SortDefinition<ArticleDb> sortByDateDefinition = Builders<ArticleDb>.Sort.Ascending(article => article.DateOfPublication);
-        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
+        //FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
         ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
 
         var dbArticles = await _articles
-                        .Find(isPublishedFilter)
+                        .Find("{}")//(isPublishedFilter)
                         .Project(shortProjection)
                         .Sort(sortByDateDefinition)
                         .Skip((pageNo - 1) * pageSize)

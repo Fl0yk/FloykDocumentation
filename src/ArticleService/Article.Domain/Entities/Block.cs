@@ -2,7 +2,7 @@
 
 public class Block
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string Text { get; set; } = string.Empty;
 

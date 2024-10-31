@@ -8,6 +8,8 @@ public interface IArticleRepository
 
     public Task<IEnumerable<ArticleModel>> GetPaginatedByCategoryWithoutBlocksArticles(Guid categoryId, int pageNo, int pageSize, CancellationToken cancellationToken = default);
 
+    public Task<long> GetCountAsync(CancellationToken cancellationToken = default);
+
     public Task<ArticleModel?> GetArticleByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     public Task CreateArticleAsync(ArticleModel article, CancellationToken cancellationToken = default);

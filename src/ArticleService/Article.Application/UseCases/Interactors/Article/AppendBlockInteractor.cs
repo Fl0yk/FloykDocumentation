@@ -37,7 +37,9 @@ public class AppendBlockInteractor : IRequestHandler<AppendBlockRequest>
             throw new BadRequestException($"Block type \"{request.BlockType}\" does not exist");
         }
 
-        article.Blocks.Append(_mapper.Map<Block>(request));
+        var block = _mapper.Map<Block>(request);
+
+        article.Blocks.Add(block);
 
         await _unitOfWork.ArticleRepository.UpdateArticleAsync(article, cancellationToken);
     }

@@ -11,11 +11,5 @@ public class CategoryDb
 
     public Guid? ParentId { get; set; }
 
-    [BsonIgnore]
-    public CategoryDb? Parent { get; set; }
-
-    //public ICollection<Guid> ArticleIds { get; set; } = [];
-
-    //[BsonIgnore]
-    //public ICollection<ArticleDb> Articles { get; set; } = [];
+    public int Level { get; set; }
 }

@@ -21,7 +21,7 @@ public class CreateArticleInteractor : IRequestHandler<CreateArticleRequest>
 
     public async Task Handle(CreateArticleRequest request, CancellationToken cancellationToken)
     {
-        var dbCategory = await _unitOfWork.CatergoryRepository.GetCategoryById(request.CategoryId, cancellationToken);
+        var dbCategory = await _unitOfWork.CatergoryRepository.GetCategoryByIdAsync(request.CategoryId, cancellationToken);
 
         if (dbCategory is null)
         {

@@ -1,5 +1,6 @@
-﻿namespace Article.Application.UseCases.Requests.Articles;
+﻿using Article.Application.Shared.Models.DTOs;
+using MediatR;
 
-internal class GetArticleByIdRequest
-{
-}
+namespace Article.Application.UseCases.Requests.Articles;
+
+public record class GetArticleByIdRequest(Guid Id) : IRequest<ArticleDTO>;

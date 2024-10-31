@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace Article.Infrastructure.Repositories;
 
-public class CategoryRepository : ICatergoryRepository
+public class CategoryRepository : ICategoryRepository
 {
     private readonly IMongoCollection<CategoryDb> _categories;
     private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ public class CategoryRepository : ICatergoryRepository
         _mapper = mapper;
     }
 
-    public Task AddCategoryAsync(Category category, Category parent, CancellationToken cancellationToken = default)
+    public Task AddCategoryAsync(Category category, CancellationToken cancellationToken = default)
     {
         var dbCategory = _mapper.Map<CategoryDb>(category);
 
@@ -38,7 +38,7 @@ public class CategoryRepository : ICatergoryRepository
         return _mapper.Map<IEnumerable<Category>>(categories);
     }
 
-    public async Task<Category?> GetCategoryById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         FilterDefinition<CategoryDb> idFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, id);
 
