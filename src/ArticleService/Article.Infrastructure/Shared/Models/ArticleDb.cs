@@ -13,7 +13,7 @@ public class ArticleDb
 
     public bool IsPublished { get; set; }
 
-    public DateTime DateOfPublication { get; set; } = DateTime.UtcNow.Date;
+    public DateTime? DateOfPublication { get; set; }
 
     public Guid CategoryId { get; set; }
 

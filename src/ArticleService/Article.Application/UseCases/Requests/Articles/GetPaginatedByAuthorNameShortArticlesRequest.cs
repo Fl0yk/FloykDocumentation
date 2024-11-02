@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class GetPaginatedByCategoryShortArticlesRequest(Guid CategoryId, int PageNo, int PageSize) : IRequest<PaginatedResult<ShortArticleDTO>>;
+public record class GetPaginatedByAuthorNameShortArticlesRequest(int PageNo, int PageSize, string AuthorName) : IRequest<PaginatedResult<ShortArticleDTO>>;

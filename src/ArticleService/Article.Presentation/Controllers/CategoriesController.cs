@@ -22,6 +22,14 @@ public class CategoriesController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetArticleById([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetCategoryByIdWithoutArticlesRequest(id), cancellationToken);
+
+        return Ok(result);
+    }
+
     [HttpPost]
     public async Task<IActionResult> PostCategory(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
@@ -29,4 +37,14 @@ public class CategoriesController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteCategory([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteCategoryRequest(id), cancellationToken);
+
+        return NoContent();
+    }
+
+
 }

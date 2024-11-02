@@ -52,7 +52,43 @@ public class ArticleRepository : IArticleRepository
         return await _articles.CountDocumentsAsync("{}", cancellationToken: cancellationToken);
     }
 
-    public async Task<IEnumerable<ArticleModel>> GetPaginatedByCategoryWithoutBlocksArticles(Guid categoryId, int pageNo, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<long> GetCountAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> categoryFilter = Builders<ArticleDb>.Filter.Eq(article => article.CategoryId, categoryId);
+
+        return await _articles.CountDocumentsAsync(categoryFilter, cancellationToken: cancellationToken);
+    }
+
+    public async Task<long> GetCountAsync(string authorName, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorName, authorName);
+
+        return await _articles.CountDocumentsAsync(authorFilter, cancellationToken: cancellationToken);
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetPaginatedByAuthorWithoutBlocksArticlesAsync(string authorName, int pageNo, int pageSize, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorName, authorName);
+        ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
+
+        var dbArticles = await _articles
+                            .Find(authorFilter)
+                            .Project(shortProjection)
+                            .Skip((pageNo - 1) * pageSize)
+                            .Limit(pageSize)
+                            .ToListAsync(cancellationToken);
+
+        foreach (var dbArticle in dbArticles)
+        {
+            FilterDefinition<CategoryDb> idCategoryFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, dbArticle.CategoryId);
+
+            dbArticle.Category = _categories.Find(idCategoryFilter).First();
+        }
+
+        return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetPaginatedByCategoryWithoutBlocksArticlesAsync(Guid categoryId, int pageNo, int pageSize, CancellationToken cancellationToken = default)
     {
         FilterDefinition<ArticleDb> categoryFilter = Builders<ArticleDb>.Filter.Eq(article => article.CategoryId, categoryId);
         FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
@@ -75,14 +111,14 @@ public class ArticleRepository : IArticleRepository
         return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
     }
 
-    public async Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticles(int pageNo, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticlesAsync(int pageNo, int pageSize, CancellationToken cancellationToken = default)
     {
         SortDefinition<ArticleDb> sortByDateDefinition = Builders<ArticleDb>.Sort.Ascending(article => article.DateOfPublication);
-        //FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
+        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
         ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
 
         var dbArticles = await _articles
-                        .Find("{}")//(isPublishedFilter)
+                        .Find(isPublishedFilter)
                         .Project(shortProjection)
                         .Sort(sortByDateDefinition)
                         .Skip((pageNo - 1) * pageSize)

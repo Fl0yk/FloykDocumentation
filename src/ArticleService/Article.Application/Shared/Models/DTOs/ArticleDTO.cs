@@ -12,7 +12,7 @@ public class ArticleDTO
 
     public bool IsPublished { get; set; }
 
-    public DateTime DateOfPublication { get; set; }
+    public DateTime? DateOfPublication { get; set; }
 
     public required Guid CategoryId { get; set; }
 
