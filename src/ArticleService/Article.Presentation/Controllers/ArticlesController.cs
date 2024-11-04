@@ -1,5 +1,4 @@
-﻿using Article.Application.UseCases.Interactors.Article;
-using Article.Application.UseCases.Requests.Articles;
+﻿using Article.Application.UseCases.Requests.Articles;
 using Article.Presentation.Shared.Models.DTOs.Article;
 using AutoMapper;
 using MediatR;

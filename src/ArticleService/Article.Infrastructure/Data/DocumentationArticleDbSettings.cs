@@ -1,4 +1,4 @@
-﻿namespace Article.Infrastructure;
+﻿namespace Article.Infrastructure.Data;
 
 public class DocumentationArticleDbSettings
 {

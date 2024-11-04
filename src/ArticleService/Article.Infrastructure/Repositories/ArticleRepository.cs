@@ -139,11 +139,14 @@ public class ArticleRepository : IArticleRepository
     {
         var dbArticle = _mapper.Map<ArticleDb>(article);
 
-        FilterDefinition<ArticleDb> idFilter = Builders<ArticleDb>.Filter.Eq(article => article.Id, article.Id);
+        FilterDefinition<ArticleDb> idFilter = Builders<ArticleDb>.Filter.Eq(a => a.Id, article.Id);
         UpdateDefinition<ArticleDb> updateDefinition = Builders<ArticleDb>.Update
                                                                             .Set(a => a.Title, dbArticle.Title)
+                                                                            .Set(a => a.AuthorName, dbArticle.AuthorName)
                                                                             .Set(a => a.CategoryId, dbArticle.CategoryId)
-                                                                            .Set(a => a.Blocks, dbArticle.Blocks);
+                                                                            .Set(a => a.Blocks, dbArticle.Blocks)
+                                                                            .Set(a => a.IsPublished, dbArticle.IsPublished)
+                                                                            .Set(a => a.DateOfPublication, dbArticle.DateOfPublication);
 
         return _articles.UpdateOneAsync(idFilter, updateDefinition, cancellationToken: cancellationToken);
     }

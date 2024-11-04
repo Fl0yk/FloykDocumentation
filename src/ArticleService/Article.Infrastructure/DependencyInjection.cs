@@ -1,12 +1,11 @@
 ﻿using Article.Domain.Abstractions.Repositories;
+using Article.Infrastructure.Data;
 using Article.Infrastructure.Repositories;
-using Article.Infrastructure.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
-using MongoDB.Driver;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using System.Reflection;
 
 namespace Article.Infrastructure;
@@ -21,11 +20,10 @@ public static class DependencyInjection
             .GetSection("DocumentationDatabaseSettings")
             .Get<DocumentationArticleDbSettings>() ?? throw new ArgumentNullException("Settings for mongodb was not found");
 
-        MongoClient client = new(dbSettings.ConnectionString);
-        var dataBase = client.GetDatabase(dbSettings.DatabaseName);
+        ApplicationDbContext dbContext = new(dbSettings);
 
-        services.AddSingleton(dataBase.GetCollection<ArticleDb>(dbSettings.ArticlesCollectionName));
-        services.AddSingleton(dataBase.GetCollection<CategoryDb>(dbSettings.CategoriesCollectionName));
+        services.AddSingleton(dbContext.ArticleCollection);
+        services.AddSingleton(dbContext.CategoryCollection);
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

@@ -22,7 +22,7 @@ public class GetPaginatedByAuthorNameShortArticlesInteractor
 
     public async Task<PaginatedResult<ShortArticleDTO>> Handle(GetPaginatedByAuthorNameShortArticlesRequest request, CancellationToken cancellationToken)
     {
-        var articles = await _unitOfWork.ArticleRepository.GetPaginatedByAuthorWithoutBlocksArticles(request.AuthorName, request.PageNo, request.PageSize, cancellationToken);
+        var articles = await _unitOfWork.ArticleRepository.GetPaginatedByAuthorWithoutBlocksArticlesAsync(request.AuthorName, request.PageNo, request.PageSize, cancellationToken);
 
         if (!articles.Any())
         {

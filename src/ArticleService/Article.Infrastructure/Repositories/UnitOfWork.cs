@@ -17,6 +17,6 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(IMongoCollection<ArticleDb> articles, IMongoCollection<CategoryDb> categories, IMapper mapper)
     {
         _articleRepository = new(() => new ArticleRepository(articles, categories, mapper));
-        _categoryRepository = new(() => new CategoryRepository(categories, mapper));
+        _categoryRepository = new(() => new CategoryRepository(categories, articles, mapper));
     }
 }
