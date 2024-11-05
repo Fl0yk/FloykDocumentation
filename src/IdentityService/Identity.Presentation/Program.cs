@@ -1,13 +1,17 @@
+using Identity.Application;
+using Identity.DataAccess;
+using Identity.Presentation;
+using Identity.Presentation.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddDataAccessServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddPresentationServices(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -16,7 +20,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
