@@ -57,7 +57,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostArticle(CreateArticleRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostArticle([FromBody] CreateArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
             _mapper.Map<CreateArticleRequest>(request), 
@@ -67,7 +67,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPost("block")]
-    public async Task<IActionResult> PostBlock(AppendBlockRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostBlock([FromBody] AppendBlockRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
             _mapper.Map<AppendBlockRequest>(request), 
@@ -77,7 +77,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPost("publish")]
-    public async Task<IActionResult> PublishArticle(PublishArticleRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PublishArticle([FromBody] PublishArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
             _mapper.Map<PublishArticleRequest>(request), 
@@ -87,7 +87,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateArticle(UpdateArticleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateArticle([FromBody] UpdateArticleRequest request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
 
@@ -105,7 +105,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpDelete("block")]
-    public async Task<IActionResult> DeleteBlock([FromBody]DeleteBlockRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteBlock([FromBody] DeleteBlockRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
             _mapper.Map<DeleteBlockRequest>(request), 

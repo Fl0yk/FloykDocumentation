@@ -37,7 +37,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostCategory(CreateCategoryRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PostCategory([FromBody] CreateCategoryRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
             _mapper.Map<CreateCategoryRequest>(request), 
