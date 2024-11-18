@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "forum.presentation": "StartDebugging",
+        "identity.presentation": "StartDebugging",
+        "article.presentation": "StartDebugging"
+      }
+    }
+  }
+}
