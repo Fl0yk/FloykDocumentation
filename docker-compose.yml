@@ -56,6 +56,8 @@ services:
         - xpack.security.http.ssl.enabled=false
         - discovery.type=single-node
         - ES_JAVA_OPTS=-Xms512m -Xms512m
+    volumes:
+      - ./.containers/data/elasticsearch:/usr/share/elasticsearch/data
     ports:
         - 9200:9200
 

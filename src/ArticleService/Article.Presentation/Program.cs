@@ -6,7 +6,7 @@ using Article.Presentation.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddPresentationServices();
+builder.Services.AddPresentationServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
 var app = builder.Build();
@@ -16,6 +16,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<SerilogMiddleware>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
