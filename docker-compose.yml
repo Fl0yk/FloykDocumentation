@@ -16,7 +16,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     user: root
     volumes:
-      - ./.containers/data/forum:/var/opt/mssql/data/forum
+      - ./.containers/forum:/var/opt/mssql/data
     environment:
         ACCEPT_EULA: "Y"
         MSSQL_SA_PASSWORD: StrongPassword123
@@ -41,7 +41,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     user: root
     volumes:
-      - ./.containers/data/identity:/var/opt/mssql/data/identity
+      - ./.containers/identity:/var/opt/mssql/data
     environment:
         ACCEPT_EULA: "Y"
         MSSQL_SA_PASSWORD: StrongPassword123
@@ -55,9 +55,9 @@ services:
         - xpack.security.enabled=false
         - xpack.security.http.ssl.enabled=false
         - discovery.type=single-node
-        - ES_JAVA_OPTS=-Xms512m -Xms512m
+        - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
-      - ./.containers/data/elasticsearch:/usr/share/elasticsearch/data
+      - ./.containers/elasticsearch:/usr/share/elasticsearch/data
     ports:
         - 9200:9200
 
