@@ -1,4 +1,4 @@
-﻿namespace Identity.Presentation.Options.Models;
+﻿namespace Identity.Presentation.Shared.Options.Models;
 
 public class WWWRootOptions
 {

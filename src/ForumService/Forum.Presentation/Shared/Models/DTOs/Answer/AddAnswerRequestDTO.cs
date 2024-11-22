@@ -2,6 +2,6 @@
 
 public record class AddAnswerRequestDTO(
                         string Text,
-                        Guid AuthorId,
+                        Guid CurrentUserId,
                         Guid QuestionId,
                         Guid? ParentId);

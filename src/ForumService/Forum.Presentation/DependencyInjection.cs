@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Forum.Presentation.Options.Setups;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace Forum.Presentation
@@ -8,6 +10,8 @@ namespace Forum.Presentation
     {
         public static IServiceCollection AddPresentetionServices(this IServiceCollection services)
         {
+            services.ConfigureOptions();
+
             services.AddControllers();
 
             services.AddFluentValidationAutoValidation();
@@ -15,7 +19,33 @@ namespace Forum.Presentation
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(option =>
+            {
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
 
             services.AddCors(options =>
             {
@@ -28,6 +58,14 @@ namespace Forum.Presentation
             });
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            return services;
+        }
+
+        private static IServiceCollection ConfigureOptions(this IServiceCollection services)
+        {
+            // KEEP launchSettings.json and applicatoinSettings.json in sync
+            services.ConfigureOptions<UrlsOptionSetup>();
 
             return services;
         }

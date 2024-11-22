@@ -11,6 +11,6 @@ public class DeleteBlockRequestDTOValidator : AbstractValidator<DeleteBlockReque
 
         RuleFor(r => r.BlockId).NotEmpty();
 
-        RuleFor(r => r.AuthorName).NotEmpty();
+        RuleFor(r => r.CurrentUserName).NotEmpty();
     }
 }

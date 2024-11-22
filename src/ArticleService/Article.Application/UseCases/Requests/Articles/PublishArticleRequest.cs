@@ -2,4 +2,9 @@
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class PublishArticleRequest(Guid ArticleId, string AuthorName) : IRequest;
+public class PublishArticleRequest : IRequest
+{
+    public Guid ArticleId { get; set; }
+
+    public required string AuthorName { get; set; }
+}

@@ -1,5 +1,6 @@
 using Identity.Application;
 using Identity.DataAccess;
+using Identity.Infrastructure.gRPC.Services;
 using Identity.Presentation;
 using Identity.Presentation.Middlewares;
 
@@ -27,6 +28,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.MapGrpcService<UserService>();
 
 app.MapControllers();
 

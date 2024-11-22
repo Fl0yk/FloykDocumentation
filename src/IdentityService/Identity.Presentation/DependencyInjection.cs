@@ -5,9 +5,9 @@ using Identity.Application.Abstractions.Providers;
 using Identity.DataAccess.Data;
 using Identity.DataAccess.Entities;
 using Identity.Presentation.Managers;
-using Identity.Presentation.Options.Models;
-using Identity.Presentation.Options.Setups;
 using Identity.Presentation.Providers;
+using Identity.Presentation.Shared.Options.Models;
+using Identity.Presentation.Shared.Options.Setups;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -34,6 +34,8 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddControllers();
+
+        services.AddGrpc();
 
         services.AddFluentValidationAutoValidation();
 

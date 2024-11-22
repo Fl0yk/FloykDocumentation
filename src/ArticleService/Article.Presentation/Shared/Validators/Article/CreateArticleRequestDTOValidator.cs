@@ -9,7 +9,7 @@ public class CreateArticleRequestDTOValidator : AbstractValidator<CreateArticleR
     {
         RuleFor(r => r.Title).NotEmpty().MaximumLength(256);
 
-        RuleFor(r => r.AuthorName).NotEmpty();
+        RuleFor(r => r.CurrentUserName).NotEmpty();
 
         RuleFor(r => r.CategoryId).NotEmpty();
     }

@@ -30,6 +30,16 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.NormalizedUserName == username.ToUpper(), cancellationToken);
     }
 
+    public Task<bool> IsUserExist(Guid id, CancellationToken cancellationToken = default)
+    {
+        return _users.Where(u => u.Id == id).AnyAsync(cancellationToken);
+    }
+
+    public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default)
+    {
+        return _users.Where(u => u.NormalizedUserName == username.ToUpper()).AnyAsync(cancellationToken);
+    }
+
     public Task UpdateAsync(User user, CancellationToken cancellation = default)
     {
         _users.Update(user);

@@ -10,4 +10,7 @@ public interface IUserRepository
 
     public Task<User?> GetUserByNameAsync(string username, CancellationToken cancellationToken = default);
 
+    public Task<bool> IsUserExist(Guid id, CancellationToken cancellationToken = default);
+
+    public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default);
 }

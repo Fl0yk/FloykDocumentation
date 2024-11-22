@@ -18,4 +18,8 @@ public interface IUserService
     public Task UpdateAvatarAsync(UpdateAvatarRequest updateAvatarRequest, CancellationToken cancellationToken = default);
 
     public Task UpdateUserAsync(UpdateUserRequest updateUserRequest, CancellationToken cancellationToken = default);
+
+    public Task<bool> IsUserExist(Guid userId, CancellationToken cancellationToken = default);
+
+    public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default);
 }

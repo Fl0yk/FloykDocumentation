@@ -10,6 +10,6 @@ public class PublishArticleDTOToRequest : Profile
     {
         CreateMap<PublishArticleRequestDTO, PublishArticleRequest>()
             .ForMember(d => d.ArticleId, opt => opt.MapFrom(src => src.ArticleId))
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.AuthorName));
+            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.CurrentUserName));
     }
 }

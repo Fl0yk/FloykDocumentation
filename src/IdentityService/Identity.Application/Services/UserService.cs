@@ -221,4 +221,14 @@ public class UserService : IUserService
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<bool> IsUserExist(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return _unitOfWork.UserRepository.IsUserExist(userId, cancellationToken);
+    }
+
+    public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default)
+    {
+        return _unitOfWork.UserRepository.IsUserExist(username, cancellationToken);
+    }
 }

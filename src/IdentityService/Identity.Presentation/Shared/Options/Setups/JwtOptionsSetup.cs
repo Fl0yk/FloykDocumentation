@@ -1,7 +1,7 @@
-﻿using Identity.Presentation.Options.Models;
+﻿using Identity.Presentation.Shared.Options.Models;
 using Microsoft.Extensions.Options;
 
-namespace Identity.Presentation.Options.Setups;
+namespace Identity.Presentation.Shared.Options.Setups;
 
 public class JwtOptionsSetup : IConfigureOptions<JwtOptions>
 {

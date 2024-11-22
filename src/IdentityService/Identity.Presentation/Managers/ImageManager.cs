@@ -1,5 +1,5 @@
 ﻿using Identity.Application.Abstractions.Managers;
-using Identity.Presentation.Options.Models;
+using Identity.Presentation.Shared.Options.Models;
 using Microsoft.Extensions.Options;
 
 namespace Identity.Presentation.Managers;

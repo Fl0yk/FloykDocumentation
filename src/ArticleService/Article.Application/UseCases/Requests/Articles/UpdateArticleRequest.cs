@@ -2,4 +2,11 @@
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class UpdateArticleRequest(Guid Id, string AuthorName, string NewTitle) : IRequest;
+public class UpdateArticleRequest : IRequest
+{
+    public Guid Id { get; set; }
+
+    public required string AuthorName { get; set; }
+
+    public required string NewTitle { get; set; }
+}

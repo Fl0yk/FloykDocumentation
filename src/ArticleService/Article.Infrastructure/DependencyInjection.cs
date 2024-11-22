@@ -1,5 +1,7 @@
 ﻿using Article.Domain.Abstractions.Repositories;
+using Article.Domain.Abstractions.Services;
 using Article.Infrastructure.Data;
+using Article.Infrastructure.gRPC.Services;
 using Article.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +28,8 @@ public static class DependencyInjection
         services.AddSingleton(dbContext.CategoryCollection);
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<IUserService, UserService>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

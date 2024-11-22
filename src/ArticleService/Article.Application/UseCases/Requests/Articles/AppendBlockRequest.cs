@@ -2,4 +2,13 @@
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class AppendBlockRequest(string Text, string BlockType, Guid ArticleId, string AuthorName) : IRequest;
+public class AppendBlockRequest : IRequest
+{
+    public required string Text { get; set; }
+
+    public required string BlockType { get; set; }
+
+    public Guid ArticleId { get; set; }
+
+    public required string AuthorName { get; set; }
+}

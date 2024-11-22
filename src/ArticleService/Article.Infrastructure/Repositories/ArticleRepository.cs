@@ -40,6 +40,11 @@ public class ArticleRepository : IArticleRepository
 
         var dbArticle = await _articles.Find(idFilter).FirstOrDefaultAsync(cancellationToken);
 
+        if (dbArticle is null)
+        {
+            return null;
+        }
+
         FilterDefinition<CategoryDb> idCategoryFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, dbArticle.CategoryId);
 
         dbArticle.Category = _categories.Find(idCategoryFilter).First();

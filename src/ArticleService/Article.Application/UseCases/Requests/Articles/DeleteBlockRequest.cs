@@ -2,4 +2,11 @@
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class DeleteBlockRequest(Guid ArticleId, Guid BlockId, string AuthorName) : IRequest;
+public class DeleteBlockRequest : IRequest
+{
+    public Guid ArticleId { get; set; }
+
+    public Guid BlockId { get; set; }
+
+    public required string AuthorName { get; set; }
+}

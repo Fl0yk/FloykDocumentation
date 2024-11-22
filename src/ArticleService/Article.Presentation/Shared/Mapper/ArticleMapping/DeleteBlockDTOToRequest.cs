@@ -11,6 +11,6 @@ public class DeleteBlockDTOToRequest : Profile
         CreateMap<DeleteBlockRequestDTO, DeleteBlockRequest>()
             .ForMember(d => d.ArticleId, opt => opt.MapFrom(src => src.ArticleId))
             .ForMember(d => d.BlockId, opt => opt.MapFrom(src => src.BlockId))
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.AuthorName));
+            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.CurrentUserName));
     }
 }
