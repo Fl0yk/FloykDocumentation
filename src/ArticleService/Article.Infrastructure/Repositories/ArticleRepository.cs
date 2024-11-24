@@ -1,4 +1,5 @@
 ﻿using Article.Domain.Abstractions.Repositories;
+using Article.Domain.Entities;
 using Article.Infrastructure.Shared.Models;
 using AutoMapper;
 using MongoDB.Driver;
@@ -54,7 +55,9 @@ public class ArticleRepository : IArticleRepository
 
     public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
     {
-        return await _articles.CountDocumentsAsync("{}", cancellationToken: cancellationToken);
+        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
+
+        return await _articles.CountDocumentsAsync(isPublishedFilter, cancellationToken: cancellationToken);
     }
 
     public async Task<long> GetCountAsync(Guid categoryId, CancellationToken cancellationToken = default)
@@ -154,5 +157,13 @@ public class ArticleRepository : IArticleRepository
                                                                             .Set(a => a.DateOfPublication, dbArticle.DateOfPublication);
 
         return _articles.UpdateOneAsync(idFilter, updateDefinition, cancellationToken: cancellationToken);
+    }
+
+    public Task UpdateAuthorsNamesAsync(string oldName, string newName, CancellationToken cancellationToken)
+    {
+        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorName, oldName);
+        UpdateDefinition<ArticleDb> updateDefinition = Builders<ArticleDb>.Update.Set(a => a.AuthorName, newName);
+
+        return _articles.UpdateOneAsync(authorFilter, updateDefinition, cancellationToken: cancellationToken);
     }
 }

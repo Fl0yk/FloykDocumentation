@@ -4,10 +4,13 @@ using Identity.Application.Abstractions.Managers;
 using Identity.Application.Abstractions.Providers;
 using Identity.DataAccess.Data;
 using Identity.DataAccess.Entities;
+using Identity.Infrastructure.Consumers;
+using Identity.Infrastructure.Shared.Options.Models;
 using Identity.Presentation.Managers;
 using Identity.Presentation.Providers;
 using Identity.Presentation.Shared.Options.Models;
 using Identity.Presentation.Shared.Options.Setups;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +39,8 @@ public static class DependencyInjection
         services.AddControllers();
 
         services.AddGrpc();
+
+        services.ConfigureMassTransit();
 
         services.AddFluentValidationAutoValidation();
 
@@ -72,15 +77,7 @@ public static class DependencyInjection
                 });
         });
 
-        services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
-        });
+        services.ConfigureCors(configuration);
 
         return services;
     }
@@ -90,6 +87,7 @@ public static class DependencyInjection
         // KEEP launchSettings.json and applicatoinSettings.json in sync
         services.ConfigureOptions<WWWRootOptionsSetup>();
         services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<UrlsOptionSetup>();
 
         return services;
     }
@@ -120,5 +118,41 @@ public static class DependencyInjection
         });
 
         services.AddAuthorization();
+    }
+
+    private static void ConfigureMassTransit(this IServiceCollection services)
+    {
+        services.AddMassTransit(conf =>
+        {
+            conf.SetKebabCaseEndpointNameFormatter();
+
+            conf.AddConsumer<ArticleDeletedConsumer>();
+
+            conf.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("localhost", "/", h => {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
+    }
+
+    private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        UrlsOption urls = configuration.GetSection("Urls").Get<UrlsOption>() 
+                                            ?? throw new KeyNotFoundException("Can't read urls from appsettings.json");
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.WithOrigins(urls.ApiGatewayUrl, urls.ForumUrl, urls.ArticleUrl)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
     }
 }

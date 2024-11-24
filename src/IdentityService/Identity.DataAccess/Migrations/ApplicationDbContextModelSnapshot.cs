@@ -54,7 +54,7 @@ namespace Identity.DataAccess.Migrations
 
                     b.HasKey("UserId", "ArticleId");
 
-                    b.ToTable("SavedArticle");
+                    b.ToTable("SavedArticles");
                 });
 
             modelBuilder.Entity("Identity.DataAccess.Entities.User", b =>
@@ -136,15 +136,15 @@ namespace Identity.DataAccess.Migrations
                         {
                             Id = new Guid("ac2d055a-4d0f-41d2-90f9-88393f1b65e7"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6cc5e3e5-4777-4804-881e-5ce58210aa9f",
+                            ConcurrencyStamp = "d7988225-8562-4319-a33b-386e1b56635d",
                             Email = "admin@mail.ru",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@MAIL.RU",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAT/26EGLAGz1BHV6sredOHCB53dlKJLDXq6gzSsCVr050jguoR1QFpM7XztKxKtWQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELJ0GZWN7kmV6QHUGsEjkmaF4fYutLZuzQh9CEVnXPj/eASyolvU8wED99BrlJKAzA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a97c250e-521e-46cf-bb2f-ab53fb65fe35",
+                            SecurityStamp = "b0fd88b6-72cd-441e-8eb6-a091aaf9e40d",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
@@ -152,15 +152,15 @@ namespace Identity.DataAccess.Migrations
                         {
                             Id = new Guid("bb2d055a-4d0f-41d2-90f9-88393f1b65e7"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5efd3ae5-196c-4f19-bb57-3b0def5ac713",
+                            ConcurrencyStamp = "50020483-4c5a-4187-b181-b9f55e994da7",
                             Email = "aauthor@mail.ru",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "AUTHOR@MAIL.RU",
                             NormalizedUserName = "AUTHOR",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAf62D8L6D1WaUEfB0rnD0tOBOZspYmj0Ooj8ZUAHrIkBeDWNYSdjRisT72m2OjReA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEcg8XjPIudz/4bjQuWfQNHtI2V0KWB0IkR+oaWlczP6Pa6weVdMljMIbrDoEHHpGg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "39f4fb34-85c7-46ce-b822-076356ebeeed",
+                            SecurityStamp = "bbf70cee-9e20-441e-989f-14d398498633",
                             TwoFactorEnabled = false,
                             UserName = "Author"
                         },
@@ -168,15 +168,15 @@ namespace Identity.DataAccess.Migrations
                         {
                             Id = new Guid("ff2d055a-4d0f-41d2-90f9-88393f1b65e7"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ad7126f7-faf0-407a-9049-7852b45ce8d6",
+                            ConcurrencyStamp = "673a9017-bda9-4ece-8155-fb8d9104195d",
                             Email = "kosach@mail.ru",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "KOSACH@MAIL.RU",
                             NormalizedUserName = "FLOYK",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPFktBFiX4Ww8BHaXeZJyG0Td95H7mUmcfzyxeZGIIzm+rfCGJrrJ6acMwyLlaxU2g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBk+0NKV3B59Gbfc0/7t+WoRdsMxi9maX93dm5+h7K4gI/xhIR9DMActo0sVmW2KkA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3d0fd73-09d2-42c5-8921-ef8a3117c805",
+                            SecurityStamp = "627ba827-9b34-4fc3-a64b-7eca1e93fd30",
                             TwoFactorEnabled = false,
                             UserName = "Floyk"
                         });

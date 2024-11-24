@@ -5,8 +5,11 @@ using Identity.Application.Abstractions.Services;
 using Identity.Application.Shared.Exceptions;
 using Identity.Application.Shared.Models.DTOs;
 using Identity.Application.Shared.Models.Requests.UserRequests;
+using Identity.Contracts.Abstractions.Services;
+using Identity.Contracts.Events.User;
 using Identity.DataAccess.Entities;
 using Identity.DataAccess.Repositories.Abstractions;
+using MassTransit;
 
 namespace Identity.Application.Services;
 
@@ -15,17 +18,23 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IImageManager _imageManager;
     private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IArticleService _articleService;
     private readonly IMapper _mapper;
 
     public UserService(
         IUnitOfWork unitOfWork,
         IImageManager imageManager,
         ICurrentUserProvider currentUserProvider,
+        IPublishEndpoint publishEndpoint,
+        IArticleService articleService,
         IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _imageManager = imageManager;
         _currentUserProvider = currentUserProvider;
+        _publishEndpoint = publishEndpoint;
+        _articleService = articleService;
         _mapper = mapper;
     }
 
@@ -50,7 +59,16 @@ public class UserService : IUserService
             throw new BadRequestException("User already save this article");
         }
 
-        dbUser.SavedArticles.Add(_mapper.Map<SavedArticle>(articleRequest));
+        bool isExist = await _articleService.IsArticleExistAsync(articleRequest.Id, cancellationToken);
+
+        if (!isExist)
+        {
+            throw new NotFoundException($"Article with id {articleRequest.Id} was not found");
+        }
+
+        Article article = await _articleService.GetArticleByIdAsync(articleRequest.Id, cancellationToken);
+
+        dbUser.SavedArticles.Add(_mapper.Map<SavedArticle>(article));
 
         await _unitOfWork.UserRepository.UpdateAsync(dbUser, cancellationToken);
 
@@ -132,6 +150,13 @@ public class UserService : IUserService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task RemoveSavedArticleForAllAsync(Guid articleId, CancellationToken cancellationToken = default)
+    {
+        await _unitOfWork.UserRepository.DeleteSavedArticleForAllAsync(articleId, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task UnfollowAsync(Guid authorId, CancellationToken cancellationToken = default)
     {
         var user = _currentUserProvider.GetCurrentUser();
@@ -201,6 +226,8 @@ public class UserService : IUserService
             throw new UnauthorizedException("User is not authorize");
         }
 
+        string oldUsername = user.Username;
+
         var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
@@ -220,6 +247,15 @@ public class UserService : IUserService
         await _unitOfWork.UserRepository.UpdateAsync(dbUser, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        if (dbUser.UserName != oldUsername)
+        {
+            await _publishEndpoint.Publish<UsernameUpdated>(new
+            {
+                OldUsername = oldUsername,
+                NewUsername = dbUser.UserName
+            }, cancellationToken);
+        }
     }
 
     public Task<bool> IsUserExist(Guid userId, CancellationToken cancellationToken = default)

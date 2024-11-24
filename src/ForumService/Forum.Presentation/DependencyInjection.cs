@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Forum.Infrastructure.Options.Models;
 using Forum.Presentation.Options.Setups;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -8,7 +9,7 @@ namespace Forum.Presentation
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddPresentetionServices(this IServiceCollection services)
+        public static IServiceCollection AddPresentetionServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureOptions();
 
@@ -47,15 +48,7 @@ namespace Forum.Presentation
                 });
             });
 
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                });
-            });
+            services.ConfigureCors(configuration);
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
@@ -68,6 +61,22 @@ namespace Forum.Presentation
             services.ConfigureOptions<UrlsOptionSetup>();
 
             return services;
+        }
+
+        private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+        {
+            UrlsOption urls = configuration.GetSection("Urls").Get<UrlsOption>()
+                                                ?? throw new KeyNotFoundException("Can't read urls from appsettings.json");
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins(urls.ApiGatewayUrl, urls.ArticleUrl, urls.IdentityUrl)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
         }
     }
 }

@@ -92,6 +92,9 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
       "SwaggerKey": "identity"
     },
     {
@@ -109,6 +112,9 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
       "SwaggerKey": "identity"
     },
     {
@@ -126,6 +132,9 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
       "SwaggerKey": "identity"
     },
     {
@@ -143,10 +152,13 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
       "SwaggerKey": "identity"
     },
     {
-      "DownstreamPathTemplate": "/api/Users/save-article",
+      "DownstreamPathTemplate": "/api/Users/saved-article/{articleId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -154,16 +166,19 @@
           "Port": 6001
         }
       ],
-      "UpstreamPathTemplate": "/api/Users/save-article",
+      "UpstreamPathTemplate": "/api/Users/saved-article/{articleId}",
       "UpstreamHttpMethod": [ "Post" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
       "SwaggerKey": "identity"
     },
     {
-      "DownstreamPathTemplate": "/api/Users/save-article/{articleId}",
+      "DownstreamPathTemplate": "/api/Users/saved-article/{articleId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -171,12 +186,15 @@
           "Port": 6001
         }
       ],
-      "UpstreamPathTemplate": "/api/Users/save-article/{articleId}",
+      "UpstreamPathTemplate": "/api/Users/saved-article/{articleId}",
       "UpstreamHttpMethod": [ "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
       "SwaggerKey": "identity"
     }
   ]

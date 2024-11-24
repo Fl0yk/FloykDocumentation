@@ -22,5 +22,7 @@ public interface IArticleRepository
 
     public Task UpdateArticleAsync(ArticleModel article, CancellationToken cancellationToken = default);
 
+    public Task UpdateAuthorsNamesAsync(string oldName, string newName, CancellationToken cancellationToken = default);
+
     public Task DeleteArticleAsync(ArticleModel article, CancellationToken cancellationToken = default);
 }

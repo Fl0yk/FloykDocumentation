@@ -8,10 +8,12 @@ namespace Identity.DataAccess.Repositories.Implementations;
 public class UserRepository : IUserRepository
 {
     private readonly DbSet<User> _users;
+    private readonly DbSet<SavedArticle> _savedArticles;
 
     public UserRepository(ApplicationDbContext context)
     {
         _users = context.Users;
+        _savedArticles = context.SavedArticles;
     }
 
     public Task<User?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -43,6 +45,15 @@ public class UserRepository : IUserRepository
     public Task UpdateAsync(User user, CancellationToken cancellation = default)
     {
         _users.Update(user);
+
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteSavedArticleForAllAsync(Guid articleId, CancellationToken cancellationToken = default)
+    {
+        var articles = _savedArticles.Where(a => a.ArticleId == articleId);
+
+        _savedArticles.RemoveRange(articles);
 
         return Task.CompletedTask;
     }

@@ -31,6 +31,8 @@ public static class DependencyInjection
 
         services.AddScoped<IUserService, UserService>();
 
+        services.AddGrpc();
+
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;

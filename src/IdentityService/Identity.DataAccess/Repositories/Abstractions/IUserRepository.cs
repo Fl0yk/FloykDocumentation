@@ -13,4 +13,6 @@ public interface IUserRepository
     public Task<bool> IsUserExist(Guid id, CancellationToken cancellationToken = default);
 
     public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default);
+
+    public Task DeleteSavedArticleForAllAsync(Guid articleId, CancellationToken cancellationToken = default);
 }

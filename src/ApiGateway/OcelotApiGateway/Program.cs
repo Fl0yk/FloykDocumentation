@@ -1,5 +1,4 @@
 using MMLib.SwaggerForOcelot.DependencyInjection;
-using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using OcelotApiGateway;
 

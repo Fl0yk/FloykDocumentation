@@ -14,9 +14,11 @@ public class UrlsOptionSetup : IConfigureOptions<UrlsOption>
 
     public void Configure(UrlsOption options)
     {
-        var section = _configuration.GetSection("Urls")
-                            ?? throw new KeyNotFoundException("Can't read urls from appsettings.json");
+        var urls = _configuration.GetSection("Urls").Get<UrlsOption>()
+                                            ?? throw new KeyNotFoundException("Can't read urls from appsettings.json");
 
-        options.IdentityUrl = section["IdentityService"]!;
+        options.ArticleUrl = urls.ArticleUrl;
+        options.IdentityUrl = urls.IdentityUrl;
+        options.ApiGatewayUrl = urls.ApiGatewayUrl;
     }
 }
