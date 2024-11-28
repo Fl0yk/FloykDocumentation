@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
+using System;
 using System.Reflection;
 using System.Text;
 
@@ -28,6 +32,8 @@ public static class DependencyInjection
         services.ConfigureOptions();
 
         services.ConfigureAuthorization(configuration);
+
+        services.ConfigureSerilog(configuration);
 
         services
             .AddIdentity<User, IdentityRole<Guid>>(opt => opt.User.RequireUniqueEmail = true)
@@ -118,5 +124,31 @@ public static class DependencyInjection
         });
 
         services.AddAuthorization();
+    }
+
+    private static IServiceCollection ConfigureSerilog(this IServiceCollection services, IConfiguration configuration)
+    {
+        string elasticsearchUrl = configuration.GetSection("ElasticsearchUrl").Value
+                                                    ?? throw new KeyNotFoundException("Can't read jwt from appsettings.json");
+
+        ElasticsearchSinkOptions elasticsearchOptions = new(new Uri(elasticsearchUrl))
+        {
+            AutoRegisterTemplate = true,
+            IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+        };
+
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            .MinimumLevel.Override("System", LogEventLevel.Information)
+            .WriteTo.Console()
+            .WriteTo.Elasticsearch(elasticsearchOptions).MinimumLevel
+                    .Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .CreateLogger();
+
+
+        return services;
     }
 }

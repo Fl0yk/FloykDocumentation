@@ -1,0 +1,90 @@
+services:
+  forum.presentation:
+    container_name: "Forum.Presentation"
+    image: ${DOCKER_REGISTRY-}forumpresentation
+    build:
+      context: .
+      dockerfile: src/ForumService/Forum.Presentation/Dockerfile
+    ports:
+        - "7000:8080"
+        - "7001:8081"
+    depends_on:
+        - forum.db
+  
+  forum.db:
+    container_name: "Forum.Database"
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    volumes:
+      - ./.containers/forum:/var/opt/mssql/data
+    environment:
+        ACCEPT_EULA: "Y"
+        MSSQL_SA_PASSWORD: StrongPassword123
+    ports:
+        - "7003:1433"
+
+  identity.presentation:
+    container_name: "Identity.Presentation"
+    image: ${DOCKER_REGISTRY-}identitypresentation
+    build:
+      context: .
+      dockerfile: src/IdentityService/Identity.Presentation/Dockerfile
+    ports:
+        - "6000:8080"
+        - "6001:8081"
+    depends_on:
+        - identity.db
+        - kibana
+
+  identity.db:
+    container_name: "Identity.Database"
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    volumes:
+      - ./.containers/identity:/var/opt/mssql/data
+    environment:
+        ACCEPT_EULA: "Y"
+        MSSQL_SA_PASSWORD: StrongPassword123
+    ports:
+        - "6003:1433"
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
+    environment:
+        - xpack.security.enabled=false
+        - xpack.security.http.ssl.enabled=false
+        - discovery.type=single-node
+        - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - ./.containers/elasticsearch:/usr/share/elasticsearch/data
+    ports:
+        - 9200:9200
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:8.7.1
+    ports:
+        - 5601:5601
+    depends_on:
+        - elasticsearch
+    environment:
+        - ELASTICSEARCH_URL=http://localhost:9200
+
+  article.presentation:
+    container_name: "Article.Presentation"
+    image: ${DOCKER_REGISTRY-}articlepresentation
+    build:
+      context: .
+      dockerfile: src/ArticleService/Article.Presentation/Dockerfile
+    ports:
+        - "5000:8080"
+        - "5001:8081"
+    depends_on:
+        - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+        - "27017:27017"
+

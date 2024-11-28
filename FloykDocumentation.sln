@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forum.Presentation", "src\F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Presentation", "src\IdentityService\Identity.Presentation\Identity.Presentation.csproj", "{6CDE1E8B-766C-436E-9640-4B8F4E972052}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0F06588C-23EE-4F93-A7E2-6F1C83E5760E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{6CDE1E8B-766C-436E-9640-4B8F4E972052}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CDE1E8B-766C-436E-9640-4B8F4E972052}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CDE1E8B-766C-436E-9640-4B8F4E972052}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F06588C-23EE-4F93-A7E2-6F1C83E5760E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F06588C-23EE-4F93-A7E2-6F1C83E5760E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F06588C-23EE-4F93-A7E2-6F1C83E5760E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F06588C-23EE-4F93-A7E2-6F1C83E5760E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
