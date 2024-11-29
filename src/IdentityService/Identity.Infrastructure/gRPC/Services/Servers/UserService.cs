@@ -2,7 +2,7 @@
 using Identity.Application.Abstractions.Services;
 using Identity.Infrastructure.Protos;
 
-namespace Identity.Infrastructure.gRPC.Services;
+namespace Identity.Infrastructure.gRPC.Services.Servers;
 
 public class UserService : User.UserBase
 {
@@ -22,7 +22,7 @@ public class UserService : User.UserBase
 
         bool isExist = await _userService.IsUserExist(id);
 
-        return new IsUserExistResponse() { IsExist =  isExist };
+        return new IsUserExistResponse() { IsExist = isExist };
     }
 
     public override async Task<IsUserExistResponse> IsUserExistByName(IsUserExistByNameRequest request, ServerCallContext context)

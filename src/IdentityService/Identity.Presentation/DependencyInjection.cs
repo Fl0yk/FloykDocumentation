@@ -4,17 +4,18 @@ using Identity.Application.Abstractions.Managers;
 using Identity.Application.Abstractions.Providers;
 using Identity.DataAccess.Data;
 using Identity.DataAccess.Entities;
-using Identity.Infrastructure.Consumers;
 using Identity.Infrastructure.Shared.Options.Models;
 using Identity.Presentation.Managers;
 using Identity.Presentation.Providers;
 using Identity.Presentation.Shared.Options.Models;
 using Identity.Presentation.Shared.Options.Setups;
-using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 using System.Text;
 
@@ -32,6 +33,8 @@ public static class DependencyInjection
 
         services.ConfigureAuthorization(configuration);
 
+        services.ConfigureSerilog(configuration);
+
         services
             .AddIdentity<User, IdentityRole<Guid>>(opt => opt.User.RequireUniqueEmail = true)
             .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -39,8 +42,6 @@ public static class DependencyInjection
         services.AddControllers();
 
         services.AddGrpc();
-
-        services.ConfigureMassTransit();
 
         services.AddFluentValidationAutoValidation();
 
@@ -120,24 +121,30 @@ public static class DependencyInjection
         services.AddAuthorization();
     }
 
-    private static void ConfigureMassTransit(this IServiceCollection services)
+    private static IServiceCollection ConfigureSerilog(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMassTransit(conf =>
+        string elasticsearchUrl = configuration.GetSection("ElasticsearchUrl").Value
+                                                    ?? throw new KeyNotFoundException("Can't read jwt from appsettings.json");
+
+        ElasticsearchSinkOptions elasticsearchOptions = new(new Uri(elasticsearchUrl))
         {
-            conf.SetKebabCaseEndpointNameFormatter();
+            AutoRegisterTemplate = true,
+            IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+        };
 
-            conf.AddConsumer<ArticleDeletedConsumer>();
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            .MinimumLevel.Override("System", LogEventLevel.Information)
+            .WriteTo.Console()
+            .WriteTo.Elasticsearch(elasticsearchOptions).MinimumLevel
+                    .Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .CreateLogger();
 
-            conf.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host("localhost", "/", h => {
-                    h.Username("guest");
-                    h.Password("guest");
-                });
 
-                cfg.ConfigureEndpoints(context);
-            });
-        });
+        return services;
     }
 
     private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

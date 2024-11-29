@@ -3,11 +3,11 @@
     //Identity
     {
       "DownstreamPathTemplate": "/api/Identity/login",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Identity/login",
@@ -16,11 +16,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Identity/registration",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Identity/registration",
@@ -29,11 +29,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Identity/refresh",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Identity/refresh",
@@ -42,11 +42,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Identity/add-to-role",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Identity/add-to-role",
@@ -62,11 +62,11 @@
     },//User
     {
       "DownstreamPathTemplate": "/api/Users/{username}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users/{username}",
@@ -79,11 +79,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/follow/{authorId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users/follow/{authorId}",
@@ -99,11 +99,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/unfollow/{authorId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users/unfollow/{authorId}",
@@ -119,11 +119,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users",
@@ -139,11 +139,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/avatar",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users/avatar",
@@ -159,11 +159,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/saved-article/{articleId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users/saved-article/{articleId}",
@@ -179,11 +179,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Users/saved-article/{articleId}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 6001
+          "Host": "identity.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Users/saved-article/{articleId}",

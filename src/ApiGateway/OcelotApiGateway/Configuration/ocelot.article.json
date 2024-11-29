@@ -3,11 +3,11 @@
     //Articles
     {
       "DownstreamPathTemplate": "/api/Articles/paginated/date",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles/paginated/date",
@@ -16,11 +16,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Articles/paginated/author",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles/paginated/author",
@@ -33,11 +33,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Articles/paginated/category",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles/paginated/category",
@@ -46,11 +46,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Articles/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles/{id}",
@@ -59,11 +59,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Articles",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles",
@@ -79,11 +79,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Articles/block",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles/block",
@@ -99,11 +99,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Articles/publish",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Articles/publish",
@@ -119,11 +119,11 @@
     },//Categories
     {
       "DownstreamPathTemplate": "/api/Categories",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Categories",
@@ -132,11 +132,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Categories",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Categories",
@@ -152,11 +152,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Categories/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Categories/{id}",
@@ -165,11 +165,11 @@
     },
     {
       "DownstreamPathTemplate": "/api/Categories/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5001
+          "Host": "article.api",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/Categories/{id}",

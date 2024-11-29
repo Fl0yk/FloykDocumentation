@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 using ArticleGrpc = Identity.Infrastructure.gRPC.Protos.Article;
 
-namespace Identity.Infrastructure.gRPC.Services;
+namespace Identity.Infrastructure.gRPC.Services.Clients;
 
 internal class ArticleService : IArticleService
 {
@@ -16,7 +16,16 @@ internal class ArticleService : IArticleService
 
     public ArticleService(IOptions<UrlsOption> urls, IMapper mapper)
     {
-        var chanel = GrpcChannel.ForAddress(urls.Value.ArticleUrl);
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        };
+
+        var chanel = GrpcChannel.ForAddress(urls.Value.ArticleUrl, new GrpcChannelOptions
+        {
+            HttpHandler = handler
+        });
+
         _articleClient = new ArticleGrpc.ArticleClient(chanel);
         _mapper = mapper;
     }
@@ -33,8 +42,8 @@ internal class ArticleService : IArticleService
     public async Task<bool> IsArticleExistAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var response = await _articleClient.IsArticleExistAsync(
-            new Protos.IsArticleExistRequest() { Id = id.ToString() }, 
-            cancellationToken:  cancellationToken);
+            new Protos.IsArticleExistRequest() { Id = id.ToString() },
+            cancellationToken: cancellationToken);
 
         return response.IsExist;
     }

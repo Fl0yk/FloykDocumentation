@@ -14,6 +14,8 @@ public static class DependencyInjection
         JwtOptions jwtOptions = configuration.GetSection("Jwt").Get<JwtOptions>()
                                     ?? throw new KeyNotFoundException("Can't read jwt from appsettings.json");
 
+        services.AddEndpointsApiExplorer();
+
         services.AddOcelot(configuration)
                 .AddDelegatingHandler<JwtInjectionHandler>();
 

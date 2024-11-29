@@ -1,10 +1,11 @@
-﻿using Article.Infrastructure.Consumers.User;
 using Article.Infrastructure.Options.Models;
 using Article.Presentation.Shared.Options.Setups;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using MassTransit;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 
 namespace Article.Presentation;
@@ -21,7 +22,7 @@ public static class DependencyInjection
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.ConfigureMassTransit();
+        services.ConfigureSerilog(configuration);
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(option =>
@@ -67,26 +68,6 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void ConfigureMassTransit(this IServiceCollection services)
-    {
-        services.AddMassTransit(conf =>
-        {
-            conf.SetKebabCaseEndpointNameFormatter();
-
-            conf.AddConsumer<UsernameUpdatedConsumer>();
-
-            conf.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host("localhost", "/", h => {
-                    h.Username("guest");
-                    h.Password("guest");
-                });
-
-                cfg.ConfigureEndpoints(context);
-            });
-        });
-    }
-
     private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
     {
         UrlsOption urls = configuration.GetSection("Urls").Get<UrlsOption>()
@@ -101,5 +82,35 @@ public static class DependencyInjection
                     .AllowAnyHeader();
             });
         });
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        return;
+    }
+
+    private static IServiceCollection ConfigureSerilog(this IServiceCollection services, IConfiguration configuration)
+    {
+        string elasticsearchUrl = configuration.GetSection("ElasticsearchUrl").Value
+                                                    ?? throw new KeyNotFoundException("Can't read jwt from appsettings.json");
+
+        ElasticsearchSinkOptions elasticsearchOptions = new(new Uri(elasticsearchUrl))
+        {
+            AutoRegisterTemplate = true,
+            IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+        };
+
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+            .MinimumLevel.Override("System", LogEventLevel.Information)
+            .WriteTo.Console()
+            .WriteTo.Elasticsearch(elasticsearchOptions).MinimumLevel
+                    .Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .CreateLogger();
+
+
+        return services;
     }
 }

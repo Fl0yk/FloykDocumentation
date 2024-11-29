@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Forum.Domain.Abstractions.Repositories;
 using Forum.Infrastructure.Repositories;
 using Forum.Domain.Abstractions.Services;
-using Forum.Infrastructure.gRPC.Services;
+using Forum.Infrastructure.gRPC.Services.Clients;
 
 namespace Forum.Infrastructure;
 public static class DependencyInjection

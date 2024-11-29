@@ -7,7 +7,7 @@ using MediatR;
 using ArticlegRPC = Article.Infrastructure.gRPC.Protos.Article;
 using ApplicationRequest = Article.Application.UseCases.Requests.Articles.GetArticleByIdRequest;
 
-namespace Article.Infrastructure.gRPC.Services;
+namespace Article.Infrastructure.gRPC.Services.Servers;
 
 public class ArticleService : ArticlegRPC.ArticleBase
 {
@@ -25,10 +25,10 @@ public class ArticleService : ArticlegRPC.ArticleBase
         try
         {
             await _mediator.Send(
-                        _mapper.Map<ApplicationRequest>(request), 
+                        _mapper.Map<ApplicationRequest>(request),
                         context.CancellationToken);
         }
-        catch(NotFoundException)
+        catch (NotFoundException)
         {
             return new IsArticleExistResponse() { IsExist = false };
         }
