@@ -9,6 +9,6 @@ public class DeleteArticleRequestDTOValidator : AbstractValidator<DeleteArticleR
     {
         RuleFor(r => r.Id).NotEmpty();
 
-        RuleFor(r => r.AuthorName).NotEmpty();
+        RuleFor(r => r.CurrentUserName).NotEmpty();
     }
 }

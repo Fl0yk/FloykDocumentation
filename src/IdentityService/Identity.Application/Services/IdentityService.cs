@@ -79,7 +79,7 @@ public class IdentityService : IIdentityService
 
         if (!result.Succeeded)
         {
-            throw new UnauthorizedException("Invalid username or password");
+            throw new BadRequestException("Invalid username or password");
         }
 
         var dbUser = await _userManager.FindByNameAsync(loginRequest.Username);

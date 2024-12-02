@@ -1,5 +1,6 @@
 using Article.Application;
 using Article.Infrastructure;
+using Article.Infrastructure.gRPC.Services.Servers;
 using Article.Presentation;
 using Article.Presentation.Middlewares;
 
@@ -17,14 +18,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
+
 app.UseMiddleware<SerilogMiddleware>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<ArticleService>();
 
 app.Run();

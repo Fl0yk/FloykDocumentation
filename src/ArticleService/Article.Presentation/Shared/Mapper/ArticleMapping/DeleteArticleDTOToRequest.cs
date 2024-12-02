@@ -10,6 +10,6 @@ public class DeleteArticleDTOToRequest : Profile
     {
         CreateMap<DeleteArticleRequestDTO, DeleteArticleRequest>()
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.AuthorName));
+            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.CurrentUserName));
     }
 }

@@ -4,10 +4,11 @@ using Identity.Application.Abstractions.Managers;
 using Identity.Application.Abstractions.Providers;
 using Identity.DataAccess.Data;
 using Identity.DataAccess.Entities;
+using Identity.Infrastructure.Shared.Options.Models;
 using Identity.Presentation.Managers;
-using Identity.Presentation.Options.Models;
-using Identity.Presentation.Options.Setups;
 using Identity.Presentation.Providers;
+using Identity.Presentation.Shared.Options.Models;
+using Identity.Presentation.Shared.Options.Setups;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -15,7 +16,6 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
-using System;
 using System.Reflection;
 using System.Text;
 
@@ -40,6 +40,8 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddControllers();
+
+        services.AddGrpc();
 
         services.AddFluentValidationAutoValidation();
 
@@ -76,15 +78,7 @@ public static class DependencyInjection
                 });
         });
 
-        services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
-        });
+        services.ConfigureCors(configuration);
 
         return services;
     }
@@ -94,6 +88,7 @@ public static class DependencyInjection
         // KEEP launchSettings.json and applicatoinSettings.json in sync
         services.ConfigureOptions<WWWRootOptionsSetup>();
         services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<UrlsOptionSetup>();
 
         return services;
     }
@@ -150,5 +145,21 @@ public static class DependencyInjection
 
 
         return services;
+    }
+
+    private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        UrlsOption urls = configuration.GetSection("Urls").Get<UrlsOption>() 
+                                            ?? throw new KeyNotFoundException("Can't read urls from appsettings.json");
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.WithOrigins(urls.ApiGatewayUrl, urls.ForumUrl, urls.ArticleUrl)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
     }
 }

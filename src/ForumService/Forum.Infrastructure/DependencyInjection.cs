@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Forum.Domain.Abstractions.Repositories;
 using Forum.Infrastructure.Repositories;
+using Forum.Domain.Abstractions.Services;
+using Forum.Infrastructure.gRPC.Services.Clients;
 
 namespace Forum.Infrastructure;
 public static class DependencyInjection
@@ -16,6 +18,8 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(cfg => cfg.UseSqlServer(connectionString));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }

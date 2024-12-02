@@ -1,5 +1,8 @@
-﻿using FluentValidation;
+using Article.Infrastructure.Options.Models;
+using Article.Presentation.Shared.Options.Setups;
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -11,6 +14,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.ConfigureOptions();
+
         services.AddControllers();
 
         services.AddFluentValidationAutoValidation();
@@ -20,13 +25,59 @@ public static class DependencyInjection
         services.ConfigureSerilog(configuration);
 
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(option =>
+        {
+            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+
+            option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+        });
+
+        services.ConfigureCors(configuration);
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        return services;
+    }
+
+    private static IServiceCollection ConfigureOptions(this IServiceCollection services)
+    {
+        // KEEP launchSettings.json and applicatoinSettings.json in sync
+        services.ConfigureOptions<UrlsOptionSetup>();
+
+        return services;
+    }
+
+    private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        UrlsOption urls = configuration.GetSection("Urls").Get<UrlsOption>()
+                                            ?? throw new KeyNotFoundException("Can't read urls from appsettings.json");
 
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(builder =>
             {
-                builder.AllowAnyOrigin()
+                builder.WithOrigins(urls.ApiGatewayUrl, urls.ForumUrl, urls.IdentityUrl)
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
@@ -34,7 +85,7 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-        return services;
+        return;
     }
 
     private static IServiceCollection ConfigureSerilog(this IServiceCollection services, IConfiguration configuration)

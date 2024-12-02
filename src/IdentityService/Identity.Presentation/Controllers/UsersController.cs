@@ -72,11 +72,11 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("saved-article")]
+    [HttpPost("saved-article/{articleId:guid}")]
     [Authorize]
-    public async Task<IActionResult> SaveArticlePost([FromBody] SaveArticleRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> SaveArticlePost([FromRoute] Guid articleId, CancellationToken cancellationToken)
     {
-        await _userService.SaveArticleAsync(_mapper.Map<SaveArticleRequest>(request), cancellationToken);
+        await _userService.SaveArticleAsync(new SaveArticleRequest(articleId), cancellationToken);
 
         return NoContent();
     }

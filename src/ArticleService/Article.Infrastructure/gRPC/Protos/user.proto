@@ -1,0 +1,24 @@
+﻿syntax = "proto3";
+ 
+option csharp_namespace = " Article.Infrastructure.gRPC.Protos";
+ 
+package user;
+
+service User {
+	rpc IsUserExistById (IsUserExistByIdRequest) returns (IsUserExistResponse);
+
+	rpc IsUserExistByName (IsUserExistByNameRequest) returns (IsUserExistResponse);
+}
+
+message IsUserExistByIdRequest {
+	string id = 1;
+}
+
+message IsUserExistByNameRequest {
+	string name = 1;
+}
+
+message IsUserExistResponse {
+	bool isExist = 1;
+}
+

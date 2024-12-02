@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+ 
+option csharp_namespace = " Identity.Infrastructure.gRPC.Protos";
+
+package article;
+
+service Article {
+	rpc GetArticleById (GetArticleByIdRequest) returns (GetArticleByIdResponse);
+	rpc IsArticleExist (IsArticleExistRequest) returns (IsArticleExistResponse);
+}
+
+message GetArticleByIdRequest {
+	string id = 1;
+}
+
+message GetArticleByIdResponse {
+	string id = 1;
+	string title = 2;
+}
+
+message IsArticleExistRequest{
+	string id = 1;
+}
+
+message IsArticleExistResponse{
+	bool isExist = 1;
+}

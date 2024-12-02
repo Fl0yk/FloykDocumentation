@@ -1,6 +1,6 @@
 ﻿namespace Forum.Presentation.Shared.Models.DTOs.Question;
 
-public record CreateQuestionRequestDTO(
+public record class CreateQuestionRequestDTO(
                             string Title,
                             string Description,
-                            Guid AuthorId);
+                            Guid CurrentUserId);

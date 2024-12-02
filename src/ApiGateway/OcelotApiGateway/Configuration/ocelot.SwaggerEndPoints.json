@@ -1,0 +1,34 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "identity",
+      "Config": [
+        {
+          "Name": "Identity API",
+          "Version": "v1",
+          "Url": "http://identity.api:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "forum",
+      "Config": [
+        {
+          "Name": "Forum API",
+          "Version": "v1",
+          "Url": "http://forum.api:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "article",
+      "Config": [
+        {
+          "Name": "Article API",
+          "Version": "v1",
+          "Url": "http://article.api:8080/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

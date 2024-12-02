@@ -2,4 +2,11 @@
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class CreateArticleRequest(string Title, string AuthorName, Guid CategoryId) : IRequest;
+public class CreateArticleRequest : IRequest
+{
+    public required string Title { get; set; }
+
+    public required string AuthorName { get; set; }
+
+    public Guid CategoryId { get; set; }
+}

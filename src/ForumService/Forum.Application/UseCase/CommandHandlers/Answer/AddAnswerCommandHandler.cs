@@ -2,6 +2,7 @@
 using Forum.Application.Shared.Exceptions;
 using Forum.Application.UseCase.Command.Answer;
 using Forum.Domain.Abstractions.Repositories;
+using Forum.Domain.Abstractions.Services;
 using MediatR;
 
 using AnswerModel = Forum.Domain.Entities.Answer;
@@ -10,11 +11,13 @@ namespace Forum.Application.UseCase.CommandHandlers.Answer;
 
 public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, Guid>
 {
+    private readonly IUserService _userService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public AddAnswerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public AddAnswerCommandHandler(IUserService userService, IUnitOfWork unitOfWork, IMapper mapper)
     {
+        _userService = userService;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -31,6 +34,13 @@ public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, Guid>
         if (dbQuestion.IsClosed)
         {
             throw new BadRequestException($"Question with id {request.QuestionId} closed");
+        }
+
+        bool isUserExist = await _userService.IsUserExist(request.AuthorId, cancellationToken);
+
+        if (!isUserExist)
+        {
+            throw new NotFoundException($"User with id {request.AuthorId} was not found");
         }
 
         var answer = _mapper.Map<AnswerModel>(request);

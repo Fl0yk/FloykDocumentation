@@ -9,6 +9,6 @@ public class PublishArticleRequestDTOValidator : AbstractValidator<PublishArticl
     {
         RuleFor(r => r.ArticleId).NotEmpty();
 
-        RuleFor(r => r.AuthorName).NotEmpty();
+        RuleFor(r => r.CurrentUserName).NotEmpty();
     }
 }

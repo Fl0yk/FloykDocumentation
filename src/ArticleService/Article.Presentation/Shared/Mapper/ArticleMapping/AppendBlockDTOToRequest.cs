@@ -11,7 +11,7 @@ public class AppendBlockDTOToRequest : Profile
         CreateMap<AppendBlockRequestDTO, AppendBlockRequest>()
             .ForMember(d => d.ArticleId, opt => opt.MapFrom(src => src.ArticleId))
             .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.AuthorName))
+            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.CurrentUserName))
             .ForMember(d => d.BlockType, opt => opt.MapFrom(src => src.BlockType));
     }
 }

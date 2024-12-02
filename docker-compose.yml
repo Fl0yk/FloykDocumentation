@@ -1,7 +1,8 @@
 services:
-  forum.presentation:
+  forum.api:
     container_name: "Forum.Presentation"
-    image: ${DOCKER_REGISTRY-}forumpresentation
+    hostname: "forum.api"
+    image: ${DOCKER_REGISTRY-}forumapi
     build:
       context: .
       dockerfile: src/ForumService/Forum.Presentation/Dockerfile
@@ -23,9 +24,10 @@ services:
     ports:
         - "7003:1433"
 
-  identity.presentation:
+  identity.api:
     container_name: "Identity.Presentation"
-    image: ${DOCKER_REGISTRY-}identitypresentation
+    hostname: "identity.api"
+    image: ${DOCKER_REGISTRY-}identityapi
     build:
       context: .
       dockerfile: src/IdentityService/Identity.Presentation/Dockerfile
@@ -35,6 +37,7 @@ services:
     depends_on:
         - identity.db
         - kibana
+        - rabbitmq
 
   identity.db:
     container_name: "Identity.Database"
@@ -71,9 +74,10 @@ services:
     environment:
         - ELASTICSEARCH_URL=http://localhost:9200
 
-  article.presentation:
+  article.api:
     container_name: "Article.Presentation"
-    image: ${DOCKER_REGISTRY-}articlepresentation
+    hostname: "article.api"
+    image: ${DOCKER_REGISTRY-}articleapi
     build:
       context: .
       dockerfile: src/ArticleService/Article.Presentation/Dockerfile
@@ -82,9 +86,34 @@ services:
         - "5001:8081"
     depends_on:
         - mongodb
+        - rabbitmq
 
   mongodb:
     image: mongo:latest
     ports:
         - "27017:27017"
+
+  rabbitmq:
+    image: masstransit/rabbitmq:latest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+
+  ocelotapigateway:
+    container_name: "ApiGateway"
+    image: ${DOCKER_REGISTRY-}ocelotapigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateway/OcelotApiGateway/Dockerfile
+    ports:
+        - "9001:8080"
+    depends_on:
+        - article.api
+        - identity.api
+        - forum.api
+    links:
+        - article.api
+        - identity.api
+        - forum.api
 

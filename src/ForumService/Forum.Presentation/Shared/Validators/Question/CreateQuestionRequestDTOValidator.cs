@@ -11,6 +11,6 @@ public class CreateQuestionRequestDTOValidator : AbstractValidator<CreateQuestio
 
         RuleFor(q => q.Description).NotNull();
 
-        RuleFor(q => q.AuthorId).NotEmpty();
+        RuleFor(q => q.CurrentUserId).NotEmpty();
     }
 }

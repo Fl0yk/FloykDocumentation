@@ -2,7 +2,12 @@
 
 namespace Forum.Application.UseCase.Command.Question;
 
-public record CreateQuestionCommand(
-                string Title,
-                string Description,
-                Guid AuthorId) : IRequest<Guid>;
+public class CreateQuestionCommand : IRequest<Guid>
+{
+    public Guid AuthorId { get; set; }
+
+    public required string Title { get; set; }
+
+    public required string Description { get; set; }
+}
+

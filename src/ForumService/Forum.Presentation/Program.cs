@@ -23,13 +23,15 @@ if (app.Environment.IsDevelopment())
     scope.ApplyMigration<ApplicationDbContext>();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors();
 
 app.UseMiddleware<SerilogMiddleware>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+//app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

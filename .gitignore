@@ -1,4 +1,6 @@
 .containers/
+src/IdentityService/Identity.Presentation/wwwroot/Images
+!src/IdentityService/Identity.Presentation/wwwroot/Images/.gitkeep
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/

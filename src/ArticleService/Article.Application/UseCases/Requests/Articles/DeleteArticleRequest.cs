@@ -2,4 +2,9 @@
 
 namespace Article.Application.UseCases.Requests.Articles;
 
-public record class DeleteArticleRequest(Guid Id, string AuthorName) : IRequest;
+public class DeleteArticleRequest : IRequest
+{
+    public Guid Id { get; set; }
+
+    public required string AuthorName { get; set; }
+}

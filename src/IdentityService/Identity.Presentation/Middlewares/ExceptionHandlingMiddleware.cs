@@ -31,7 +31,7 @@ public class ExceptionHandlingMiddleware
 
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
-        catch (NotFoundException ex)
+        catch (UnauthorizedException ex)
         {
             var problemDetails = new ProblemDetails
             {
@@ -44,7 +44,7 @@ public class ExceptionHandlingMiddleware
 
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
-        catch (UnauthorizedException ex)
+        catch (NotFoundException ex)
         {
             var problemDetails = new ProblemDetails
             {

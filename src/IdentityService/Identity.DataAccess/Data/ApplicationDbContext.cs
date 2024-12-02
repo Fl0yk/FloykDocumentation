@@ -9,6 +9,8 @@ namespace Identity.DataAccess.Data;
 
 public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
+    public DbSet<SavedArticle> SavedArticles => Set<SavedArticle>();
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
         base(options)
     { }
