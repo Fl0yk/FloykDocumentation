@@ -6,8 +6,6 @@ using Article.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.WebHost.UseKestrel(conf => conf.ConfigureEndpointDefaults(endpoints => { endpoints.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2; }));
-
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddPresentationServices(builder.Configuration);
 builder.Services.AddApplicationServices();

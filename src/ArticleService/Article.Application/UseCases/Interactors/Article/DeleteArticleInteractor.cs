@@ -37,6 +37,6 @@ public class DeleteArticleInteractor : IRequestHandler<DeleteArticleRequest>
         await _publishEndpoint.Publish<ArticleDeleted>(new
         {
             Id = request.Id
-        });
+        }, cancellationToken);
     }
 }

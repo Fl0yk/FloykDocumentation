@@ -10,8 +10,6 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.WebHost.UseKestrel(conf => conf.ConfigureEndpointDefaults(endpoints => { endpoints.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2; }));
-
 builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices(builder.Configuration);

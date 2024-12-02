@@ -1,11 +1,10 @@
 ﻿using Article.Infrastructure.gRPC.Protos;
-using Article.Application.Shared.Exceptions;
 using AutoMapper;
 using Grpc.Core;
 using MediatR;
 
+using ApplicationRequests = Article.Application.UseCases.Requests.Articles;
 using ArticlegRPC = Article.Infrastructure.gRPC.Protos.Article;
-using ApplicationRequest = Article.Application.UseCases.Requests.Articles.GetArticleByIdRequest;
 
 namespace Article.Infrastructure.gRPC.Services.Servers;
 
@@ -22,23 +21,22 @@ public class ArticleService : ArticlegRPC.ArticleBase
 
     public async override Task<IsArticleExistResponse> IsArticleExist(IsArticleExistRequest request, ServerCallContext context)
     {
-        try
-        {
-            await _mediator.Send(
-                        _mapper.Map<ApplicationRequest>(request),
-                        context.CancellationToken);
-        }
-        catch (NotFoundException)
+
+        if (!Guid.TryParse(request.Id, out var id))
         {
             return new IsArticleExistResponse() { IsExist = false };
         }
 
-        return new IsArticleExistResponse() { IsExist = true };
+        var isExist = await _mediator.Send(
+                        new ApplicationRequests.IsArticleExistByIdRequest(id),
+                        context.CancellationToken);
+
+        return new IsArticleExistResponse() { IsExist = isExist };
     }
 
     public override async Task<GetArticleByIdResponse> GetArticleById(GetArticleByIdRequest request, ServerCallContext context)
     {
-        var appRequest = _mapper.Map<ApplicationRequest>(request);
+        var appRequest = _mapper.Map<ApplicationRequests.GetArticleByIdRequest>(request);
 
         var appResponse = await _mediator.Send(appRequest, context.CancellationToken);
 
