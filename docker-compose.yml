@@ -24,6 +24,13 @@ services:
     ports:
         - "7003:1433"
 
+  forum.cache:
+    image: redis
+    hostname: "forum.cache"
+    container_name: Forum.Cache
+    ports:
+      - "6379:6379"
+
   identity.api:
     container_name: "Identity.Presentation"
     hostname: "identity.api"

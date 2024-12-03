@@ -20,6 +20,9 @@ public static class DependencyInjection
     {
         BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
+        string redisConnection = configuration.GetSection("RedisUrl").Value 
+                                            ?? throw new KeyNotFoundException("SConnection string for redis was not found");
+
         DocumentationArticleDbSettings dbSettings = configuration
             .GetSection("DocumentationDatabaseSettings")
             .Get<DocumentationArticleDbSettings>() ?? throw new ArgumentNullException("Settings for mongodb was not found");
@@ -32,6 +35,11 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IUserService, UserService>();
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisConnection;
+        });
 
         services.AddGrpc();
 

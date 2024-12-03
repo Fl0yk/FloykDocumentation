@@ -3,6 +3,8 @@ using Forum.Presentation;
 using Forum.Infrastructure;
 using Forum.Presentation.Middlewares;
 using Forum.Infrastructure.Extensions;
+using Hangfire;
+using Forum.Presentation.Shared.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new HangFireAuthorizationFilter() }
+    });
 
     using IServiceScope scope = app.Services.CreateScope();
 
