@@ -53,7 +53,7 @@ public class ExceptionHandlingMiddleware
                 Detail = ex.Message
             };
 
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
 
             await context.Response.WriteAsJsonAsync(problemDetails);
         }

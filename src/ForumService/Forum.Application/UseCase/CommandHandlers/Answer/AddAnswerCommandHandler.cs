@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Forum.Application.Shared.Exceptions;
+using Forum.Application.Shared.Models.DTOs;
 using Forum.Application.UseCase.Command.Answer;
 using Forum.Domain.Abstractions.Repositories;
 using Forum.Domain.Abstractions.Services;
@@ -9,7 +10,7 @@ using AnswerModel = Forum.Domain.Entities.Answer;
 
 namespace Forum.Application.UseCase.CommandHandlers.Answer;
 
-public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, Guid>
+public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, AnswerDTO>
 {
     private readonly IUserService _userService;
     private readonly IUnitOfWork _unitOfWork;
@@ -22,7 +23,7 @@ public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, Guid>
         _mapper = mapper;
     }
 
-    public async Task<Guid> Handle(AddAnswerCommand request, CancellationToken cancellationToken)
+    public async Task<AnswerDTO> Handle(AddAnswerCommand request, CancellationToken cancellationToken)
     {
         var dbQuestion = await _unitOfWork.QuestionRepository.FirstOrDefaultByIdAsync(request.QuestionId);
 
@@ -61,6 +62,6 @@ public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, Guid>
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return id;
+        return _mapper.Map<AnswerDTO>(answer);
     }
 }

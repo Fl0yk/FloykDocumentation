@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Forum.Application.Shared.Models.DTOs;
+using MediatR;
 
 namespace Forum.Application.UseCase.Command.Answer;
 
-public class AddAnswerCommand : IRequest<Guid>
+public class AddAnswerCommand : IRequest<AnswerDTO>
 {
     public required string Text { get; set; }
 

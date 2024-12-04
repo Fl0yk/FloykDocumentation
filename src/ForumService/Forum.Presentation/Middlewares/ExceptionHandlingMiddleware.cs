@@ -44,7 +44,20 @@ public class ExceptionHandlingMiddleware
 
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
-        catch(Exception)
+        catch (ForbiddenException ex)
+        {
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status403Forbidden,
+                Title = "Forbidden error",
+                Detail = ex.Message
+            };
+
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        }
+        catch (Exception)
         {
             var problemDetails = new ProblemDetails
             {

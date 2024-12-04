@@ -10,6 +10,7 @@ public class UpdateAnswerRequestToCommand : Profile
     {
         CreateMap<UpdateAnswerRequestDTO, UpdateAnswerCommand>()
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text));
+            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
+            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.CurrentUserId));
     }
 }

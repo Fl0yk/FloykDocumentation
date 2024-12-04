@@ -10,6 +10,7 @@ public class CreateAnswerCommandToAnswer : Profile
         CreateMap<AddAnswerCommand, Answer>()
             .ForMember(d => d.ParentId, opt => opt.MapFrom(src => src.ParentId))
             .ForMember(d => d.QuestionId, opt => opt.MapFrom(src => src.QuestionId))
-            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text));
+            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
+            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId));
     }
 }

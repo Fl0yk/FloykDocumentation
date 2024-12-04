@@ -14,6 +14,7 @@ public class AnswerToAnswerDTO : Profile
             .ForMember(d => d.QuestionId, opt => opt.MapFrom(src => src.QuestionId))
             .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
             .ForMember(d => d.Level, opt => opt.MapFrom(src => src.Level))
-            .ForMember(d => d.TimeOfCreation, opt => opt.MapFrom(src => src.TimeOfCreation));
+            .ForMember(d => d.TimeOfCreation, opt => opt.MapFrom(src => src.TimeOfCreation))
+            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId));
     }
 }
