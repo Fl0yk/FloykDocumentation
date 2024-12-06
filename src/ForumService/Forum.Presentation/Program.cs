@@ -1,10 +1,11 @@
 using Forum.Application;
-using Forum.Presentation;
 using Forum.Infrastructure;
-using Forum.Presentation.Middlewares;
 using Forum.Infrastructure.Extensions;
-using Hangfire;
+using Forum.Infrastructure.SignalR.Hubs;
+using Forum.Presentation;
+using Forum.Presentation.Middlewares;
 using Forum.Presentation.Shared.Filters;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapHub<QuestionsHub>("/questions-hub");
 
 app.MapControllers();
 

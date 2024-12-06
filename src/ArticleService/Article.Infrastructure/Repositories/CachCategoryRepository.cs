@@ -1,5 +1,6 @@
 ﻿using Article.Domain.Abstractions.Repositories;
 using Article.Domain.Entities;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
@@ -9,6 +10,7 @@ public class CachCategoryRepository : ICategoryRepository
 {
     private readonly CategoryRepository _baseRepository;
     private readonly IDistributedCache _cache;
+    private const string _categoriesKey = "categories-key";
 
     public CachCategoryRepository(CategoryRepository baseRepository, IDistributedCache cache)
     {
@@ -18,6 +20,13 @@ public class CachCategoryRepository : ICategoryRepository
 
     public async Task AddCategoryAsync(Category category, CancellationToken cancellationToken = default)
     {
+        string? categories = await _cache.GetStringAsync(_categoriesKey, cancellationToken);
+
+        if (categories is not null)
+        {
+            await _cache.RemoveAsync(_categoriesKey, cancellationToken);
+        }
+
         await _baseRepository.AddCategoryAsync(category, cancellationToken);
     }
 
@@ -32,12 +41,26 @@ public class CachCategoryRepository : ICategoryRepository
             await _cache.RemoveAsync(key, cancellationToken);
         }
 
+        string? categories = await _cache.GetStringAsync(_categoriesKey, cancellationToken);
+
+        if (value is not null)
+        {
+            await _cache.RemoveAsync(_categoriesKey, cancellationToken);
+        }
+
         await _baseRepository.DelteCategoryAsync(id, cancellationToken);
     }
 
-    public Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Category>> GetAllCategoriesAsync(CancellationToken cancellationToken = default)
     {
-        return _baseRepository.GetAllCategoriesAsync(cancellationToken);
+        string? value = await _cache.GetStringAsync(_categoriesKey, cancellationToken);
+
+        if (value is not null)
+        {
+            return JsonConvert.DeserializeObject<IEnumerable<Category>>(value)!;
+        }
+
+        return await _baseRepository.GetAllCategoriesAsync(cancellationToken);
     }
 
     public async Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)

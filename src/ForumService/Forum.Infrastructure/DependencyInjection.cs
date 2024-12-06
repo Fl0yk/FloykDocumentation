@@ -7,6 +7,8 @@ using Forum.Domain.Abstractions.Services;
 using Forum.Infrastructure.gRPC.Services.Clients;
 using Hangfire;
 using Forum.Infrastructure.BackgroundJobs.Question;
+using Hangfire.SqlServer;
+using Microsoft.Data.SqlClient;
 
 
 namespace Forum.Infrastructure;
@@ -30,14 +32,19 @@ public static class DependencyInjection
 
         services.AddHangfire(opt =>
         {
-            opt.UseSqlServerStorage(hangfireConnection)
+            opt.UseSqlServerStorage(connectionString)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings();
         });
 
+        JobStorage.Current = new SqlServerStorage(connectionString);
+
         services.AddHangfireServer();
 
-        RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>(Guid.NewGuid().ToString(), x => x.CloseQuestionsAsync(1), Cron.Daily());
+        services.AddSignalR();
+        //Generate("ForumTasks", hangfireConnection);
+
+        RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>("4699754f-79de-4b23-8ba5-dac5cf0357da", x => x.CloseQuestionsAsync(25), Cron.Daily());
 
         return services;
     }
