@@ -44,7 +44,7 @@ public static class DependencyInjection
         services.AddSignalR();
         //Generate("ForumTasks", hangfireConnection);
 
-        RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>("4699754f-79de-4b23-8ba5-dac5cf0357da", x => x.CloseQuestionsAsync(25), Cron.Daily());
+        //RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>("4699754f-79de-4b23-8ba5-dac5cf0357da", x => x.CloseQuestionsAsync(25), Cron.Daily());
 
         return services;
     }
