@@ -4,7 +4,7 @@ public class FollowingDTO
 {
     public Guid AuthorId { get; set; }
 
-    public string AuthorName { get; set; } = string.Empty;
+    public string AuthorName { get; set; } = null!;
 
-    public DateTime DateOfFollow { get; set; }
+    public DateTimeOffset DateOfFollow { get; set; }
 }

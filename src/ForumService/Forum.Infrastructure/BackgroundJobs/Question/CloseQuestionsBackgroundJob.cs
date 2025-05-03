@@ -17,7 +17,7 @@ public class CloseQuestionsBackgroundJob
 
         foreach (var question in questions)
         {
-            if ((DateTime.UtcNow.Date - question.DateOfCreation).Days >= maxOpenedDays)
+            if ((DateTime.UtcNow.Date - question.CreatedAt).Days >= maxOpenedDays)
             {
                 question.IsClosed = true;
 

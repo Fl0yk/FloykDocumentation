@@ -1,4 +1,4 @@
-﻿using Article.Infrastructure.Options.Models;
+﻿using Core.Api.Models.Options;
 using Microsoft.Extensions.Options;
 
 namespace Article.Presentation.Shared.Options.Setups;

@@ -13,16 +13,14 @@ services:
         - forum.db
   
   forum.db:
-    container_name: "Forum.Database"
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    user: root
-    volumes:
-      - ./.containers/forum:/var/opt/mssql/data
-    environment:
-        ACCEPT_EULA: "Y"
-        MSSQL_SA_PASSWORD: StrongPassword123
-    ports:
-        - "7003:1433"
+     container_name: "Forum.Database"
+     image: postgres:16.4
+     user: root
+     environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+     ports:
+        - "7004:5432"
 
   forum.cache:
     image: redis
@@ -47,16 +45,13 @@ services:
         - rabbitmq
 
   identity.db:
-    container_name: "Identity.Database"
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    user: root
-    volumes:
-      - ./.containers/identity:/var/opt/mssql/data
-    environment:
-        ACCEPT_EULA: "Y"
-        MSSQL_SA_PASSWORD: StrongPassword123
-    ports:
-        - "6003:1433"
+     container_name: "Identity.Database"
+     image: postgres:16.4
+     environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+     ports:
+        - "6004:5432"
 
   elasticsearch:
     container_name: elasticsearch
@@ -94,6 +89,15 @@ services:
     depends_on:
         - mongodb
         - rabbitmq
+
+  article.db:
+    container_name: "Article.Database"
+    image: postgres:16.4
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+    ports:
+        - "5004:5432"
 
   mongodb:
     image: mongo:latest

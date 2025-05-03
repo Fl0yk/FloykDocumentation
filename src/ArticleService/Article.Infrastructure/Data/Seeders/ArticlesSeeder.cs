@@ -18,7 +18,7 @@ public static class ArticlesSeeder
             {
                 Id = Guid.Parse("810b1d52-8546-41a8-9d7c-31406ec364b8"),
                 Title = "Numeric data types",
-                AuthorName = "Author",
+                AuthorId = Guid.Parse("810b1d52-8546-41a8-9d7c-31406ec364b8"),
                 IsPublished = true,
                 DateOfPublication = DateTime.UtcNow.AddDays(-30),
                 CategoryId = Guid.Parse("af65248a-df56-456a-b84d-d1756ce06765"),
@@ -53,7 +53,7 @@ public static class ArticlesSeeder
             {
                 Id = Guid.Parse("499b4ad1-1e48-4c50-8b97-0f9465815246"),
                 Title = "Difference between class and structure",
-                AuthorName = "Author",
+                AuthorId = Guid.Parse("810b1d52-8546-41a8-9d7c-31406ec364b8"),
                 IsPublished = false,
                 DateOfPublication = null,
                 CategoryId = Guid.Parse("8eb020a2-7f4f-4726-8b3b-b3614a474ec7"),

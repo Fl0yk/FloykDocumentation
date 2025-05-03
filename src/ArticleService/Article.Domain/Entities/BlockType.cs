@@ -1,5 +1,6 @@
 ﻿namespace Article.Domain.Entities;
 
+//TODO: ничего себе... Переписать на енам
 public static class BlockType
 {
     public const string Title = "title";

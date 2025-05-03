@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
+﻿using Core.Infrastructure.Extensions;
+using Core.Providers.Interfaces;
 using Forum.Domain.Abstractions.Repositories;
-using Forum.Infrastructure.Repositories;
-using Forum.Domain.Abstractions.Services;
-using Forum.Infrastructure.gRPC.Services.Clients;
-using Hangfire;
 using Forum.Infrastructure.BackgroundJobs.Question;
-using Hangfire.SqlServer;
-using Microsoft.Data.SqlClient;
+using Forum.Infrastructure.Data;
+using Forum.Infrastructure.Repositories;
+using Hangfire;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Forum.Infrastructure;
@@ -24,27 +24,20 @@ public static class DependencyInjection
         string hangfireConnection = configuration.GetConnectionString("HangfireConnection")
                                                         ?? throw new ArgumentNullException("Hangfire db connection string is not found");
 
-        services.AddDbContext<ApplicationDbContext>(cfg => cfg.UseSqlServer(connectionString));
-
+        services.AddScoped<ISaveChangesInterceptor, SaveChangesInterceptor>();
+        services.AddScoped<ITransactionProvider, TransactionProvider>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IUserService, UserService>();
-
-        services.AddHangfire(opt =>
-        {
-            opt.UseSqlServerStorage(connectionString)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings();
+        services.AddDbContext<ApplicationDbContext>((sp, cfg) => {
+            cfg.UseNpgsql(connectionString);
+            cfg.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
         });
 
-        JobStorage.Current = new SqlServerStorage(connectionString);
-
-        services.AddHangfireServer();
+        services.ConfigureHangfire(connectionString);
 
         services.AddSignalR();
-        //Generate("ForumTasks", hangfireConnection);
 
-        //RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>("4699754f-79de-4b23-8ba5-dac5cf0357da", x => x.CloseQuestionsAsync(25), Cron.Daily());
+        RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>($"Recuring-{nameof(CloseQuestionsBackgroundJob)}", x => x.CloseQuestionsAsync(25), Cron.Daily());
 
         return services;
     }

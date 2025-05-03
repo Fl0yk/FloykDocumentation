@@ -6,5 +6,5 @@ public class AccessToken
 
     public required string RefreshToken { get; set; }
 
-    public DateTime RefreshTokenExpiry { get; set; }
+    public DateTimeOffset RefreshTokenExpiry { get; set; }
 }

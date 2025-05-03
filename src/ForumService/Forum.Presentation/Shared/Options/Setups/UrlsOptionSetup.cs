@@ -1,4 +1,4 @@
-﻿using Forum.Infrastructure.Options.Models;
+﻿using Core.Api.Models.Options;
 using Microsoft.Extensions.Options;
 
 namespace Forum.Presentation.Options.Setups;

@@ -1,8 +1,7 @@
 using Article.Application;
 using Article.Infrastructure;
-using Article.Infrastructure.gRPC.Services.Servers;
 using Article.Presentation;
-using Article.Presentation.Middlewares;
+using Core.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +28,5 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapGrpcService<ArticleService>();
 
 app.Run();

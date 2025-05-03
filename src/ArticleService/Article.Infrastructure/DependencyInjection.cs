@@ -1,10 +1,11 @@
 ﻿using Article.Domain.Abstractions.Repositories;
-using Article.Domain.Abstractions.Services;
-using Article.Infrastructure.Consumers.User;
 using Article.Infrastructure.Data;
-using Article.Infrastructure.gRPC.Services.Clients;
+using Article.Infrastructure.Data.TransactionProviders;
 using Article.Infrastructure.Repositories;
+using Core.Providers.Interfaces;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
@@ -20,28 +21,23 @@ public static class DependencyInjection
     {
         BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
-        string redisConnection = configuration.GetSection("RedisUrl").Value 
-                                            ?? throw new KeyNotFoundException("SConnection string for redis was not found");
-
         DocumentationArticleDbSettings dbSettings = configuration
             .GetSection("DocumentationDatabaseSettings")
             .Get<DocumentationArticleDbSettings>() ?? throw new ArgumentNullException("Settings for mongodb was not found");
 
-        ApplicationDbContext dbContext = new(dbSettings);
+        var dbContext = new ApplicationDbContext(dbSettings);
 
         services.AddSingleton(dbContext.ArticleCollection);
-        services.AddSingleton(dbContext.CategoryCollection);
+        services.AddSingleton<ISaveChangesInterceptor, SaveChangesInterceptor>();
 
+        services.AddScoped<ITransactionProvider, SqlTransactionProvider>();
+        //TODO: mongo db transactions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IUserService, UserService>();
-
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = redisConnection;
+        services.AddDbContext<SqlDbContext>((sp, cfg) => {
+            cfg.UseNpgsql(dbSettings.SqlConnectionString);
+            cfg.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
         });
-
-        services.AddGrpc();
 
         services.ConfigureMassTransit();
 
@@ -56,7 +52,7 @@ public static class DependencyInjection
         {
             conf.SetKebabCaseEndpointNameFormatter();
 
-            conf.AddConsumer<UsernameUpdatedConsumer>();
+            //conf.AddConsumer<UsernameUpdatedConsumer>();
 
             conf.UsingRabbitMq((context, cfg) =>
             {

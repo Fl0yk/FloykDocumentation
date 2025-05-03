@@ -1,23 +1,24 @@
 ﻿using Article.Domain.Abstractions.Repositories;
-using Article.Domain.Entities;
 using Article.Infrastructure.Shared.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 using ArticleModel = Article.Domain.Entities.Article;
 
 namespace Article.Infrastructure.Repositories;
 
+//TODO: помучать чат для оптимизации запросов с работой блоков
 public class ArticleRepository : IArticleRepository
 {
     private readonly IMongoCollection<ArticleDb> _articles;
-    private readonly IMongoCollection<CategoryDb> _categories;
     private readonly IMapper _mapper;
 
-    public ArticleRepository(IMongoCollection<ArticleDb> articles, IMongoCollection<CategoryDb> categories, IMapper mapper)
+    public ArticleRepository(
+        IMongoCollection<ArticleDb> articles, 
+        IMapper mapper)
     {
         _articles = articles;
-        _categories = categories;
         _mapper = mapper;
     }
 
@@ -46,37 +47,33 @@ public class ArticleRepository : IArticleRepository
             return null;
         }
 
-        FilterDefinition<CategoryDb> idCategoryFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, dbArticle.CategoryId);
-
-        dbArticle.Category = _categories.Find(idCategoryFilter).First();
-
         return _mapper.Map<ArticleModel>(dbArticle);
     }
 
-    public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+    public async Task<long> CountAsync(CancellationToken cancellationToken = default)
     {
         FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
 
         return await _articles.CountDocumentsAsync(isPublishedFilter, cancellationToken: cancellationToken);
     }
 
-    public async Task<long> GetCountAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    public async Task<long> CountByCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default)
     {
         FilterDefinition<ArticleDb> categoryFilter = Builders<ArticleDb>.Filter.Eq(article => article.CategoryId, categoryId);
 
         return await _articles.CountDocumentsAsync(categoryFilter, cancellationToken: cancellationToken);
     }
 
-    public async Task<long> GetCountAsync(string authorName, CancellationToken cancellationToken = default)
+    public async Task<long> CountByAuthorAsync(Guid authorId, CancellationToken cancellationToken = default)
     {
-        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorName, authorName);
+        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorId, authorId);
 
         return await _articles.CountDocumentsAsync(authorFilter, cancellationToken: cancellationToken);
     }
 
-    public async Task<IEnumerable<ArticleModel>> GetPaginatedByAuthorWithoutBlocksArticlesAsync(string authorName, int pageNo, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ArticleModel>> GetPaginatedByAuthorWithoutBlocksArticlesAsync(Guid authorId, int pageNo, int pageSize, CancellationToken cancellationToken = default)
     {
-        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorName, authorName);
+        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorId, authorId);
         ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
 
         var dbArticles = await _articles
@@ -85,13 +82,6 @@ public class ArticleRepository : IArticleRepository
                             .Skip((pageNo - 1) * pageSize)
                             .Limit(pageSize)
                             .ToListAsync(cancellationToken);
-
-        foreach (var dbArticle in dbArticles)
-        {
-            FilterDefinition<CategoryDb> idCategoryFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, dbArticle.CategoryId);
-
-            dbArticle.Category = _categories.Find(idCategoryFilter).First();
-        }
 
         return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
     }
@@ -108,13 +98,6 @@ public class ArticleRepository : IArticleRepository
                             .Skip((pageNo - 1) * pageSize)
                             .Limit(pageSize)
                             .ToListAsync(cancellationToken);
-
-        foreach (var dbArticle in dbArticles)
-        {
-            FilterDefinition<CategoryDb> idCategoryFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, dbArticle.CategoryId);
-
-            dbArticle.Category = _categories.Find(idCategoryFilter).First();
-        }
 
         return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
     }
@@ -133,13 +116,6 @@ public class ArticleRepository : IArticleRepository
                         .Limit(pageSize)
                         .ToListAsync(cancellationToken);
 
-        foreach (var dbArticle in dbArticles)
-        {
-            FilterDefinition<CategoryDb> idCategoryFilter = Builders<CategoryDb>.Filter.Eq(c => c.Id, dbArticle.CategoryId);
-
-            dbArticle.Category = _categories.Find(idCategoryFilter).First();
-        }
-
         return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
     }
 
@@ -150,20 +126,12 @@ public class ArticleRepository : IArticleRepository
         FilterDefinition<ArticleDb> idFilter = Builders<ArticleDb>.Filter.Eq(a => a.Id, article.Id);
         UpdateDefinition<ArticleDb> updateDefinition = Builders<ArticleDb>.Update
                                                                             .Set(a => a.Title, dbArticle.Title)
-                                                                            .Set(a => a.AuthorName, dbArticle.AuthorName)
+                                                                            .Set(a => a.AuthorId, dbArticle.AuthorId)
                                                                             .Set(a => a.CategoryId, dbArticle.CategoryId)
                                                                             .Set(a => a.Blocks, dbArticle.Blocks)
                                                                             .Set(a => a.IsPublished, dbArticle.IsPublished)
                                                                             .Set(a => a.DateOfPublication, dbArticle.DateOfPublication);
 
         return _articles.UpdateOneAsync(idFilter, updateDefinition, cancellationToken: cancellationToken);
-    }
-
-    public Task UpdateAuthorsNamesAsync(string oldName, string newName, CancellationToken cancellationToken)
-    {
-        FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorName, oldName);
-        UpdateDefinition<ArticleDb> updateDefinition = Builders<ArticleDb>.Update.Set(a => a.AuthorName, newName);
-
-        return _articles.UpdateOneAsync(authorFilter, updateDefinition, cancellationToken: cancellationToken);
     }
 }

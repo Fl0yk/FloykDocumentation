@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 namespace OcelotApiGateway.DelegatingHandlers;
 
+//TODO: переписать на токен в redis
 public class JwtInjectionHandler : DelegatingHandler
 {
     private readonly IHttpContextAccessor _contextAccessor;
@@ -16,43 +15,45 @@ public class JwtInjectionHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        if (request.Headers.Authorization?.Scheme != "Bearer")
-        {
-            return await base.SendAsync(request, cancellationToken);
-        }
-
-        var token = request.Headers.Authorization.Parameter;
-        var handler = new JwtSecurityTokenHandler();
-
-        if (!handler.CanReadToken(token))
-        {
-            return await base.SendAsync(request, cancellationToken);
-        }
-
-        var jwtToken = handler.ReadJwtToken(token);
-
-        var currentUserName = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-        var currentUserId = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(currentUserId) || string.IsNullOrEmpty(currentUserName))
-        {
-            return await base.SendAsync(request, cancellationToken);
-        }
-
-        if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put 
-            || request.Method == HttpMethod.Patch || request.Method == HttpMethod.Delete)
-        {
-            if (request.Content is not null && request.Content.Headers.ContentType?.MediaType == "multipart/form-data")
-            {
-                await MultipartDataHandling(request, currentUserName, currentUserId);
-            }
-            else
-            {
-                await JsonDataHandling(request, currentUserName, currentUserId);
-            }
-        }
-
         return await base.SendAsync(request, cancellationToken);
+
+        //if (request.Headers.Authorization?.Scheme != "Bearer")
+        //{
+        //    return await base.SendAsync(request, cancellationToken);
+        //}
+
+        //var token = request.Headers.Authorization.Parameter;
+        //var handler = new JwtSecurityTokenHandler();
+
+        //if (!handler.CanReadToken(token))
+        //{
+        //    return await base.SendAsync(request, cancellationToken);
+        //}
+
+        //var jwtToken = handler.ReadJwtToken(token);
+
+        //var currentUserName = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+        //var currentUserId = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        //if (string.IsNullOrEmpty(currentUserId) || string.IsNullOrEmpty(currentUserName))
+        //{
+        //    return await base.SendAsync(request, cancellationToken);
+        //}
+
+        //if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put 
+        //    || request.Method == HttpMethod.Patch || request.Method == HttpMethod.Delete)
+        //{
+        //    if (request.Content is not null && request.Content.Headers.ContentType?.MediaType == "multipart/form-data")
+        //    {
+        //        await MultipartDataHandling(request, currentUserName, currentUserId);
+        //    }
+        //    else
+        //    {
+        //        await JsonDataHandling(request, currentUserName, currentUserId);
+        //    }
+        //}
+
+        //return await base.SendAsync(request, cancellationToken);
     }
 
     private async Task MultipartDataHandling(HttpRequestMessage request, string currentUserName, string currentUserId)

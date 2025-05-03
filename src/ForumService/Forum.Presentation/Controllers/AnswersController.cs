@@ -28,7 +28,7 @@ public class AnswersController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetAnswerById([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
-        AnswerDTO answer = await _mediator.Send(new GetAnswerByIdQuery(id), cancellationToken);
+        AnswerDTO answer = await _mediator.Send(new GetAnswerByIdQuery() { Id = id }, cancellationToken);
 
         return Ok(answer);
     }

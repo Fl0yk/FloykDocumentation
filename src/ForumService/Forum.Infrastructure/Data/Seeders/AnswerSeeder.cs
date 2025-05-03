@@ -14,7 +14,7 @@ public static class AnswerSeeder
                 ParentId = null,
                 AuthorId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255c7"),
                 Text = "Text 1",
-                TimeOfCreation = DateTime.Now.AddDays(-3),
+                CreatedAt = DateTime.Now.AddDays(-3),
                 Level = 0,
             },
             new Answer()
@@ -24,7 +24,7 @@ public static class AnswerSeeder
                 ParentId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255ca"),
                 AuthorId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255c8"),
                 Text = "Text 1-1",
-                TimeOfCreation = DateTime.Now.AddDays(-2),
+                CreatedAt = DateTime.Now.AddDays(-2),
                 Level = 1,
             },
             new Answer()
@@ -34,7 +34,7 @@ public static class AnswerSeeder
                 ParentId = Guid.Parse("5963ab4c-cb6f-4053-974e-2bd3da76ff6c"),
                 AuthorId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255c9"),
                 Text = "Text 1-1-1",
-                TimeOfCreation = DateTime.Now.AddDays(-1),
+                CreatedAt = DateTime.Now.AddDays(-1),
                 Level = 2,
             },
             new Answer()
@@ -44,7 +44,7 @@ public static class AnswerSeeder
                 ParentId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255ca"),
                 AuthorId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255c1"),
                 Text = "Text 1-2",
-                TimeOfCreation = DateTime.Now.AddDays(-3),
+                CreatedAt = DateTime.Now.AddDays(-3),
                 Level = 1,
             },
             new Answer()
@@ -54,7 +54,7 @@ public static class AnswerSeeder
                 AuthorId = Guid.Parse("a6c0936a-9d91-4d6a-b893-b257d5b255c1"),
                 ParentId = null,
                 Text = "Text 2",
-                TimeOfCreation = DateTime.Now.AddDays(-4),
+                CreatedAt = DateTime.Now.AddDays(-4),
                 Level = 0,
             },
             ]);

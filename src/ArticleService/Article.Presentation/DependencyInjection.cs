@@ -1,11 +1,10 @@
-using Article.Infrastructure.Options.Models;
 using Article.Presentation.Shared.Options.Setups;
+using Core.Api.Extensions;
+using Core.Api.Models.Options;
+using Core.Api.Providers.Implementations;
+using Core.Providers.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 
 namespace Article.Presentation;
@@ -22,36 +21,13 @@ public static class DependencyInjection
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.ConfigureSerilog(configuration);
+        services.ConfigureSerilog(configuration, Assembly.GetExecutingAssembly());
+        services.ConfigureAuthorization(configuration);
+
+        services.AddScoped<IBaseCurrentUserProvider, BaseCurrentUserProvider>();
 
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(option =>
-        {
-            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                In = ParameterLocation.Header,
-                Description = "Please enter a valid token",
-                Name = "Authorization",
-                Type = SecuritySchemeType.Http,
-                BearerFormat = "JWT",
-                Scheme = "Bearer"
-            });
-
-            option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
-                            }
-                        },
-                        new string[]{}
-                    }
-                });
-        });
+        services.ConfigureSwaggerGen();
 
         services.ConfigureCors(configuration);
 
@@ -86,31 +62,5 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         return;
-    }
-
-    private static IServiceCollection ConfigureSerilog(this IServiceCollection services, IConfiguration configuration)
-    {
-        string elasticsearchUrl = configuration.GetSection("ElasticsearchUrl").Value
-                                                    ?? throw new KeyNotFoundException("Can't read jwt from appsettings.json");
-
-        ElasticsearchSinkOptions elasticsearchOptions = new(new Uri(elasticsearchUrl))
-        {
-            AutoRegisterTemplate = true,
-            IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
-        };
-
-        Log.Logger = new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-            .MinimumLevel.Override("System", LogEventLevel.Information)
-            .WriteTo.Console()
-            .WriteTo.Elasticsearch(elasticsearchOptions).MinimumLevel
-                    .Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-            .CreateLogger();
-
-
-        return services;
     }
 }

@@ -3,4 +3,7 @@ using MediatR;
 
 namespace Forum.Application.UseCase.Query.Answer;
 
-public record class GetAnswerByIdQuery(Guid Id) : IRequest<AnswerDTO>;
+public sealed class GetAnswerByIdQuery : IRequest<AnswerDTO>
+{
+    public Guid Id { get; init; }
+}

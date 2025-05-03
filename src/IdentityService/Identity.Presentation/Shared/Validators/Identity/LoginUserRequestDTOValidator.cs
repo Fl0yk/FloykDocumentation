@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
-using Identity.Application.Shared.Models.Requests.IdentityRequests;
+using Identity.Application.UseCases.Command.Identity;
 
 namespace Identity.Presentation.Shared.Validators.Identity;
 
-public class LoginUserRequestDTOValidator : AbstractValidator<LoginUserRequest>
+//TODO: в какой момент валидировать? Мб до контроллера?
+public class LoginUserRequestDTOValidator : AbstractValidator<LoginCommand>
 {
     public LoginUserRequestDTOValidator()
     {

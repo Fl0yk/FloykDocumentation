@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Identity.Application.Shared.Models.Requests.UserRequests;
-using Identity.DataAccess.Entities;
+using Identity.Application.UseCases.Command.Users;
+using Identity.Domain.Entities;
 
 namespace Identity.Application.Shared.Mapper.UserMapping;
 
@@ -8,7 +8,7 @@ public class UpdateUserRequestToUser : Profile
 {
     public UpdateUserRequestToUser()
     {
-        CreateMap<UpdateUserRequest, User>()
+        CreateMap<UpdateUserCommand, User>()
             .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.NewUsername))
             .ForMember(d => d.NormalizedUserName, opt => opt.MapFrom(src => src.NewUsername.ToUpper()));
     }

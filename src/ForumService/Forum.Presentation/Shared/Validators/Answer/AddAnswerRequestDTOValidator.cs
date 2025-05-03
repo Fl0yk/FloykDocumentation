@@ -9,8 +9,6 @@ public class AddAnswerRequestDTOValidator : AbstractValidator<AddAnswerRequestDT
     {
         RuleFor(a => a.Text).NotEmpty();
 
-        RuleFor(a => a.CurrentUserId).NotEmpty();
-
         RuleFor(a => a.QuestionId).NotEmpty();
     }
 }

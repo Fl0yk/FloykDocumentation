@@ -1,10 +1,12 @@
-﻿namespace Forum.Domain.Entities;
+﻿using Core.Abstractions;
 
-public class Answer
+namespace Forum.Domain.Entities;
+
+public class Answer : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public Guid AuthorId { get; set; }
+
+    public User Author { get; set; } = null!;
 
     public Guid QuestionId { get; set; }
 
@@ -17,8 +19,6 @@ public class Answer
     public ICollection<Answer> Childrens { get; set; } = [];
 
     public string Text { get; set; } = string.Empty;
-
-    public DateTime TimeOfCreation { get; set; } = DateTime.UtcNow;
 
     public int Level { get; set; }
 }

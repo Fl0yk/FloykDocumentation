@@ -3,14 +3,12 @@ using MediatR;
 
 namespace Forum.Application.UseCase.Command.Answer;
 
-public class AddAnswerCommand : IRequest<AnswerDTO>
+public sealed class AddAnswerCommand : IRequest<AnswerDTO>
 {
-    public required string Text { get; set; }
+    public string Text { get; init; } = null!;
 
-    public Guid AuthorId { get; set; }
+    public Guid QuestionId { get; init; }
 
-    public Guid QuestionId { get; set; }
-
-    public Guid? ParentId { get; set; }
+    public Guid? ParentId { get; init; }
 }
 

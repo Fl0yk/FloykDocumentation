@@ -11,7 +11,7 @@ public class QuestionToQuestionDTO : Profile
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(d => d.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(d => d.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(d => d.DateOfCreation, opt => opt.MapFrom(src => src.DateOfCreation))
+            .ForMember(d => d.DateOfCreation, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId))
             .ForMember(d => d.IsClosed, opt => opt.MapFrom(src => src.IsClosed));
 
@@ -20,6 +20,6 @@ public class QuestionToQuestionDTO : Profile
             .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId))
             .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
             .ForMember(d => d.ParentId, opt => opt.MapFrom(src => src.ParentId))
-            .ForMember(d => d.TimeOfCreation, opt => opt.MapFrom(src => src.TimeOfCreation));
+            .ForMember(d => d.TimeOfCreation, opt => opt.MapFrom(src => src.CreatedAt));
     }
 }

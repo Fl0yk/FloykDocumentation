@@ -1,19 +1,16 @@
+using Core.Api.Middlewares;
+using Core.Infrastructure.Extensions;
 using Identity.Application;
-using Identity.DataAccess;
 using Identity.DataAccess.Data;
-using Identity.DataAccess.Data.Extensions;
 using Identity.Infrastructure;
-using Identity.Infrastructure.gRPC.Services.Servers;
 using Identity.Presentation;
-using Identity.Presentation.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices(builder.Configuration);
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -41,8 +38,6 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.MapGrpcService<UserService>();
 
 app.MapControllers();
 

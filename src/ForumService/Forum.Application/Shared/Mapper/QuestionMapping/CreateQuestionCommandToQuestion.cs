@@ -9,7 +9,6 @@ public class CreateQuestionCommandToQuestion : Profile
     {
         CreateMap<CreateQuestionCommand, Question>()
             .ForMember(d => d.Title, opt => opt.MapFrom(src => src.Title))
-            .ForMember(d => d.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId));
+            .ForMember(d => d.Description, opt => opt.MapFrom(src => src.Description));
     }
 }

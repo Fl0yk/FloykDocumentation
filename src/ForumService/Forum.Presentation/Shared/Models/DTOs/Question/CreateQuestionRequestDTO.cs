@@ -2,5 +2,4 @@
 
 public record class CreateQuestionRequestDTO(
                             string Title,
-                            string Description,
-                            Guid CurrentUserId);
+                            string Description);

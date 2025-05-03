@@ -1,18 +1,18 @@
-﻿namespace Forum.Domain.Entities;
+﻿using Core.Abstractions;
 
-public class Question
+namespace Forum.Domain.Entities;
+
+public class Question : BaseEntity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     public Guid AuthorId { get; set; }
 
-    public string Title { get; set; } = string.Empty;
+    public User Author { get; set; } = null!;
 
-    public string Description { get; set; } = string.Empty;
+    public string Title { get; set; } = null!;
+
+    public string Description { get; set; } = null!;
 
     public bool IsClosed { get; set; } = false;
 
-    public DateTime DateOfCreation { get; set; } = DateTime.UtcNow.Date;
-
-    public ICollection<Answer> Answers { get; set; } = [];
+    public ICollection<Answer> Answers { get; set; } = null!;
 }

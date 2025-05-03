@@ -10,6 +10,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Answer> Answers => Set<Answer>();
 
+    public DbSet<User> Users => Set<User>();
+
     public ApplicationDbContext(DbContextOptions options)
         : base(options)
     { }
@@ -18,6 +20,7 @@ public class ApplicationDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new AnswerEntityTypeConfigurator());
         modelBuilder.ApplyConfiguration(new  QuestionEntityTypeConfigurator());
+        modelBuilder.ApplyConfiguration(new UserEntityTypeConfigurator());
 
         base.OnModelCreating(modelBuilder);
     }

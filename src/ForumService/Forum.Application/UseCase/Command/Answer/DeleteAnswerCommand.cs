@@ -3,9 +3,7 @@ using MediatR;
 
 namespace Forum.Application.UseCase.Command.Answer;
 
-public class DeleteAnswerCommand : IRequest<DeleteAnswerResponse>
+public sealed class DeleteAnswerCommand : IRequest<DeleteAnswerResponse>
 {
     public Guid Id { get; init; }
-
-    public Guid AuthorId { get; set; }
 }

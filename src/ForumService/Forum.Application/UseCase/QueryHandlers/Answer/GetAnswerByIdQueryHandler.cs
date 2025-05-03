@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Forum.Application.Shared.Exceptions;
+using Core.Exceptions;
 using Forum.Application.Shared.Models.DTOs;
 using Forum.Application.UseCase.Query.Answer;
 using Forum.Domain.Abstractions.Repositories;
@@ -24,7 +24,7 @@ public class GetAnswerByIdQueryHandler : IRequestHandler<GetAnswerByIdQuery, Ans
 
         if (dbAnswer is null)
         {
-            throw new NotFoundException($"Answer with id {request.Id} not found");
+            throw new GuardNotFoundException($"Answer with id {request.Id} not found");
         }
 
         return _mapper.Map<AnswerDTO>(dbAnswer);

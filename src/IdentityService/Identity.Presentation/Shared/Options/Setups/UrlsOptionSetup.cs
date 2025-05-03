@@ -1,4 +1,4 @@
-﻿using Identity.Infrastructure.Shared.Options.Models;
+﻿using Core.Api.Models.Options;
 using Microsoft.Extensions.Options;
 
 namespace Identity.Presentation.Shared.Options.Setups;

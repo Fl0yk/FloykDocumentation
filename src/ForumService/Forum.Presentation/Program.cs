@@ -1,9 +1,9 @@
+using Core.Api.Middlewares;
+using Core.Infrastructure.Extensions;
 using Forum.Application;
 using Forum.Infrastructure;
-using Forum.Infrastructure.Extensions;
 using Forum.Infrastructure.SignalR.Hubs;
 using Forum.Presentation;
-using Forum.Presentation.Middlewares;
 using Forum.Presentation.Shared.Filters;
 using Hangfire;
 

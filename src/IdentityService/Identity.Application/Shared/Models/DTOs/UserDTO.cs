@@ -11,6 +11,4 @@ public class UserDTO
     public string? Avatar { get; set; }
 
     public ICollection<FollowingDTO> Followings { get; set; } = [];
-
-    public ICollection<SavedArticleDTO> SavedArticles { get; set; } = [];
 }

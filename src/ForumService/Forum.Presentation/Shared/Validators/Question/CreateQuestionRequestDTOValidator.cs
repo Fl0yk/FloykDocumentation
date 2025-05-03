@@ -10,7 +10,5 @@ public class CreateQuestionRequestDTOValidator : AbstractValidator<CreateQuestio
         RuleFor(q => q.Title).NotEmpty().MaximumLength(250);
 
         RuleFor(q => q.Description).NotNull();
-
-        RuleFor(q => q.CurrentUserId).NotEmpty();
     }
 }

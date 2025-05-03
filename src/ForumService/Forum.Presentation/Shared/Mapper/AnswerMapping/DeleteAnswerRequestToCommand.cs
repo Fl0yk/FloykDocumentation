@@ -9,7 +9,6 @@ public class DeleteAnswerRequestToCommand : Profile
     public DeleteAnswerRequestToCommand()
     {
         CreateMap<DeleteAnswerRequestDTO, DeleteAnswerCommand>()
-            .ForMember(d => d.Id, opt => opt.MapFrom(src => src.AnswerId))
-            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.CurrentUserId));
+            .ForMember(d => d.Id, opt => opt.MapFrom(src => src.AnswerId));
     }
 }

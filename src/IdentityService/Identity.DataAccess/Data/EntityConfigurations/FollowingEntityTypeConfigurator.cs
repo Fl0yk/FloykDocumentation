@@ -1,19 +1,36 @@
-﻿using Identity.DataAccess.Entities;
+﻿using Core.Infrastructure.EntityConfigurations;
+using Identity.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Identity.DataAccess.Data.EntityConfigurations;
 
-public class FollowingEntityTypeConfigurator : IEntityTypeConfiguration<Following>
+public class FollowingEntityTypeConfigurator : BaseEntityTypeConfiguration<Following>, IEntityTypeConfiguration<Following>
 {
-    public void Configure(EntityTypeBuilder<Following> builder)
+    public override void Configure(EntityTypeBuilder<Following> builder)
     {
-        builder.HasKey(f => new { f.UserId, f.AuthorId });
+        builder.ToTable("followings");
+
+        base.Configure(builder);
+
+        builder.Property(x => x.UserId)
+            .HasColumnName("user_id");
+
+        builder.Property(x => x.AuthorId)
+            .HasColumnName("author_id");
 
         builder
             .HasOne(f => f.Author)
             .WithMany()
             .HasForeignKey(f => f.AuthorId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasOne(x => x.User)
+            .WithMany(x => x.Followings)
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasIndex(f => new { f.IsDeleted, f.UserId, f.AuthorId });
     }
 }

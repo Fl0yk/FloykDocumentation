@@ -1,6 +1,6 @@
 ﻿using Identity.DataAccess.Data;
-using Identity.DataAccess.Entities;
-using Identity.DataAccess.Repositories.Abstractions;
+using Identity.Domain.Entities;
+using Identity.Domain.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DataAccess.Repositories.Implementations;
@@ -8,19 +8,16 @@ namespace Identity.DataAccess.Repositories.Implementations;
 public class UserRepository : IUserRepository
 {
     private readonly DbSet<User> _users;
-    private readonly DbSet<SavedArticle> _savedArticles;
 
     public UserRepository(ApplicationDbContext context)
     {
         _users = context.Users;
-        _savedArticles = context.SavedArticles;
     }
 
     public Task<User?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return _users
             .Include(u => u.Followings).ThenInclude(f => f.Author)
-            .Include(u => u.SavedArticles)
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
@@ -28,7 +25,6 @@ public class UserRepository : IUserRepository
     {
         return _users
             .Include(u => u.Followings).ThenInclude(f => f.Author)
-            .Include(u => u.SavedArticles)
             .FirstOrDefaultAsync(u => u.NormalizedUserName == username.ToUpper(), cancellationToken);
     }
 
@@ -45,15 +41,6 @@ public class UserRepository : IUserRepository
     public Task UpdateAsync(User user, CancellationToken cancellation = default)
     {
         _users.Update(user);
-
-        return Task.CompletedTask;
-    }
-
-    public Task DeleteSavedArticleForAllAsync(Guid articleId, CancellationToken cancellationToken = default)
-    {
-        var articles = _savedArticles.Where(a => a.ArticleId == articleId);
-
-        _savedArticles.RemoveRange(articles);
 
         return Task.CompletedTask;
     }

@@ -1,9 +1,10 @@
-﻿using Identity.Application.Abstractions.Managers;
+﻿using Identity.Domain.Abstractions.Managers;
 using Identity.Presentation.Shared.Options.Models;
 using Microsoft.Extensions.Options;
 
 namespace Identity.Presentation.Managers;
 
+//TODO: заменить на облако?
 public class ImageManager : IImageManager
 {
     private readonly WWWRootOptions _options;

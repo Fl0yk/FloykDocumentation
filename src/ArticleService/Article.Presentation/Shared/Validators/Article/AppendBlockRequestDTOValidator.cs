@@ -7,8 +7,6 @@ public class AppendBlockRequestDTOValidator : AbstractValidator<AppendBlockReque
 {
     public AppendBlockRequestDTOValidator()
     {
-        RuleFor(r => r.CurrentUserName).NotEmpty();
-
         RuleFor(r => r.ArticleId).NotEmpty();
 
         RuleFor(r => r.Text).NotEmpty();

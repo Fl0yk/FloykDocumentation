@@ -1,4 +1,5 @@
-﻿using Article.Application.UseCases.Requests.Articles;
+﻿using Article.Application.UseCases.Comand.Articles;
+using Article.Application.UseCases.Query.Articles;
 using Article.Presentation.Shared.Models.DTOs.Article;
 using AutoMapper;
 using MediatR;
@@ -22,7 +23,7 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> GetPaginatedByDate([FromQuery] GetPaginatedByDateArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
-            _mapper.Map< GetPaginatedByDateShortArticlesRequest>(request), 
+            _mapper.Map< GetPaginatedByDateShortArticlesQuery>(request), 
             cancellationToken);
 
         return Ok(result);
@@ -32,7 +33,7 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> GetPaginatedByName([FromQuery] GetPaginatedByAuthorArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
-            _mapper.Map<GetPaginatedByAuthorNameShortArticlesRequest>(request), 
+            _mapper.Map<GetPaginatedByAuthorNameShortArticlesQuery>(request), 
             cancellationToken);
 
         return Ok(result);
@@ -42,7 +43,7 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> GetPaginatedByCategory([FromQuery] GetPaginatedByCategoryArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
-            _mapper.Map<GetPaginatedByCategoryShortArticlesRequest>(request), 
+            _mapper.Map<GetPaginatedByCategoryShortArticlesQuery>(request), 
             cancellationToken);
 
         return Ok(result);
@@ -51,26 +52,26 @@ public class ArticlesController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetArticleByIdRequest(id), cancellationToken);
+        var result = await _mediator.Send(new GetArticleByIdQuery() { Id = id }, cancellationToken);
 
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostArticle([FromBody] CreateArticleRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            _mapper.Map<CreateArticleRequest>(request), 
+            _mapper.Map<CreateArticleCommand>(request), 
             cancellationToken);
 
         return NoContent();
     }
 
     [HttpPost("block")]
-    public async Task<IActionResult> PostBlock([FromBody] AppendBlockRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AppendBlock([FromBody] AppendBlockRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            _mapper.Map<AppendBlockRequest>(request), 
+            _mapper.Map<AppendBlockCommand>(request), 
             cancellationToken);
 
         return NoContent();
@@ -80,16 +81,18 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> PublishArticle([FromBody] PublishArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            _mapper.Map<PublishArticleRequest>(request), 
+            _mapper.Map<PublishArticleCommand>(request), 
             cancellationToken);
 
         return NoContent();
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateArticle([FromBody] UpdateArticleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateArticle([FromBody] UpdateArticleRequestDTO request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(request, cancellationToken);
+        await _mediator.Send(
+            _mapper.Map<UpdateArticleCommand>(request), 
+            cancellationToken);
 
         return NoContent();
     }
@@ -98,7 +101,7 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> DeleteArticle([FromBody] DeleteArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            _mapper.Map<DeleteArticleRequest>(request), 
+            _mapper.Map<DeleteArticleCommand>(request), 
             cancellationToken);
 
         return NoContent();
@@ -108,7 +111,7 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> DeleteBlock([FromBody] DeleteBlockRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
-            _mapper.Map<DeleteBlockRequest>(request), 
+            _mapper.Map<DeleteBlockCommand>(request), 
             cancellationToken);
 
         return NoContent();

@@ -2,6 +2,7 @@
 
 namespace Forum.Infrastructure.SignalR.Hubs;
 
+//TODO: Это надо? Пересмотреть логику с этим
 public class QuestionsHub : Hub
 {
     public async Task JoinInGroup(Guid questionId)
