@@ -6,7 +6,8 @@
       "serviceActions": {
         "forum.presentation": "StartDebugging",
         "identity.presentation": "StartDebugging",
-        "article.presentation": "StartDebugging"
+        "article.presentation": "StartDebugging",
+        "ocelotapigateway": "StartDebugging"
       }
     }
   }

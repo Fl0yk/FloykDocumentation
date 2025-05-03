@@ -13,7 +13,7 @@ public class ArticleToShortDTO : Profile
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(d => d.IsPublished, opt => opt.MapFrom(src => src.IsPublished))
             .ForMember(d => d.DateOfPublication, opt => opt.MapFrom(src => src.DateOfPublication))
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.AuthorName))
+            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId))
             .ForMember(d => d.Title, opt => opt.MapFrom(src => src.Title));
     }
 }

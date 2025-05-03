@@ -6,6 +6,8 @@ public interface IQuestionRepository
 {
     public Task<IQueryable<Question>> GetQuestionsByDateAsync(CancellationToken cancellationToken = default);
 
+    public Task<IEnumerable<Question>> GetOpenedQuestionsAsync(CancellationToken cancellationToken = default);
+
     public Task<Question?> FirstOrDefaultByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     public Task<Question?> FirstOrDefaultByIdWithAnswersAsync(Guid id, CancellationToken cancellationToken = default);

@@ -1,4 +1,5 @@
-﻿using Forum.Application.Shared.Exceptions;
+﻿using Core.Exceptions;
+using Core.Providers.Interfaces;
 using Forum.Application.UseCase.Command.Question;
 using Forum.Domain.Abstractions.Repositories;
 using MediatR;
@@ -8,24 +9,45 @@ namespace Forum.Application.UseCase.CommandHandlers.Question;
 public class CloseQuestionCommandHandler : IRequestHandler<CloseQuestionCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransactionProvider _transactionProvider;
+    private readonly IBaseCurrentUserProvider _currentUserProvider;
 
-    public CloseQuestionCommandHandler(IUnitOfWork unitOfWork)
+    public CloseQuestionCommandHandler(
+        IUnitOfWork unitOfWork,
+        ITransactionProvider transactionProvider,
+        IBaseCurrentUserProvider currentUserProvider)
     {
         _unitOfWork = unitOfWork;
+        _transactionProvider = transactionProvider;
+        _currentUserProvider = currentUserProvider;
     }
 
     public async Task<Guid> Handle(CloseQuestionCommand request, CancellationToken cancellationToken)
     {
+        await _transactionProvider.OpenTransaction(cancellationToken);
+
+        var currentUser = _currentUserProvider.GetCurrentUser();
+
+        if (currentUser is null)
+        {
+            throw new GuardForbiddenException("Current user is null");
+        }
+
         var dbQuestion = await _unitOfWork.QuestionRepository.FirstOrDefaultByIdAsync(request.Id);
 
         if (dbQuestion is null)
         {
-            throw new NotFoundException($"Question with id {request.Id} not found");
+            throw new GuardNotFoundException($"Question with id {request.Id} not found");
         }
 
         if (dbQuestion.IsClosed)
         {
-            throw new BadRequestException($"Question with id {request.Id} is already closed");
+            throw new GuardArgumentException($"Question with id {request.Id} is already closed");
+        }
+
+        if (dbQuestion.AuthorId != currentUser.Id)
+        {
+            throw new GuardForbiddenException($"Current user with id {currentUser.Id} is not author of question with id {dbQuestion.Id}");
         }
 
         dbQuestion.IsClosed = true;
@@ -33,6 +55,8 @@ public class CloseQuestionCommandHandler : IRequestHandler<CloseQuestionCommand,
         Guid id = await _unitOfWork.QuestionRepository.UpdateQuestionAsync(dbQuestion, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        await _transactionProvider.Commit(cancellationToken);
 
         return id;
     }

@@ -1,6 +1,8 @@
 ﻿using Forum.Domain.Entities;
 
 namespace Forum.Application.Shared.Comparators;
+
+//TODO: от этого надо избавляться. Может, поле Order и сортировка по нему?
 public class AnswerComparator : IComparer<Answer>
 {
     public int Compare(Answer? x, Answer? y)
@@ -20,6 +22,6 @@ public class AnswerComparator : IComparer<Answer>
         if (y.ParentId is null && x.ParentId is not null)
             return 1;
 
-        return x.TimeOfCreation.CompareTo(y.TimeOfCreation);
+        return x.CreatedAt.CompareTo(y.CreatedAt);
     }
 }

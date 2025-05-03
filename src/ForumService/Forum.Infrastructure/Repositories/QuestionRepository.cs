@@ -37,6 +37,11 @@ public class QuestionRepository : IQuestionRepository
                                     ApplySpecification(new GetQuestionByIdWithAnswersSpecification(id))
                                     .FirstOrDefaultAsync(cancellationToken);
 
+    public Task<IEnumerable<Question>> GetOpenedQuestionsAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(_questions.Where(q => !q.IsClosed).AsEnumerable());
+    }
+
     public Task<IQueryable<Question>> GetQuestionsByDateAsync(CancellationToken cancellationToken = default) =>
                                     Task.FromResult(
                                         ApplySpecification(new GetQuestionsByDateSpecification()));

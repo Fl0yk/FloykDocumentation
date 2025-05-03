@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using Forum.Application.Shared.Exceptions;
+using Core.Exceptions;
+using Core.Models;
 using Forum.Application.Shared.Models.DTOs;
-using Forum.Application.Shared.Models;
+using Forum.Application.UseCase.Query.Question;
 using Forum.Domain.Abstractions.Repositories;
 using MediatR;
-using Forum.Application.UseCase.Query.Question;
-
 using QuestionModel = Forum.Domain.Entities.Question;
 
 namespace Forum.Application.UseCase.QueryHandlers.Question;
@@ -33,7 +32,7 @@ public class GetPaginatedByDateQuestionQueryHandler
 
         if (questions.Length == 0)
         {
-            throw new BadRequestException("Get an empty questions page");
+            throw new GuardArgumentException("Get an empty questions page");
         }
 
         int count = questionQuery.Count();

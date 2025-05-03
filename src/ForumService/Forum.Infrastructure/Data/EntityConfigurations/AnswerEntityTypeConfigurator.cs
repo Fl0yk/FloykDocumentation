@@ -1,23 +1,46 @@
-﻿using Forum.Domain.Entities;
+﻿using Core.Infrastructure.EntityConfigurations;
+using Forum.Domain.Entities;
 using Forum.Infrastructure.Data.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Forum.Infrastructure.Data.EntityConfigurations;
-public class AnswerEntityTypeConfigurator : IEntityTypeConfiguration<Answer>
+public class AnswerEntityTypeConfigurator : BaseEntityTypeConfiguration<Answer>, IEntityTypeConfiguration<Answer>
 {
-    public void Configure(EntityTypeBuilder<Answer> builder)
+    public override void Configure(EntityTypeBuilder<Answer> builder)
     {
-        builder.HasKey(a => a.Id);
+        builder.ToTable("answers");
 
-        builder.Property(a => a.Text).IsRequired();
-        builder.Property(a => a.TimeOfCreation).IsRequired();
+        base.Configure(builder);
 
-        builder
-            .HasOne(a => a.Parent)
+        builder.Property(a => a.Text)
+            .IsRequired()
+            .HasColumnName("text");
+
+        builder.Property(x => x.Level)
+            .IsRequired()
+            .HasColumnName("level");
+
+        builder.Property(x => x.AuthorId)
+            .HasColumnName("author_id");
+
+        builder.Property(x => x.ParentId)
+            .HasColumnName("parent_id");
+
+        builder.HasOne(a => a.Parent)
             .WithMany(a => a.Childrens)
             .HasForeignKey(a => a.ParentId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.Question)
+            .WithMany(x => x.Answers)
+            .HasForeignKey(x => x.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(x => x.Author)
+            .WithMany()
+            .HasForeignKey(x => x.AuthorId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.SeedAnswer();
     }

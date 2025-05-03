@@ -3,6 +3,8 @@ public class AnswerDTO
 {
     public Guid Id { get; set; }
 
+    public Guid AuthorId { get; set; }
+
     public Guid QuestionId { get; set; }
 
     public Guid? ParentId { get; set; }

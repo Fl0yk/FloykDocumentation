@@ -1,6 +1,4 @@
-﻿using Identity.Application.Abstractions.Services;
-using Identity.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Identity.Application;
@@ -11,8 +9,9 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.AddScoped<IIdentityService, IdentityService>();
-        services.AddScoped<IUserService, UserService>();
+        services.AddMediatR(cfg => {
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+        });
 
         return services;
     }

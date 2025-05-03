@@ -1,6 +1,6 @@
-﻿using Identity.Application.Abstractions.Providers;
-using Identity.DataAccess.Entities;
-using Identity.Presentation.Options.Models;
+﻿using Core.Api.Models.Options;
+using Identity.Domain.Abstractions.Providers;
+using Identity.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

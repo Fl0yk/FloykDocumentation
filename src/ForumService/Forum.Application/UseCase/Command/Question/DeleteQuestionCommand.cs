@@ -2,4 +2,7 @@
 
 namespace Forum.Application.UseCase.Command.Question;
 
-public record class DeleteQuestionCommand(Guid Id) : IRequest;
+public sealed class DeleteQuestionCommand : IRequest
+{
+    public Guid Id { get; init; }
+}

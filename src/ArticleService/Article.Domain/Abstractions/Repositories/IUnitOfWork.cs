@@ -5,4 +5,6 @@ public interface IUnitOfWork
     public IArticleRepository ArticleRepository { get; }
 
     public ICategoryRepository CatergoryRepository { get; }
+
+    public IUserRepository UserRepository { get; }
 }

@@ -18,16 +18,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.Api\Core.Api.csproj" />
+    <ProjectReference Include="..\..\Core\Core.Infrastructure\Core.Infrastructure.csproj" />
     <ProjectReference Include="..\Identity.Application\Identity.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 

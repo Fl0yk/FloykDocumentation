@@ -1,7 +1,7 @@
 using Article.Application;
 using Article.Infrastructure;
 using Article.Presentation;
-using Article.Presentation.Middlewares;
+using Core.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +17,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
+
 app.UseMiddleware<SerilogMiddleware>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

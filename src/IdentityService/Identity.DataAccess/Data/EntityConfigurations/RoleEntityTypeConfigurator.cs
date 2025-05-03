@@ -9,6 +9,18 @@ public class RoleEntityTypeConfigurator : IEntityTypeConfiguration<IdentityRole<
 {
     public void Configure(EntityTypeBuilder<IdentityRole<Guid>> builder)
     {
+        builder.ToTable("roles");
+
+        builder.HasKey(x => x.Id);
+
+        builder.Property(x => x.Name)
+            .IsRequired()
+            .HasColumnName("name");
+
+        builder.Property(x => x.NormalizedName)
+            .IsRequired()
+            .HasColumnName("normalized_name");
+
         builder.SeedRoles();
     }
 }

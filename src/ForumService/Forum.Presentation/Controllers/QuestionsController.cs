@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Forum.Application.Shared.Models;
+using Core.Models;
 using Forum.Application.Shared.Models.DTOs;
 using Forum.Application.UseCase.Command.Question;
 using Forum.Application.UseCase.Query.Question;
@@ -35,7 +35,7 @@ public class QuestionsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetQuestionById([FromRoute] Guid id)
     {
-        QuestionDTO question = await _mediator.Send(new GetQuestionByIdQuery(id));
+        QuestionDTO question = await _mediator.Send(new GetQuestionByIdQuery() { Id = id });
 
         return Ok(question);
     }
@@ -53,7 +53,7 @@ public class QuestionsController : ControllerBase
     [HttpPost("close/{id:guid}")]
     public async Task<IActionResult> CloseQuestion([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
-        Guid questionId = await _mediator.Send(new CloseQuestionCommand(id), cancellationToken);
+        Guid questionId = await _mediator.Send(new CloseQuestionCommand() { Id = id }, cancellationToken);
 
         return Ok(questionId);
     }
@@ -71,7 +71,7 @@ public class QuestionsController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteQuestion([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(new DeleteQuestionCommand(id));
+        await _mediator.Send(new DeleteQuestionCommand() { Id = id });
 
         return NoContent();
     }

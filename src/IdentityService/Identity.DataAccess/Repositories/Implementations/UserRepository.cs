@@ -1,6 +1,6 @@
 ﻿using Identity.DataAccess.Data;
-using Identity.DataAccess.Entities;
-using Identity.DataAccess.Repositories.Abstractions;
+using Identity.Domain.Entities;
+using Identity.Domain.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DataAccess.Repositories.Implementations;
@@ -18,7 +18,6 @@ public class UserRepository : IUserRepository
     {
         return _users
             .Include(u => u.Followings).ThenInclude(f => f.Author)
-            .Include(u => u.SavedArticles)
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
@@ -26,8 +25,17 @@ public class UserRepository : IUserRepository
     {
         return _users
             .Include(u => u.Followings).ThenInclude(f => f.Author)
-            .Include(u => u.SavedArticles)
             .FirstOrDefaultAsync(u => u.NormalizedUserName == username.ToUpper(), cancellationToken);
+    }
+
+    public Task<bool> IsUserExist(Guid id, CancellationToken cancellationToken = default)
+    {
+        return _users.Where(u => u.Id == id).AnyAsync(cancellationToken);
+    }
+
+    public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default)
+    {
+        return _users.Where(u => u.NormalizedUserName == username.ToUpper()).AnyAsync(cancellationToken);
     }
 
     public Task UpdateAsync(User user, CancellationToken cancellation = default)

@@ -8,9 +8,5 @@ public interface ICategoryRepository
 
     public Task<Category?> GetCategoryByIdAsync(Guid id,  CancellationToken cancellationToken = default);
 
-    public Task AddCategoryAsync(Category category, CancellationToken cancellationToken = default);
-
-    public Task DelteCategoryAsync(Guid id, CancellationToken cancellationToken = default);
-
     public Task<bool> IsExistArticleInCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default);
 }

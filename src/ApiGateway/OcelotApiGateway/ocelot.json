@@ -1,0 +1,190 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:9001"
+  },
+  "Routes": [
+    // Articles
+    {
+      "DownstreamPathTemplate": "/api/Articles/{everthing}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "article.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Articles/{everthing}",
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
+      "SwaggerKey": "article"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Articles/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "article.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Articles/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "article"
+    },
+    // Categories
+    {
+      "DownstreamPathTemplate": "/api/Categories/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "article.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Categories/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "article"
+    },
+    // Answers
+    {
+      "DownstreamPathTemplate": "/api/Answers/{everthing}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "article.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Answers/{everthing}",
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
+      "SwaggerKey": "article"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Answers/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "article.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Answers/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "article"
+    },
+    // Questions
+    {
+      "DownstreamPathTemplate": "/api/Questions/{everthing}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "forum.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Questions/{everthing}",
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
+      "SwaggerKey": "forum"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Questions/{everthing}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "forum.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Questions/{everthing}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
+      "SwaggerKey": "forum"
+    },
+    // Identity
+    {
+      "DownstreamPathTemplate": "/api/Identity/add-to-role",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Identity/add-to-role",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "identity"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Identity/{everthing}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Identity/{everthing}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "identity"
+    }
+    // User
+    {
+      "DownstreamPathTemplate": "/api/Users/{everthing}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Users/{everthing}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" , "Delete"],
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
+      "SwaggerKey": "identity"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "identity",
+      "Config": [
+        {
+          "Name": "Identity API",
+          "Version": "v1",
+          "Url": "http://identity.api:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "forum",
+      "Config": [
+        {
+          "Name": "Forum API",
+          "Version": "v1",
+          "Url": "http://forum.api:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "article",
+      "Config": [
+        {
+          "Name": "Article API",
+          "Version": "v1",
+          "Url": "http://article.api:8080/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

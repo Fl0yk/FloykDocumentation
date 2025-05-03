@@ -1,5 +1,5 @@
 ﻿using Identity.DataAccess.Data;
-using Identity.DataAccess.Repositories.Abstractions;
+using Identity.Domain.Repositories.Abstractions;
 
 namespace Identity.DataAccess.Repositories.Implementations;
 

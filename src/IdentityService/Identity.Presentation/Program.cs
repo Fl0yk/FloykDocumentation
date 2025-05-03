@@ -1,16 +1,16 @@
+using Core.Api.Middlewares;
+using Core.Infrastructure.Extensions;
 using Identity.Application;
-using Identity.DataAccess;
 using Identity.DataAccess.Data;
-using Identity.DataAccess.Data.Extensions;
+using Identity.Infrastructure;
 using Identity.Presentation;
-using Identity.Presentation.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -27,11 +27,13 @@ if (app.Environment.IsDevelopment())
     scope.ApplyMigration<ApplicationDbContext>();
 }
 
+app.UseCors();
+
 app.UseMiddleware<SerilogMiddleware>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

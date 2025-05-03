@@ -2,4 +2,7 @@
 
 namespace Forum.Application.UseCase.Command.Question;
 
-public record class CloseQuestionCommand(Guid Id) : IRequest<Guid>;
+public sealed class CloseQuestionCommand : IRequest<Guid>
+{
+    public Guid Id { get; init; }
+}
