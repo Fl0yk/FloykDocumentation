@@ -1,6 +1,6 @@
 ﻿using Article.Domain.Abstractions.Repositories;
 using Article.Domain.Entities;
-using Article.Infrastructure.Data;
+using Article.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Article.Infrastructure.Repositories;

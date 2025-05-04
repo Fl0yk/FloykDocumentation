@@ -41,7 +41,6 @@ services:
         - "6001:8081"
     depends_on:
         - identity.db
-        - kibana
         - rabbitmq
 
   identity.db:
@@ -52,29 +51,6 @@ services:
         - POSTGRES_PASSWORD=postgres
      ports:
         - "6004:5432"
-
-  elasticsearch:
-    container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
-    environment:
-        - xpack.security.enabled=false
-        - xpack.security.http.ssl.enabled=false
-        - discovery.type=single-node
-        - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    volumes:
-      - ./.containers/elasticsearch:/usr/share/elasticsearch/data
-    ports:
-        - 9200:9200
-
-  kibana:
-    container_name: kibana
-    image: docker.elastic.co/kibana/kibana:8.7.1
-    ports:
-        - 5601:5601
-    depends_on:
-        - elasticsearch
-    environment:
-        - ELASTICSEARCH_URL=http://localhost:9200
 
   article.api:
     container_name: "Article.Presentation"
@@ -88,6 +64,7 @@ services:
         - "5001:8081"
     depends_on:
         - mongodb
+        - article.db 
         - rabbitmq
 
   article.db:

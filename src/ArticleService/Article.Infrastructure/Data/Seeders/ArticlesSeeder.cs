@@ -8,6 +8,8 @@ public static class ArticlesSeeder
 {
     public static void SeedArticles(this IMongoCollection<ArticleDb> articles)
     {
+        //TODO: returns seeds
+        return;
         if (articles.EstimatedDocumentCount() != 0)
         {
             return;

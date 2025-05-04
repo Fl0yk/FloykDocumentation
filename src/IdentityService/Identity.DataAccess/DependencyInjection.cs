@@ -1,9 +1,9 @@
 ﻿using Core.Infrastructure.DataBase;
 using Core.Providers.Interfaces;
-using Identity.DataAccess.Data;
 using Identity.DataAccess.Repositories.Implementations;
 using Identity.Domain.Repositories.Abstractions;
 using Identity.Infrastructure.Data;
+using Identity.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;

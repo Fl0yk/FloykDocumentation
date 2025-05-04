@@ -1,8 +1,9 @@
-﻿using Article.Infrastructure.Data.Seeders;
+﻿using Article.Infrastructure.Data;
+using Article.Infrastructure.Data.Seeders;
 using Article.Infrastructure.Shared.Models;
 using MongoDB.Driver;
 
-namespace Article.Infrastructure.Data;
+namespace Article.Infrastructure.Database;
 
 public class ApplicationDbContext
 {

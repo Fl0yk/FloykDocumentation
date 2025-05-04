@@ -1,13 +1,19 @@
+using Core.Api.Configurators;
 using Core.Api.Middlewares;
 using Core.Infrastructure.Extensions;
 using Forum.Application;
 using Forum.Infrastructure;
+using Forum.Infrastructure.Database;
 using Forum.Infrastructure.SignalR.Hubs;
 using Forum.Presentation;
 using Forum.Presentation.Shared.Filters;
 using Hangfire;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = SerilogConfigurator.CreateLogger();
+builder.Host.UseSerilog((_, loggerConfiguration) => loggerConfiguration.ConfigureLogger());
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -38,6 +44,8 @@ app.UseMiddleware<SerilogMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 //app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.UseAuthorization();
 

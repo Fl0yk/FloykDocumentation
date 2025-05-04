@@ -1,5 +1,5 @@
 ﻿using Article.Domain.Abstractions.Repositories;
-using Article.Infrastructure.Data;
+using Article.Infrastructure.Database;
 using Article.Infrastructure.Shared.Models;
 using AutoMapper;
 using MongoDB.Driver;

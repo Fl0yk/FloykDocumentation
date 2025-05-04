@@ -12,6 +12,7 @@ public static class UserSeeder
         {
             Id = Guid.Parse("ac2d055a-4d0f-41d2-90f9-88393f1b65e7"),
             UserName = "Admin",
+            PublicUsername = "Admin",
             NormalizedUserName = "ADMIN",
             Email = "admin@mail.ru",
             NormalizedEmail = "ADMIN@MAIL.RU",
@@ -26,6 +27,7 @@ public static class UserSeeder
         {
             Id = Guid.Parse("bb2d055a-4d0f-41d2-90f9-88393f1b65e7"),
             UserName = "Author",
+            PublicUsername = "Author",
             NormalizedUserName = "AUTHOR",
             Email = "aauthor@mail.ru",
             NormalizedEmail = "AUTHOR@MAIL.RU",
@@ -39,6 +41,7 @@ public static class UserSeeder
         {
             Id = Guid.Parse("ff2d055a-4d0f-41d2-90f9-88393f1b65e7"),
             UserName = "Floyk",
+            PublicUsername = "Floyk",
             NormalizedUserName = "FLOYK",
             Email = "kosach@mail.ru",
             NormalizedEmail = "KOSACH@MAIL.RU",

@@ -42,6 +42,7 @@ public class AnswerEntityTypeConfigurator : BaseEntityTypeConfiguration<Answer>,
             .HasForeignKey(x => x.AuthorId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.SeedAnswer();
+        //TODO: return seeds
+        //builder.SeedAnswer();
     }
 }

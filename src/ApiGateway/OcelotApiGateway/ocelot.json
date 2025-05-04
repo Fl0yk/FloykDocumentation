@@ -136,7 +136,7 @@
       "UpstreamPathTemplate": "/api/Identity/{everthing}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
       "SwaggerKey": "identity"
-    }
+    },
     // User
     {
       "DownstreamPathTemplate": "/api/Users/{everthing}",
@@ -148,7 +148,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Users/{everthing}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put" , "Delete"],
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DelegatingHandlers": [
         "JwtInjectionHandler"
       ],

@@ -1,5 +1,6 @@
 ﻿using Forum.Domain.Abstractions.Repositories;
 using Forum.Domain.Entities;
+using Forum.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Infrastructure.Repositories;

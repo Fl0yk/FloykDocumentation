@@ -1,6 +1,6 @@
-﻿using Identity.DataAccess.Data;
-using Identity.Domain.Entities;
+﻿using Identity.Domain.Entities;
 using Identity.Domain.Repositories.Abstractions;
+using Identity.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DataAccess.Repositories.Implementations;

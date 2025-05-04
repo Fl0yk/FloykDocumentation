@@ -1,6 +1,6 @@
 ﻿using Article.Domain.Abstractions.Repositories;
 using Article.Domain.Entities;
-using Article.Infrastructure.Data;
+using Article.Infrastructure.Database;
 using Article.Infrastructure.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;

@@ -21,8 +21,8 @@ public static class DependencyInjection
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.ConfigureSerilog(configuration, Assembly.GetExecutingAssembly());
         services.ConfigureAuthorization(configuration);
+        services.AddHttpContextAccessor();
 
         services.AddScoped<IBaseCurrentUserProvider, BaseCurrentUserProvider>();
 

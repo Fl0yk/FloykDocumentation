@@ -2,7 +2,7 @@
 using Article.Infrastructure.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Article.Infrastructure.Data;
+namespace Article.Infrastructure.Database;
 
 public sealed class SqlDbContext : DbContext
 {

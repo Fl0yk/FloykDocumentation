@@ -2,10 +2,10 @@
 using Core.Api.Models.Options;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Identity.DataAccess.Data;
 using Identity.Domain.Abstractions.Managers;
 using Identity.Domain.Abstractions.Providers;
 using Identity.Domain.Entities;
+using Identity.Infrastructure.Database;
 using Identity.Presentation.Managers;
 using Identity.Presentation.Providers;
 using Identity.Presentation.Shared.Options.Setups;
@@ -25,8 +25,6 @@ public static class DependencyInjection
         services.ConfigureOptions();
 
         services.ConfigureAuthorization(configuration);
-
-        services.ConfigureSerilog(configuration, Assembly.GetExecutingAssembly());
 
         services
             .AddIdentity<User, IdentityRole<Guid>>(opt => opt.User.RequireUniqueEmail = true)

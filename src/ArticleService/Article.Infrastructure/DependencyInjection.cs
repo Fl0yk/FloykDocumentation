@@ -1,7 +1,9 @@
 ﻿using Article.Domain.Abstractions.Repositories;
 using Article.Infrastructure.Data;
 using Article.Infrastructure.Data.TransactionProviders;
+using Article.Infrastructure.Database;
 using Article.Infrastructure.Repositories;
+using Core.Infrastructure.DataBase;
 using Core.Providers.Interfaces;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -28,8 +30,8 @@ public static class DependencyInjection
         var dbContext = new ApplicationDbContext(dbSettings);
 
         services.AddSingleton(dbContext.ArticleCollection);
-        services.AddSingleton<ISaveChangesInterceptor, SaveChangesInterceptor>();
 
+        services.AddScoped<ISaveChangesInterceptor, DatabaseAuditableInterceptor>();
         services.AddScoped<ITransactionProvider, SqlTransactionProvider>();
         //TODO: mongo db transactions
         services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -1,12 +1,16 @@
+using Core.Api.Configurators;
 using Core.Api.Middlewares;
 using Core.Infrastructure.Extensions;
 using Identity.Application;
-using Identity.DataAccess.Data;
 using Identity.Infrastructure;
+using Identity.Infrastructure.Database;
 using Identity.Presentation;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = SerilogConfigurator.CreateLogger();
+builder.Host.UseSerilog((_, loggerConfiguration) => loggerConfiguration.ConfigureLogger());
 
 builder.Services.AddApplicationServices();
 builder.Services.AddPresentationServices(builder.Configuration);

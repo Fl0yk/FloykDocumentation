@@ -1,4 +1,5 @@
 ﻿using Forum.Domain.Abstractions.Repositories;
+using Forum.Infrastructure.Database;
 
 namespace Forum.Infrastructure.Repositories;
 public class UnitOfWork : IUnitOfWork

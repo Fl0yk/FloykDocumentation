@@ -1,5 +1,5 @@
 ﻿using Core.Infrastructure.DataBase;
-using Identity.DataAccess.Data;
+using Identity.Infrastructure.Database;
 
 namespace Identity.Infrastructure.Data;
 

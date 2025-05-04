@@ -6,14 +6,14 @@ namespace Core.Api.Middlewares;
 
 public class SerilogMiddleware
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<SerilogMiddleware> _logger;
     private readonly RequestDelegate _next;
 
     private const string _messageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
 
     public SerilogMiddleware(
         RequestDelegate next,
-        ILogger logger)
+        ILogger<SerilogMiddleware> logger)
     {
         _logger = logger;
         _next = next ?? throw new ArgumentNullException("Request delegate is null");

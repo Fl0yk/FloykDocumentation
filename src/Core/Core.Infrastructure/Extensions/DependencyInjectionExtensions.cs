@@ -1,6 +1,5 @@
-﻿using Hangfire.PostgreSql;
-using Hangfire;
-using Npgsql;
+﻿using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Infrastructure.Extensions;

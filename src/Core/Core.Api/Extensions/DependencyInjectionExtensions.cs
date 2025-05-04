@@ -5,40 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.Elasticsearch;
-using System.Reflection;
 using System.Text;
 
 namespace Core.Api.Extensions;
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection ConfigureSerilog(this IServiceCollection services, IConfiguration configuration, Assembly? assembly = null)
-    {
-        string elasticsearchUrl = configuration.GetSection("ElasticsearchUrl").Value
-                                                    ?? throw new KeyNotFoundException("Can't read jwt from appsettings.json");
-        assembly ??= Assembly.GetExecutingAssembly();
-        ElasticsearchSinkOptions elasticsearchOptions = new(new Uri(elasticsearchUrl))
-        {
-            AutoRegisterTemplate = true,
-            IndexFormat = $"{assembly.GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
-        };
-
-        Log.Logger = new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-            .MinimumLevel.Override("System", LogEventLevel.Information)
-            .WriteTo.Console()
-            .WriteTo.Elasticsearch(elasticsearchOptions).MinimumLevel
-                    .Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
-            .CreateLogger();
-
-        return services;
-    }
-
     public static void ConfigureAuthorization(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureOptions<JwtOptionsSetup>();

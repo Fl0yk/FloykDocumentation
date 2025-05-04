@@ -1,4 +1,5 @@
 ﻿using Core.Infrastructure.DataBase;
+using Forum.Infrastructure.Database;
 
 namespace Forum.Infrastructure.Data;
 

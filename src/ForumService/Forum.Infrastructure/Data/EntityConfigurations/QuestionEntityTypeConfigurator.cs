@@ -38,6 +38,7 @@ public class QuestionEntityTypeConfigurator : BaseEntityTypeConfiguration<Questi
             .HasForeignKey(x => x.AuthorId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.SeedQuestion();
+        //TODO: return seeds
+        //builder.SeedQuestion();
     }
 }

@@ -1,10 +1,10 @@
-﻿using Core.Infrastructure.Extensions;
+﻿using Core.Infrastructure.DataBase;
+using Core.Infrastructure.Extensions;
 using Core.Providers.Interfaces;
 using Forum.Domain.Abstractions.Repositories;
-using Forum.Infrastructure.BackgroundJobs.Question;
 using Forum.Infrastructure.Data;
+using Forum.Infrastructure.Database;
 using Forum.Infrastructure.Repositories;
-using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +24,7 @@ public static class DependencyInjection
         string hangfireConnection = configuration.GetConnectionString("HangfireConnection")
                                                         ?? throw new ArgumentNullException("Hangfire db connection string is not found");
 
-        services.AddScoped<ISaveChangesInterceptor, SaveChangesInterceptor>();
+        services.AddScoped<ISaveChangesInterceptor, DatabaseAuditableInterceptor>();
         services.AddScoped<ITransactionProvider, TransactionProvider>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -37,7 +37,7 @@ public static class DependencyInjection
 
         services.AddSignalR();
 
-        RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>($"Recuring-{nameof(CloseQuestionsBackgroundJob)}", x => x.CloseQuestionsAsync(25), Cron.Daily());
+        //RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>($"Recuring-{nameof(CloseQuestionsBackgroundJob)}", x => x.CloseQuestionsAsync(25), Cron.Daily());
 
         return services;
     }

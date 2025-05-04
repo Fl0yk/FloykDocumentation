@@ -2,7 +2,7 @@
 using Forum.Infrastructure.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Forum.Infrastructure;
+namespace Forum.Infrastructure.Database;
 
 public class ApplicationDbContext : DbContext
 {
@@ -12,7 +12,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
 
-    public ApplicationDbContext(DbContextOptions options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     { }
 

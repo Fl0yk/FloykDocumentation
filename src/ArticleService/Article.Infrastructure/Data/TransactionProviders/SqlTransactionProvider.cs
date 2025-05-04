@@ -1,4 +1,5 @@
-﻿using Core.Infrastructure.DataBase;
+﻿using Article.Infrastructure.Database;
+using Core.Infrastructure.DataBase;
 
 namespace Article.Infrastructure.Data.TransactionProviders;
 
