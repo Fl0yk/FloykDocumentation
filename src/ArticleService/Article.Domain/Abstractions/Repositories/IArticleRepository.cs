@@ -4,6 +4,8 @@ namespace Article.Domain.Abstractions.Repositories;
 
 public interface IArticleRepository
 {
+    public Task<IEnumerable<ArticleModel>> GetArticlesByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
+
     public Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticlesAsync(int pageNo, int pageSize, CancellationToken cancellationToken = default);
 
     public Task<IEnumerable<ArticleModel>> GetPaginatedByCategoryWithoutBlocksArticlesAsync(Guid categoryId, int pageNo, int pageSize, CancellationToken cancellationToken = default);

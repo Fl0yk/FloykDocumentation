@@ -2,7 +2,6 @@
 using Article.Domain.Abstractions.Repositories;
 using Core.Exceptions;
 using Core.Providers.Interfaces;
-using MassTransit;
 using MediatR;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
@@ -10,21 +9,23 @@ namespace Article.Application.UseCases.ComandHandler.Articles;
 internal sealed class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IPublishEndpoint _publishEndpoint;
     private readonly IBaseCurrentUserProvider _currentUserProvider;
+    private readonly ITransactionProvider _transactionProvider;
 
     public DeleteArticleCommandHandler(
         IUnitOfWork unitOfWork, 
-        IPublishEndpoint publishEndpoint,
-        IBaseCurrentUserProvider currentUserProvider)
+        IBaseCurrentUserProvider currentUserProvider,
+        ITransactionProvider transactionProvider)
     {
         _unitOfWork = unitOfWork;
-        _publishEndpoint = publishEndpoint;
         _currentUserProvider = currentUserProvider;
+        _transactionProvider = transactionProvider;
     }
 
     public async Task Handle(DeleteArticleCommand request, CancellationToken cancellationToken)
     {
+        await _transactionProvider.OpenTransaction(cancellationToken);
+
         var currentUser = _currentUserProvider.GetCurrentUser();
 
         if (currentUser is null)
@@ -44,12 +45,10 @@ internal sealed class DeleteArticleCommandHandler : IRequestHandler<DeleteArticl
             throw new GuardForbiddenException($"Author with id {currentUser.Id} cannot delete this article");
         }
 
+        await _unitOfWork.UserRepository.RemoveSavedArticlesByArticleAsync(dbArticle.Id, cancellationToken);
+
         await _unitOfWork.ArticleRepository.DeleteArticleAsync(dbArticle, cancellationToken);
 
-        //TODO: нужны ивенты?
-        //await _publishEndpoint.Publish<ArticleDeleted>(new
-        //{
-        //    request.Id
-        //}, cancellationToken);
+        await _transactionProvider.Commit(cancellationToken);
     }
 }

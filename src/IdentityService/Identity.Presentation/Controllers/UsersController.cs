@@ -72,22 +72,4 @@ public class UsersController : ControllerBase
 
         return NoContent();
     }
-
-    //[HttpPost("saved-article/{articleId:guid}")]
-    //[Authorize]
-    //public async Task<IActionResult> SaveArticlePost([FromRoute] Guid articleId, CancellationToken cancellationToken)
-    //{
-    //    await _userService.SaveArticleAsync(new SaveArticleRequest(articleId), cancellationToken);
-
-    //    return NoContent();
-    //}
-
-    //[HttpDelete("saved-article/{articleId:guid}")]
-    //[Authorize]
-    //public async Task<IActionResult> DeleteSavedArticle([FromRoute] Guid articleId, CancellationToken cancellationToke)
-    //{
-    //    await _userService.RemoveSavedArticleAsync(articleId, cancellationToke);
-
-    //    return NoContent();
-    //}
 }

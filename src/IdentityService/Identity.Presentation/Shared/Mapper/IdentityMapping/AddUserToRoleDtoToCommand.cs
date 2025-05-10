@@ -9,7 +9,7 @@ public class AddUserToRoleDtoToCommand : Profile
     public AddUserToRoleDtoToCommand()
     {
         CreateMap<AddUserToRoleRequestDTO, AddUserToRoleCommand>()
-            .ForMember(d => d.Username, opt => opt.MapFrom(src => src.Username))
+            .ForMember(d => d.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(d => d.RoleName, opt => opt.MapFrom(src => src.RoleName));
     }
 }

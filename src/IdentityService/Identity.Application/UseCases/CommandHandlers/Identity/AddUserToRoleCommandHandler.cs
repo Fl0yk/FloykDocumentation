@@ -27,11 +27,11 @@ internal sealed class AddUserToRoleCommandHandler : IRequestHandler<AddUserToRol
     {
         await _transactionProvider.OpenTransaction(cancellationToken);
 
-        var dbUser = await _userManager.FindByNameAsync(request.Username);
+        var dbUser = await _userManager.FindByIdAsync(request.UserId.ToString());
 
         if (dbUser is null)
         {
-            throw new GuardArgumentException($"User with username {request.Username} was not found");
+            throw new GuardArgumentException($"User with username {request.UserId} was not found");
         }
 
         var role = await _roleManager.FindByNameAsync(request.RoleName);

@@ -4,5 +4,5 @@ namespace Identity.Application.UseCases.Command.Users;
 
 public sealed class UpdateUserCommand : IRequest
 {
-    public string NewUsername { get; init; } = null!;
+    public string NewPublicUsername { get; init; } = null!;
 }

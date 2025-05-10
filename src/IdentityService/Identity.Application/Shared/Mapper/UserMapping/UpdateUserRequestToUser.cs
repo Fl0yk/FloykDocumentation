@@ -9,7 +9,6 @@ public class UpdateUserRequestToUser : Profile
     public UpdateUserRequestToUser()
     {
         CreateMap<UpdateUserCommand, User>()
-            .ForMember(d => d.UserName, opt => opt.MapFrom(src => src.NewUsername))
-            .ForMember(d => d.NormalizedUserName, opt => opt.MapFrom(src => src.NewUsername.ToUpper()));
+            .ForMember(d => d.PublicUsername, opt => opt.MapFrom(src => src.NewPublicUsername));
     }
 }

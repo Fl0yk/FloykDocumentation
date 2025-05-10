@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
+using Core.Models.Events;
 using Core.Providers.Interfaces;
 using Identity.Application.UseCases.Command.Users;
 using Identity.Domain.Abstractions.Providers;
 using Identity.Domain.Repositories.Abstractions;
+using MassTransit;
 using MediatR;
 
 namespace Identity.Application.UseCases.CommandHandlers.Users;
@@ -13,17 +15,20 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
     private readonly IMapper _mapper;
     private readonly ICurrentUserProvider _currentUserProvider;
     private readonly ITransactionProvider _transactionProvider;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public UpdateUserCommandHandler(
         IUnitOfWork unitOfWork, 
         IMapper mapper, 
         ICurrentUserProvider currentUserProvider,
-        ITransactionProvider transactionProvider)
+        ITransactionProvider transactionProvider,
+        IPublishEndpoint publishEndpoint)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUserProvider = currentUserProvider;
         _transactionProvider = transactionProvider;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -37,25 +42,11 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
             throw new GuardUnauthorizedException("User is not authorize");
         }
 
-        string oldUsername = user.Username;
-
         var dbUser = await _unitOfWork.UserRepository.GetUserByIdAsync(user.Id, cancellationToken);
 
         if (dbUser is null)
         {
             throw new GuardNotFoundException($"User with id {user.Id} was not found");
-        }
-
-        if (dbUser.UserName == oldUsername)
-        {
-            return;
-        }
-
-        var anotherUser = await _unitOfWork.UserRepository.GetUserByNameAsync(request.NewUsername, cancellationToken);
-
-        if (anotherUser is not null)
-        {
-            throw new GuardArgumentException($"Username is already taken");
         }
 
         _mapper.Map(request, dbUser);
@@ -64,12 +55,12 @@ internal sealed class UpdateUserCommandHandler : IRequestHandler<UpdateUserComma
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+        await _publishEndpoint.Publish(new UserUpdatedEvent()
+        {
+            Id = dbUser.Id,
+            PublicUsername = dbUser.PublicUsername
+        }, cancellationToken);
+
         await _transactionProvider.Commit(cancellationToken);
-        //TODO: think with replication
-        //await _publishEndpoint.Publish<UsernameUpdated>(new
-        //{
-        //    OldUsername = oldUsername,
-        //    NewUsername = dbUser.UserName
-        //}, cancellationToken);
     }
 }

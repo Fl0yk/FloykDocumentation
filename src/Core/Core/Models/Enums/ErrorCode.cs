@@ -11,15 +11,13 @@ public enum ErrorCode
     //TODO: add not author (article)
 }
 
-//Переписать ArticleService(несколбко бд(реляционка под юзера и категории, монго под статьи)+, транзакции, работа с юзером+, сохраненные статьи)
-//Вынести ICurrentuserProvider в  Core, добавить работу с токеном во все сервисы+
-//Пересмотреть хэндлеры в ApiGateway(нужны ли вообще они, если каждый сервис сам будет доставать данные из запроса)+
-//Синхронизация юзеров+
+// Redis Jwt token? Napizdec?
+// ArticleRepository: add filter isDeleted = false
+// Article command: add transaction provider? Mongo transactions?
 
 //Статусы статьи? Типа, если вносят изменения в опубликованную статью, то она снимается с публикации? Или не давать изменять опубликованную
 //В идеале сделать так: блоки хранят, опубликованы ли они. Пользователь добавляет блок, основная статья исходной версии, автор видит с новыми блоками
 
-//ApproveArtcileCommand (Article; Admin)
-//SaveArticleCommand (Article; Authorize)
-//UnsaveArtileCommand (Article; Authorize)
-//GetSavedArticlesByUser (Article; Authorize)
+//ApproveArtcileCommand (Article; Admin) ?Отправлять сообщение, что статья одобрена и готова к публикации?
+
+//GetUserInfo(Identity; Current authorize and unauthorize)

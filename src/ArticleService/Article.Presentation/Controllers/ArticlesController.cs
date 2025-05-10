@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Article.Presentation.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class ArticlesController : ControllerBase
@@ -36,6 +37,17 @@ public class ArticlesController : ControllerBase
     {
         var result = await _mediator.Send(
             _mapper.Map<GetPaginatedByAuthorNameShortArticlesQuery>(request), 
+            cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("paginated/current")]
+    [Authorize]
+    public async Task<IActionResult> GetCurrentUserArticles([FromQuery] GetCurrentUserShortArticlesRequestDto request, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(
+            _mapper.Map<GetCurrentUserShortArticlesQuery>(request),
             cancellationToken);
 
         return Ok(result);
@@ -123,5 +135,56 @@ public class ArticlesController : ControllerBase
             cancellationToken);
 
         return NoContent();
+    }
+
+    [HttpPost("{articleId:guid}/approve")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> ApproveArticle([FromRoute] Guid articleId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new ApproveArticleCommand()
+            {
+                ArticleId = articleId
+            },
+            cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpPost("{articleId:guid}/save")]
+    [Authorize]
+    public async Task<IActionResult> SaveArticle([FromRoute] Guid articleId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new SaveArticleCommand()
+            {
+                ArticleId = articleId
+            },
+            cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpPost("{articleId:guid}/unsave")]
+    [Authorize]
+    public async Task<IActionResult> UnsaveArticle([FromRoute] Guid articleId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(
+            new UnsaveArticleCommand()
+            {
+                ArticleId = articleId
+            },
+            cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpGet("saved-articles")]
+    [Authorize]
+    public async Task<IActionResult> GetSavedArticles(CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetSavedArticlesByUserQuery(), cancellationToken);
+
+        return Ok(result);
     }
 }

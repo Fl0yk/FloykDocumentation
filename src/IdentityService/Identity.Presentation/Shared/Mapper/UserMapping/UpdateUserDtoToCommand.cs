@@ -9,6 +9,6 @@ public class UpdateUserDtoToCommand : Profile
     public UpdateUserDtoToCommand() 
     {
         CreateMap<UpdateUserRequestDTO, UpdateUserCommand>()
-            .ForMember(d => d.NewUsername, opt => opt.MapFrom(src => src.NewUsername));
+            .ForMember(d => d.NewPublicUsername, opt => opt.MapFrom(src => src.NewPublicUsername));
     }
 }

@@ -24,11 +24,11 @@ public class GetPaginatedByAuthorNameShortArticlesQueryHandler
 
     public async Task<PaginatedResult<ShortArticleDTO>> Handle(GetPaginatedByAuthorNameShortArticlesQuery request, CancellationToken cancellationToken)
     {
-        var author = await _unitOfWork.UserRepository.GetByUsernameAsync(request.AuthorName, cancellationToken);
+        var author = await _unitOfWork.UserRepository.GetByIdAsync(request.AuthorId, cancellationToken);
 
         if (author is null)
         {
-            throw new GuardNotFoundException($"Author with username {request.AuthorName} not found");
+            throw new GuardNotFoundException($"Author with id {request.AuthorId} not found");
         }
 
         var articles = await _unitOfWork.ArticleRepository.GetPaginatedByAuthorWithoutBlocksArticlesAsync(author.Id, request.PageNo, request.PageSize, cancellationToken);

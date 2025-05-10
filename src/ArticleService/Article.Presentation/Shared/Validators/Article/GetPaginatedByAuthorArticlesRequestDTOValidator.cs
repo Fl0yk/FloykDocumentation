@@ -12,6 +12,6 @@ public class GetPaginatedByAuthorArticlesRequestDTOValidator
 
         RuleFor(r => r.PageSize).GreaterThan(0);
 
-        RuleFor(r => r.AuthorName).NotEmpty();
+        RuleFor(r => r.AuthorId).NotEmpty();
     }
 }

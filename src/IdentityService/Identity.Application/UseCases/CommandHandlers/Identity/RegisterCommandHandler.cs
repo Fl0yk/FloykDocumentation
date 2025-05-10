@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
+using Core.Models.Events;
 using Core.Providers.Interfaces;
 using Identity.Application.Shared.Models;
 using Identity.Application.UseCases.Command.Identity;
 using Identity.Domain.Abstractions.Providers;
 using Identity.Domain.Entities;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -17,19 +19,22 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
     private readonly IMapper _mapper;
     private readonly IJwtProvider _jwtProvider;
     private readonly ITransactionProvider _transactionProvider;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public RegisterCommandHandler(
         UserManager<User> userManager, 
         SignInManager<User> signInManager, 
         IMapper mapper, 
         IJwtProvider jwtProvider,
-        ITransactionProvider transactionProvider)
+        ITransactionProvider transactionProvider,
+        IPublishEndpoint publishEndpoint)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
         _jwtProvider = jwtProvider;
         _transactionProvider = transactionProvider;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<AccessToken> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -66,6 +71,8 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
         UpdateRefresh(user);
 
         await _userManager.UpdateAsync(user);
+
+        await _publishEndpoint.Publish(_mapper.Map<UserCreatedEvent>(user));
 
         await _transactionProvider.Commit(cancellationToken);
 

@@ -4,12 +4,11 @@ using AutoMapper;
 
 namespace Article.Presentation.Shared.Mapper.ArticleMapping;
 
-public class GetPaginatedByAuthorArticlesDtoToQuery : Profile
+public class GetCurrentUserShortArticlesRequestDtoToQuery : Profile
 {
-    public GetPaginatedByAuthorArticlesDtoToQuery()
+    public GetCurrentUserShortArticlesRequestDtoToQuery()
     {
-        CreateMap<GetPaginatedByAuthorArticlesRequestDTO, GetPaginatedByAuthorNameShortArticlesQuery>()
-            .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId))
+        CreateMap<GetCurrentUserShortArticlesRequestDto, GetCurrentUserShortArticlesQuery>()
             .ForMember(d => d.PageNo, opt => opt.MapFrom(src => src.PageNo))
             .ForMember(d => d.PageSize, opt => opt.MapFrom(src => src.PageSize));
     }

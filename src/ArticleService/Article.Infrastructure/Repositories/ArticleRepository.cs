@@ -42,11 +42,6 @@ public class ArticleRepository : IArticleRepository
 
         var dbArticle = await _articles.Find(idFilter).FirstOrDefaultAsync(cancellationToken);
 
-        if (dbArticle is null)
-        {
-            return null;
-        }
-
         return _mapper.Map<ArticleModel>(dbArticle);
     }
 
@@ -130,8 +125,18 @@ public class ArticleRepository : IArticleRepository
                                                                             .Set(a => a.CategoryId, dbArticle.CategoryId)
                                                                             .Set(a => a.Blocks, dbArticle.Blocks)
                                                                             .Set(a => a.IsPublished, dbArticle.IsPublished)
+                                                                            .Set(a => a.IsShouldBeApproved, dbArticle.IsShouldBeApproved)
                                                                             .Set(a => a.DateOfPublication, dbArticle.DateOfPublication);
 
         return _articles.UpdateOneAsync(idFilter, updateDefinition, cancellationToken: cancellationToken);
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetArticlesByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> idsFilter = Builders<ArticleDb>.Filter.In(a => a.Id, ids);
+
+        var dbArticle = await _articles.Find(idsFilter).ToListAsync(cancellationToken);
+
+        return _mapper.Map<IEnumerable<ArticleModel>>(dbArticle);
     }
 }

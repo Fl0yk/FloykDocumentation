@@ -7,7 +7,7 @@ public class UpdateUserRequestDTOValidator : AbstractValidator<UpdateUserRequest
 {
     public UpdateUserRequestDTOValidator()
     {
-        RuleFor(r => r.NewUsername)
+        RuleFor(r => r.NewPublicUsername)
             .NotEmpty()
             .MaximumLength(20);
     }

@@ -7,7 +7,7 @@ public class AddUserToRoleRequestDTOValidator : AbstractValidator<AddUserToRoleR
 {
     public AddUserToRoleRequestDTOValidator()
     {
-        RuleFor(r => r.Username).NotEmpty();
+        RuleFor(r => r.UserId).NotEmpty();
 
         RuleFor(r => r.RoleName).NotEmpty();
     }

@@ -13,6 +13,8 @@ public class ArticleDb
 
     public bool IsPublished { get; set; }
 
+    public bool IsShouldBeApproved { get; set; }
+
     public DateTimeOffset? DateOfPublication { get; set; }
 
     public Guid CategoryId { get; set; }

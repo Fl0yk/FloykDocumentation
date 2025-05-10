@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Article.Domain.Entities;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Article.Infrastructure.Shared.Models;
 
@@ -7,9 +8,9 @@ public class BlockDb
     [BsonId]
     public Guid Id { get; set; }
 
-    public string Text { get; set; } = string.Empty;
+    public string Text { get; set; } = null!;
 
-    public required string Type { get; set; }
+    public BlockType Type { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
 

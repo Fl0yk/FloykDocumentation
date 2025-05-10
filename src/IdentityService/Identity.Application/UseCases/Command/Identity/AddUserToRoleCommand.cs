@@ -4,7 +4,7 @@ namespace Identity.Application.UseCases.Command.Identity;
 
 public sealed class AddUserToRoleCommand : IRequest
 {
-    public string Username { get; set; } = null!;
+    public Guid UserId { get; set; }
 
     public string RoleName { get; set; } = null!;
 }

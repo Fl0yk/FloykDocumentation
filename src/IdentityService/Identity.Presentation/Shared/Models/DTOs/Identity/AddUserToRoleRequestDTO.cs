@@ -1,3 +1,3 @@
 ﻿namespace Identity.Presentation.Shared.Models.DTOs.Identity;
 
-public record class AddUserToRoleRequestDTO(string Username, string RoleName);
+public record class AddUserToRoleRequestDTO(Guid UserId, string RoleName);

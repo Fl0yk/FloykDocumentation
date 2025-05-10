@@ -10,5 +10,5 @@ public sealed class GetPaginatedByAuthorNameShortArticlesQuery : IRequest<Pagina
 
     public int PageSize { get; init; }
 
-    public string AuthorName { get; init; } = null!;
+    public Guid AuthorId { get; init; }
 }

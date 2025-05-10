@@ -11,5 +11,7 @@ public class ShortArticleDTO
 
     public bool IsPublished { get; set; }
 
+    public bool IsShouldBeApproved { get; set; }
+
     public DateTime DateOfPublication { get; set; }
 }

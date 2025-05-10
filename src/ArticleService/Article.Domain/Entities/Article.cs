@@ -8,6 +8,8 @@ public class Article : BaseEntity
 
     public bool IsPublished { get; set; }
 
+    public bool IsShouldBeApproved { get; set; }
+
     public DateTimeOffset? DateOfPublication { get; set; }
 
     public Guid AuthorId { get; set; }
