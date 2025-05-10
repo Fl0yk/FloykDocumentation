@@ -1,3 +1,5 @@
-﻿namespace Article.Presentation.Shared.Models.DTOs.Article;
+﻿using Article.Domain.Entities;
 
-public record class AppendBlockRequestDTO(string Text, string BlockType, Guid ArticleId);
+namespace Article.Presentation.Shared.Models.DTOs.Article;
+
+public record class AppendBlockRequestDTO(string Text, BlockType BlockType, Guid ArticleId);

@@ -10,7 +10,7 @@ public class BlockToBlockDb : Profile
     {
         CreateMap<Block, BlockDb>()
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
+            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Data))
             .ForMember(d => d.Type, opt => opt.MapFrom(src => src.Type))
             .ForMember(d => d.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
             .ForMember(d => d.UpdatedAt, opt => opt.MapFrom(src => src.UpdatedAt))

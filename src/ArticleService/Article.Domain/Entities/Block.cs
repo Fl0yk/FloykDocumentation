@@ -4,7 +4,7 @@ namespace Article.Domain.Entities;
 
 public class Block : BaseEntity
 {
-    public string Text { get; set; } = string.Empty;
+    public string Data { get; set; } = null!;
 
-    public required string Type { get; set; }
+    public BlockType Type { get; set; }
 }

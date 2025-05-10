@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly Lazy<IArticleRepository> _articleRepository;
     private readonly Lazy<ICategoryRepository> _categoryRepository;
     private readonly Lazy<IUserRepository> _userRepository;
+    private readonly SqlDbContext _dbContext;
 
     public IArticleRepository ArticleRepository => _articleRepository.Value;
 
@@ -23,5 +24,11 @@ public class UnitOfWork : IUnitOfWork
         _articleRepository = new(() => new ArticleRepository(articles, mapper));
         _categoryRepository = new(() => new CategoryRepository(dbContext, articles));
         _userRepository = new(() => new UserRepository(dbContext));
+        _dbContext = dbContext;
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

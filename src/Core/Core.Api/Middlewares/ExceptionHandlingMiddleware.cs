@@ -2,6 +2,7 @@
 using Core.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Core.Api.Middlewares;
@@ -9,10 +10,16 @@ namespace Core.Api.Middlewares;
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-    public ExceptionHandlingMiddleware(RequestDelegate requestDelegate)
+    private const string MessageTemplate = "{Exception message: {0};\tSensetive message: {1}";
+
+    public ExceptionHandlingMiddleware(
+        RequestDelegate requestDelegate,
+        ILogger<ExceptionHandlingMiddleware> logger)
     {
         _next = requestDelegate;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -32,6 +39,8 @@ public class ExceptionHandlingMiddleware
 
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
+            _logger.LogInformation(MessageTemplate, ex.Message, ex.SensitiveMessage);
+
             await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
         }
         catch (GuardForbiddenException ex)
@@ -44,6 +53,8 @@ public class ExceptionHandlingMiddleware
             };
 
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+            _logger.LogInformation(MessageTemplate, ex.Message, ex.SensitiveMessage);
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
         }
@@ -58,7 +69,11 @@ public class ExceptionHandlingMiddleware
 
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
+            _logger.LogInformation(MessageTemplate, ex.Message, ex.SensitiveMessage);
+
             await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
+
+            throw;
         }
         catch (CustomExceptionBase ex)
         {
@@ -70,6 +85,8 @@ public class ExceptionHandlingMiddleware
             };
 
             context.Response.StatusCode = StatusCodes.Status404NotFound;
+
+            _logger.LogInformation(MessageTemplate, ex.Message, ex.SensitiveMessage);
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
         }

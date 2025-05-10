@@ -30,6 +30,7 @@
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\Images\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

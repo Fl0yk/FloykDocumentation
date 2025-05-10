@@ -1,9 +1,11 @@
 ﻿using Article.Domain.Abstractions.Repositories;
+using Article.Infrastructure.Consumers.Users;
 using Article.Infrastructure.Data;
 using Article.Infrastructure.Data.TransactionProviders;
 using Article.Infrastructure.Database;
 using Article.Infrastructure.Repositories;
 using Core.Infrastructure.DataBase;
+using Core.Models.Events;
 using Core.Providers.Interfaces;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +56,8 @@ public static class DependencyInjection
         {
             conf.SetKebabCaseEndpointNameFormatter();
 
-            //conf.AddConsumer<UsernameUpdatedConsumer>();
+            conf.AddConsumer<UserCreatedEventConsumer>();
+            conf.AddConsumer<UserUpdatedEventConsumer>();
 
             conf.UsingRabbitMq((context, cfg) =>
             {

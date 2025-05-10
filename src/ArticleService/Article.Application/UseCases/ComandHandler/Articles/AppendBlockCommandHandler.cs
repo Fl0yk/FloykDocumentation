@@ -47,11 +47,6 @@ internal sealed class AppendBlockCommandHandler : IRequestHandler<AppendBlockCom
             throw new GuardForbiddenException($"The user {currentUser.Id} is not author of this article");
         }
 
-        if (!BlockType.Types.Contains(request.BlockType))
-        {
-            throw new GuardArgumentException($"Block type \"{request.BlockType}\" does not exist");
-        }
-
         var block = _mapper.Map<Block>(request);
 
         article.Blocks.Add(block);

@@ -5,7 +5,7 @@
   "Routes": [
     // Articles
     {
-      "DownstreamPathTemplate": "/api/Articles/{everthing}",
+      "DownstreamPathTemplate": "/api/Articles/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -13,7 +13,7 @@
           "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/api/Articles/{everthing}",
+      "UpstreamPathTemplate": "/api/Articles/{everything}",
       "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
       "DelegatingHandlers": [
         "JwtInjectionHandler"
@@ -49,37 +49,7 @@
     },
     // Answers
     {
-      "DownstreamPathTemplate": "/api/Answers/{everthing}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "article.api",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/Answers/{everthing}",
-      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
-      "DelegatingHandlers": [
-        "JwtInjectionHandler"
-      ],
-      "SwaggerKey": "article"
-    },
-    {
       "DownstreamPathTemplate": "/api/Answers/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "article.api",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/Answers/{everything}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "article"
-    },
-    // Questions
-    {
-      "DownstreamPathTemplate": "/api/Questions/{everthing}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -87,7 +57,7 @@
           "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/api/Questions/{everthing}",
+      "UpstreamPathTemplate": "/api/Answers/{everything}",
       "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
       "DelegatingHandlers": [
         "JwtInjectionHandler"
@@ -95,7 +65,7 @@
       "SwaggerKey": "forum"
     },
     {
-      "DownstreamPathTemplate": "/api/Questions/{everthing}",
+      "DownstreamPathTemplate": "/api/Answers/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -103,7 +73,37 @@
           "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/api/Questions/{everthing}",
+      "UpstreamPathTemplate": "/api/Answers/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "forum"
+    },
+    // Questions
+    {
+      "DownstreamPathTemplate": "/api/Questions/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "forum.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Questions/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
+      "DelegatingHandlers": [
+        "JwtInjectionHandler"
+      ],
+      "SwaggerKey": "forum"
+    },
+    {
+      "DownstreamPathTemplate": "/api/Questions/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "forum.api",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Questions/{everything}",
       "UpstreamHttpMethod": [ "Get" ],
       "DelegatingHandlers": [
         "JwtInjectionHandler"
@@ -112,7 +112,7 @@
     },
     // Identity
     {
-      "DownstreamPathTemplate": "/api/Identity/add-to-role",
+      "DownstreamPathTemplate": "/api/Identity/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -120,26 +120,13 @@
           "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/api/Identity/add-to-role",
-      "UpstreamHttpMethod": [ "Post" ],
-      "SwaggerKey": "identity"
-    },
-    {
-      "DownstreamPathTemplate": "/api/Identity/{everthing}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "identity.api",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/api/Identity/{everthing}",
+      "UpstreamPathTemplate": "/api/Identity/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
       "SwaggerKey": "identity"
     },
     // User
     {
-      "DownstreamPathTemplate": "/api/Users/{everthing}",
+      "DownstreamPathTemplate": "/api/Users/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -147,7 +134,7 @@
           "Port": 8080
         }
       ],
-      "UpstreamPathTemplate": "/api/Users/{everthing}",
+      "UpstreamPathTemplate": "/api/Users/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DelegatingHandlers": [
         "JwtInjectionHandler"

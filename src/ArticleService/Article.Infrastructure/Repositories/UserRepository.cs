@@ -29,4 +29,18 @@ internal sealed class UserRepository : IUserRepository
             .Where(x => x.Username == username)
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public Task UpdateAsync(User user, CancellationToken cancellationToken = default)
+    {
+        _users.Update(user);
+        
+        return Task.CompletedTask;
+    }
+
+    public Task CreateAsync(User user, CancellationToken cancellationToken = default)
+    {
+        _users.Add(user);
+
+        return Task.CompletedTask;
+    }
 }

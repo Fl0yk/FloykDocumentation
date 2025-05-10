@@ -2,7 +2,9 @@
 using Article.Application.UseCases.Query.Articles;
 using Article.Presentation.Shared.Models.DTOs.Article;
 using AutoMapper;
+using Core.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Article.Presentation.Controllers;
@@ -58,6 +60,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -68,6 +71,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPost("block")]
+    [Authorize]
     public async Task<IActionResult> AppendBlock([FromBody] AppendBlockRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -78,6 +82,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPost("publish")]
+    [Authorize(Roles = Roles.Author)]
     public async Task<IActionResult> PublishArticle([FromBody] PublishArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -88,6 +93,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<IActionResult> UpdateArticle([FromBody] UpdateArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -98,6 +104,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize]
     public async Task<IActionResult> DeleteArticle([FromBody] DeleteArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -108,6 +115,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpDelete("block")]
+    [Authorize]
     public async Task<IActionResult> DeleteBlock([FromBody] DeleteBlockRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(

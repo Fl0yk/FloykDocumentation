@@ -64,7 +64,7 @@ public static class DependencyInjection
         {
             options.AddDefaultPolicy(builder =>
             {
-                builder.WithOrigins(urls.ApiGatewayUrl, urls.ForumUrl, urls.ArticleUrl)
+                builder.AllowAnyOrigin()//WithOrigins(urls.ApiGatewayUrl, urls.ForumUrl, urls.ArticleUrl)
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });

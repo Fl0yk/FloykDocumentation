@@ -22,11 +22,17 @@ internal sealed class UserRepository : IUserRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    //public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken = default)
-    //{
-    //    return await _users
-    //        .AsNoTracking()
-    //        .Where(x => x.Username == username)
-    //        .FirstOrDefaultAsync(cancellationToken);
-    //}
+    public Task CreateAsync(User user, CancellationToken cancellationToken = default)
+    {
+        _users.Add(user);
+
+        return Task.CompletedTask;
+    }
+
+    public Task UpdateAsync(User user, CancellationToken cancellationToken = default)
+    {
+        _users.Update(user);
+
+        return Task.CompletedTask;
+    }
 }
