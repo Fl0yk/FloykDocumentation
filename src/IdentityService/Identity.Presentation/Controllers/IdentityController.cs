@@ -25,7 +25,19 @@ public class IdentityController : ControllerBase
     [HttpPost("registration")]
     public async Task<IActionResult> Registration([FromBody]RegistrationUserRequestDTO request, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(_mapper.Map<RegisterCommand>(request), cancellationToken);
+        await _mediator.Send(_mapper.Map<RegisterCommand>(request), cancellationToken);
+
+        return NoContent();
+    }
+
+    [HttpGet("registration/confirm")]
+    public async Task<IActionResult> RegistrationConfirm([FromQuery] Guid userId, [FromQuery] string token, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new RegistrationConfirmCommand()
+        {
+            UserId = userId,
+            Token = token
+        }, cancellationToken);
 
         return Ok(result);
     }

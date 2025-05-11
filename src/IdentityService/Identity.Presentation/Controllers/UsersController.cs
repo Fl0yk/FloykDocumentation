@@ -22,7 +22,7 @@ public class UsersController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("{username}")]
+    [HttpGet("{username}/info")]
     [Authorize]
     public async Task<IActionResult> GetUserByName([FromRoute] string username, CancellationToken cancellationToken)
     {
@@ -31,16 +31,25 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("follow/{authorId:guid}")]
+    [HttpGet("current/info")]
     [Authorize]
-    public async Task<IActionResult> Follow([FromRoute]Guid authorId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCurrentUserInfo([FromRoute] string username, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetCurrentUserInfoQuery(), cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost("{authorId:guid}/follow")]
+    [Authorize]
+    public async Task<IActionResult> Follow([FromRoute] Guid authorId, CancellationToken cancellationToken)
     {
         await _mediator.Send(new FollowCommand() { AuthorId = authorId }, cancellationToken);
 
         return NoContent();
     }
 
-    [HttpDelete("follow/{authorId:guid}")]
+    [HttpDelete("{authorId:guid}/follow")]
     [Authorize]
     public async Task<IActionResult> Unfollow([FromRoute] Guid authorId, CancellationToken cancellationToken)
     {
@@ -71,5 +80,18 @@ public class UsersController : ControllerBase
         await _mediator.Send(command, cancellationToken);
 
         return NoContent();
+    }
+
+    [HttpGet("{username}")]
+    public async Task<IActionResult> GetUsersByPartialName([FromRoute] string username, [FromQuery] int pageNo, [FromQuery] int pageSize, CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetShortUsersInfoByPartialNameQuery()
+        {
+            PartialUsername = username,
+            PageNo = pageNo,
+            PageSize = pageSize
+        }, cancellationToken);
+
+        return Ok(result);
     }
 }

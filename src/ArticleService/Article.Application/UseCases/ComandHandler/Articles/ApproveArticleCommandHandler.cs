@@ -55,7 +55,8 @@ public sealed class ApproveArticleCommandHandler : IRequestHandler<ApproveArticl
 
         await _publishEndpoint.Publish(new ArticleApprovedEvent()
         {
-            UserId = author.Id
+            UserId = author.Id,
+            Title = article.Title
         }, cancellationToken);
 
         await _transactionProvider.Commit(cancellationToken);

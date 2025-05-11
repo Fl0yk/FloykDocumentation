@@ -2,6 +2,7 @@
 using Core.Exceptions;
 using Core.Models.Events;
 using Core.Providers.Interfaces;
+using Identity.Domain.Abstractions.Managers;
 using Identity.Domain.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
@@ -13,15 +14,18 @@ public sealed class ArticleApprovedEventConsumer : IConsumer<ArticleApprovedEven
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly ITransactionProvider _transactionProvider;
+    private readonly IEmailManager _emailManager;
 
     public ArticleApprovedEventConsumer(
         UserManager<User> userManager, 
         RoleManager<IdentityRole<Guid>> roleManager, 
-        ITransactionProvider transactionProvider)
+        ITransactionProvider transactionProvider,
+        IEmailManager emailManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _transactionProvider = transactionProvider;
+        _emailManager = emailManager;
     }
 
     public async Task Consume(ConsumeContext<ArticleApprovedEvent> context)
@@ -48,6 +52,8 @@ public sealed class ArticleApprovedEventConsumer : IConsumer<ArticleApprovedEven
         {
             throw new GuardArgumentException(string.Join('\n', result.Errors));
         }
+
+        await _emailManager.SendArticleApprovedEmailAsync(dbUser.Email!, dbUser.UserName!, context.Message.Title);
 
         await _transactionProvider.Commit(context.CancellationToken);
     }

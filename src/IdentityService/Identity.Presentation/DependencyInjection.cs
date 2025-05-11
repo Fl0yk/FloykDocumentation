@@ -22,13 +22,16 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
         services.AddScoped<IImageManager, ImageManager>();
 
+        services.AddTransient<IEmailManager, EmailManager>();
+
         services.ConfigureOptions();
 
         services.ConfigureAuthorization(configuration);
 
         services
             .AddIdentity<User, IdentityRole<Guid>>(opt => opt.User.RequireUniqueEmail = true)
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
         services.AddControllers();
 

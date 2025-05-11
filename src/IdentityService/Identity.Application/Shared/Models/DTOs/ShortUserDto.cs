@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Shared.Models.DTOs;
 
-public class UserDTO
+public sealed class ShortUserDto
 {
     public Guid Id { get; set; }
 
@@ -8,9 +8,5 @@ public class UserDTO
 
     public string PublicUsername { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
-
     public string? Avatar { get; set; }
-
-    public ICollection<FollowingDTO> Followings { get; set; } = [];
 }

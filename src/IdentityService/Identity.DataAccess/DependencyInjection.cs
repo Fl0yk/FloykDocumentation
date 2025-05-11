@@ -2,8 +2,10 @@
 using Core.Providers.Interfaces;
 using Identity.DataAccess.Repositories.Implementations;
 using Identity.Domain.Repositories.Abstractions;
+using Identity.Infrastructure.Consumers.Articles;
 using Identity.Infrastructure.Data;
 using Identity.Infrastructure.Database;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -23,11 +25,33 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        services.ConfigureMassTransit();
+
         services.AddDbContext<ApplicationDbContext>((sp, cfg) => {
             cfg.UseNpgsql(connectionString);
             cfg.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
         });
 
         return services;
+    }
+
+    private static void ConfigureMassTransit(this IServiceCollection services)
+    {
+        services.AddMassTransit(conf =>
+        {
+            conf.SetKebabCaseEndpointNameFormatter();
+
+            conf.AddConsumer<ArticleApprovedEventConsumer>();
+
+            conf.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("rabbitmq", "/", h => {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
     }
 }

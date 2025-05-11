@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Identity.Application.UseCases.Command.Identity;
 
-public sealed class RegisterCommand : IRequest<AccessToken>
+public sealed class RegisterCommand : IRequest
 {
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;

@@ -10,7 +10,7 @@ public interface IUserRepository
 
     public Task<User?> GetUserByNameAsync(string username, CancellationToken cancellationToken = default);
 
-    public Task<bool> IsUserExist(Guid id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<User>> GetPaginatedUsersByPartialUsernameAsync(int pageNo, int pageSize, string partialUsername, CancellationToken cancellationToken = default);
 
-    public Task<bool> IsUserExist(string username, CancellationToken cancellationToken = default);
+    Task<long> GetCountByPartialNameAsync(string partialUsername, CancellationToken cancellationToken = default);
 }

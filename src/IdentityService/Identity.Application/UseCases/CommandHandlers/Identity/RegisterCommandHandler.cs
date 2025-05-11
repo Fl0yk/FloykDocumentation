@@ -1,58 +1,64 @@
 ﻿using AutoMapper;
 using Core.Exceptions;
-using Core.Models.Events;
 using Core.Providers.Interfaces;
-using Identity.Application.Shared.Models;
 using Identity.Application.UseCases.Command.Identity;
-using Identity.Domain.Abstractions.Providers;
+using Identity.Domain.Abstractions.Managers;
 using Identity.Domain.Entities;
-using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using System.Text.Unicode;
+using System.Threading;
 
 namespace Identity.Application.UseCases.CommandHandlers.Identity;
 
-internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, AccessToken>
+internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
 {
     private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
     private readonly IMapper _mapper;
-    private readonly IJwtProvider _jwtProvider;
     private readonly ITransactionProvider _transactionProvider;
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IEmailManager _emailManager;
 
     public RegisterCommandHandler(
         UserManager<User> userManager, 
-        SignInManager<User> signInManager, 
         IMapper mapper, 
-        IJwtProvider jwtProvider,
         ITransactionProvider transactionProvider,
-        IPublishEndpoint publishEndpoint)
+        IEmailManager emailManager)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
         _mapper = mapper;
-        _jwtProvider = jwtProvider;
         _transactionProvider = transactionProvider;
-        _publishEndpoint = publishEndpoint;
+        _emailManager = emailManager;
     }
 
-    public async Task<AccessToken> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         await _transactionProvider.OpenTransaction(cancellationToken);
 
-        var dbUser = await _userManager.FindByEmailAsync(request.Email);
+        var dbUser = await _userManager.FindByNameAsync(request.Username);
+
+        if (dbUser is not null && dbUser.EmailConfirmed)
+        {
+            throw new GuardArgumentException($"User with username {request.Username} already exists");
+        }
+        else if (dbUser is not null)
+        {
+            await _userManager.SetEmailAsync(dbUser, request.Email);
+
+            await _userManager.UpdateAsync(dbUser);
+
+            await SendEmail(dbUser, request.Email, cancellationToken);
+
+            await _transactionProvider.Commit(cancellationToken);
+
+            return;
+        }
+
+        dbUser = await _userManager.FindByEmailAsync(request.Email);
 
         if (dbUser is not null)
         {
             throw new GuardArgumentException($"User with email {request.Email} already exists");
-        }
-
-        dbUser = await _userManager.FindByNameAsync(request.Username);
-
-        if (dbUser is not null)
-        {
-            throw new GuardArgumentException($"User with username {request.Username} already exists");
         }
 
         User user = _mapper.Map<User>(request);
@@ -64,31 +70,15 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, 
             throw new GuardArgumentException(string.Join('\n', result.Errors));
         }
 
-        var principals = await _signInManager.CreateUserPrincipalAsync(user);
-
-        string jwt = _jwtProvider.GenerateJwt(user, principals.Claims);
-
-        UpdateRefresh(user);
-
-        await _userManager.UpdateAsync(user);
-
-        await _publishEndpoint.Publish(_mapper.Map<UserCreatedEvent>(user));
+        await SendEmail(user, request.Email, cancellationToken);
 
         await _transactionProvider.Commit(cancellationToken);
-
-        return new()
-        {
-            JwtToken = jwt,
-            RefreshToken = user.RefreshToken!,
-            RefreshTokenExpiry = user.RefreshTokenExpiry!.Value,
-        };
     }
 
-    private void UpdateRefresh(User user)
+    private async Task SendEmail(User user, string email, CancellationToken cancellationToken)
     {
-        string refresh = _jwtProvider.GenerateRefreshToken();
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-        user.RefreshToken = refresh;
-        user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(1);
+        await _emailManager.SendRegistrationCompleteEmailAsync(email, token, user.Id);
     }
 }

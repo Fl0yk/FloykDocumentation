@@ -46,6 +46,11 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, Access
             throw new GuardArgumentException($"User with username {request.Username} not found");
         }
 
+        if (!dbUser.EmailConfirmed)
+        {
+            throw new GuardUnauthorizedException($"Email not confirmed for user with id {dbUser.Id}");
+        }
+
         var principals = await _signInManager.CreateUserPrincipalAsync(dbUser);
 
         string jwt = _jwtProvider.GenerateJwt(dbUser, principals.Claims);

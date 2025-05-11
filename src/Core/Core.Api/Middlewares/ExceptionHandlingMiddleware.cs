@@ -12,7 +12,7 @@ public class ExceptionHandlingMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-    private const string MessageTemplate = "{Exception message: {0};\tSensetive message: {1}";
+    private const string MessageTemplate = "Exception message: {0};\tSensetive message: {1}";
 
     public ExceptionHandlingMiddleware(
         RequestDelegate requestDelegate,
