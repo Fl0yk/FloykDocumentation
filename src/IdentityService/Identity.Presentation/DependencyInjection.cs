@@ -31,7 +31,8 @@ public static class DependencyInjection
         services
             .AddIdentity<User, IdentityRole<Guid>>(opt => opt.User.RequireUniqueEmail = true)
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider)
+            .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>();
 
         services.AddControllers();
 

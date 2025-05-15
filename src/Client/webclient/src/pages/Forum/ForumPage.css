@@ -1,0 +1,135 @@
+.questions-container {
+  padding-top: 0px; /* Высота навбара */
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.questions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.new-question-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.new-question-button:hover {
+  background-color: #218838;
+}
+
+/* Остальные существующие стили остаются без изменений */
+.questions-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.questions-list {
+  margin-top: 20px;
+}
+
+.question-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.question-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.question-card.closed {
+  background-color: #f5f5f5;
+  border-left: 4px solid #ccc;
+}
+
+.question-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.question-card p {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.question-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  color: #888;
+}
+
+.closed-badge {
+  background-color: #ccc;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.pagination button {
+  padding: 5px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #dc3545;
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .questions-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .new-question-button {
+    width: 100%;
+  }
+}

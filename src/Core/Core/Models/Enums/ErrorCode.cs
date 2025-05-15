@@ -14,9 +14,10 @@ public enum ErrorCode
 // Redis Jwt token? Napizdec?
 // ArticleRepository: add filter isDeleted = false
 // Article command: add transaction provider? Mongo transactions?
-// IEmailSender
+//Доступ к статье для апрува? в ICurrebtUserProvider сделать IsGlobalAdmin?
 
 //Статусы статьи? Типа, если вносят изменения в опубликованную статью, то она снимается с публикации? Или не давать изменять опубликованную
 //В идеале сделать так: блоки хранят, опубликованы ли они. Пользователь добавляет блок, основная статья исходной версии, автор видит с новыми блоками
 
 //ApproveArtcileCommand (Article; Admin) ?Отправлять сообщение, что статья одобрена и готова к публикации?
+

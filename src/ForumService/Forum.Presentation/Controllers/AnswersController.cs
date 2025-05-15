@@ -26,6 +26,7 @@ public class AnswersController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AnswerDTO))]
     public async Task<IActionResult> GetAnswerById([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         AnswerDTO answer = await _mediator.Send(new GetAnswerByIdQuery() { Id = id }, cancellationToken);

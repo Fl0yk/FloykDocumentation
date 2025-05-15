@@ -2,5 +2,5 @@
 
 public static class Secure
 {
-    public const string EmailCode;// = "ltsd xnnu agae mqeu";
+    public const string EmailCode ;
 }

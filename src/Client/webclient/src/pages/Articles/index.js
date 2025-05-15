@@ -1,3 +1,3 @@
-import Articles from './Articles';
+import ArticlesPage from './ArticlesPage';
 
-export default Articles;
+export default ArticlesPage;

@@ -1,8 +1,10 @@
-﻿using Article.Application.UseCases.Comand.Articles;
+﻿using Article.Application.Shared.Models.DTOs;
+using Article.Application.UseCases.Comand.Articles;
 using Article.Application.UseCases.Query.Articles;
 using Article.Presentation.Shared.Models.DTOs.Article;
 using AutoMapper;
 using Core.Constants;
+using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet("paginated/date")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<ShortArticleDTO>))]
     public async Task<IActionResult> GetPaginatedByDate([FromQuery] GetPaginatedByDateArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
@@ -33,6 +36,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet("paginated/author")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<ShortArticleDTO>))]
     public async Task<IActionResult> GetPaginatedByName([FromQuery] GetPaginatedByAuthorArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
@@ -44,6 +48,7 @@ public class ArticlesController : ControllerBase
 
     [HttpGet("paginated/current")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<ShortArticleDTO>))]
     public async Task<IActionResult> GetCurrentUserArticles([FromQuery] GetCurrentUserShortArticlesRequestDto request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
@@ -54,6 +59,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet("paginated/category")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<ShortArticleDTO>))]
     public async Task<IActionResult> GetPaginatedByCategory([FromQuery] GetPaginatedByCategoryArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
@@ -64,6 +70,7 @@ public class ArticlesController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ArticleDTO))]
     public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetArticleByIdQuery() { Id = id }, cancellationToken);

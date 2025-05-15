@@ -22,8 +22,6 @@ try
 
     Log.Information("Starting web host...");
 
-    app.UseStaticFiles();
-
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -34,6 +32,8 @@ try
 
         scope.ApplyMigration<ApplicationDbContext>();
     }
+
+    app.UseStaticFiles();
 
     app.UseCors();
 

@@ -28,6 +28,7 @@ public class CurrentUserProvider : BaseCurrentUserProvider, ICurrentUserProvider
         string id = principal.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
         string email = principal.FindFirst(c => c.Type == ClaimTypes.Email)!.Value;
         string username = principal.FindFirst(c => c.Type == ClaimTypes.Name)!.Value;
+        string publicUsername = principal.FindFirst(c => c.Type == "PublicUsername")!.Value;
         IEnumerable<string> roles = principal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
 
         return new CurrentUser()
@@ -35,6 +36,7 @@ public class CurrentUserProvider : BaseCurrentUserProvider, ICurrentUserProvider
             Id = Guid.Parse(id),
             Email = email,
             Username = username,
+            PublicUsername = publicUsername,
             Roles = roles
         };
     }

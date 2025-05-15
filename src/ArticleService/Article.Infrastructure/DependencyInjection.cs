@@ -5,7 +5,6 @@ using Article.Infrastructure.Data.TransactionProviders;
 using Article.Infrastructure.Database;
 using Article.Infrastructure.Repositories;
 using Core.Infrastructure.DataBase;
-using Core.Models.Events;
 using Core.Providers.Interfaces;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -43,14 +42,14 @@ public static class DependencyInjection
             cfg.AddInterceptors(sp.GetRequiredService<ISaveChangesInterceptor>());
         });
 
-        services.ConfigureMassTransit();
+        services.ConfigureMassTransit("article");
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }
 
-    private static void ConfigureMassTransit(this IServiceCollection services)
+    private static void ConfigureMassTransit(this IServiceCollection services, string prefix)
     {
         services.AddMassTransit(conf =>
         {
@@ -61,6 +60,8 @@ public static class DependencyInjection
 
             conf.UsingRabbitMq((context, cfg) =>
             {
+                cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(prefix, includeNamespace: false));
+
                 cfg.Host("rabbitmq", "/", h => {
                     h.Username("guest");
                     h.Password("guest");

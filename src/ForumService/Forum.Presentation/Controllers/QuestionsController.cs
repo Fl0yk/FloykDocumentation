@@ -5,6 +5,7 @@ using Forum.Application.UseCase.Command.Question;
 using Forum.Application.UseCase.Query.Question;
 using Forum.Presentation.Shared.Models.DTOs.Question;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forum.Presentation.Controllers;
@@ -23,6 +24,7 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<QuestionDTO>))]
     public async Task<IActionResult> GetPaginatedByDateQuestions([FromQuery] GetPaginatedByDateQuestionsRequestDTO paginatedRequest , CancellationToken cancellationToken = default)
     {
         PaginatedResult<QuestionDTO> response = await _mediator.Send(
@@ -33,6 +35,7 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(QuestionDTO))]
     public async Task<IActionResult> GetQuestionById([FromRoute] Guid id)
     {
         QuestionDTO question = await _mediator.Send(new GetQuestionByIdQuery() { Id = id });
@@ -41,6 +44,7 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequestDTO createQuestionRequest, CancellationToken cancellationToken = default)
     {
         Guid questionId = await _mediator.Send(

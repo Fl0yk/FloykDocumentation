@@ -79,6 +79,11 @@ public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, AnswerD
 
         await _transactionProvider.Commit(cancellationToken);
 
-        return _mapper.Map<AnswerDTO>(answer);
+        var res = _mapper.Map<AnswerDTO>(answer);
+        res.AuthorUsername = author.Username;
+        res.PublicAuthorUsername = author.PublicUsername;
+        res.IsAuthor = true;
+
+        return res;
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 
 namespace Forum.Infrastructure;
@@ -37,16 +38,18 @@ public static class DependencyInjection
 
         services.ConfigureHangfire(connectionString);
 
-        services.ConfigureMassTransit();
+        services.ConfigureMassTransit("forum");
 
         services.AddSignalR();
+
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         //RecurringJob.AddOrUpdate<CloseQuestionsBackgroundJob>($"Recuring-{nameof(CloseQuestionsBackgroundJob)}", x => x.CloseQuestionsAsync(25), Cron.Daily());
 
         return services;
     }
 
-    private static void ConfigureMassTransit(this IServiceCollection services)
+    private static void ConfigureMassTransit(this IServiceCollection services, string prefix)
     {
         services.AddMassTransit(conf =>
         {
@@ -57,12 +60,12 @@ public static class DependencyInjection
 
             conf.UsingRabbitMq((context, cfg) =>
             {
+                cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(prefix, includeNamespace: false));
+
                 cfg.Host("rabbitmq", "/", h => {
                     h.Username("guest");
                     h.Password("guest");
                 });
-
-                cfg.ConfigureEndpoints(context);
             });
         });
     }

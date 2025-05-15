@@ -1,18 +1,22 @@
 import {
     HOME_ROUTE,
     ARTICLES_ROUTE,
-    AUTH_ROUTE,
+    LOGIN_ROUTE,
+    REGISTER_ROUTE,
+    REGISTER_CONFIRM_ROUTE,
     FORUM_ROUTE
 } from './utils/constants';
 
 import {
-    Articles,
-    Auth,
-    Forum,
+    ArticlesPage,
+    Login,
+    Register,
+    ForumPage,
+    RegisterConfirm,
     Home
 } from './pages';
 
-import Question from './pages/Forum/QuestionPage';
+import QuestionPage from './pages/Forum/QuestionPage';
 
 export const publishRoutes = [
     {
@@ -21,18 +25,26 @@ export const publishRoutes = [
     },
     {
         path: ARTICLES_ROUTE,
-        Component: Articles
+        Component: ArticlesPage
     },
     {
-        path: AUTH_ROUTE,
-        Component: Auth
+        path: LOGIN_ROUTE,
+        Component: Login
+    },
+    {
+        path: REGISTER_ROUTE,
+        Component: Register
+    },
+    {
+        path: REGISTER_CONFIRM_ROUTE,
+        Component: RegisterConfirm
     },
     {
         path: FORUM_ROUTE,
-        Component: Forum
+        Component: ForumPage
     },
     {
-        path: "/question/:id",
-        Component: Question
+        path: "/questions/:id",
+        Component: QuestionPage
     }
 ];

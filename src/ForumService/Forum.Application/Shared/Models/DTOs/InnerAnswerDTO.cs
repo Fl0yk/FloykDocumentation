@@ -5,9 +5,15 @@ public class InnerAnswerDTO
 
     public Guid AuthorId { get; set; }
 
+    public string PublicAuthorUsername { get; set; } = null!;
+
+    public string AuthorUsername { get; set; } = null!;
+
+    public bool IsAuthor { get; set; }
+
     public Guid? ParentId { get; set; }
 
     public required string Text { get; set; }
 
-    public DateTime TimeOfCreation { get; set; }
+    public DateTimeOffset TimeOfCreation { get; set; }
 }

@@ -2,6 +2,7 @@
 using Core.Models;
 using Identity.Domain.Abstractions.Managers;
 using MailKit.Net.Smtp;
+using MassTransit.Monitoring.Performance;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Text.Encodings.Web;
@@ -43,7 +44,7 @@ public sealed class EmailManager : IEmailManager
     {
         var emailMessage = new MimeMessage();
 
-        var callbackUrl = _urlsOptions.ApiGatewayUrl + $"/api/identity/registration/confirm?token={token}&userId={userId}";
+        var callbackUrl = _urlsOptions.ClientUrl + $"/registration-confirm?token={token}&userId={userId}";
 
         emailMessage.From.Add(new MailboxAddress("Floyk documentation", "viktorpipidzule@gmail.com"));
         emailMessage.To.Add(new MailboxAddress("", email));
@@ -57,7 +58,7 @@ public sealed class EmailManager : IEmailManager
         {
             await client.ConnectAsync("smtp.gmail.com", 587, false);
             await client.AuthenticateAsync("viktorpipidzule@gmail.com", Secure.EmailCode);
-            await client.SendAsync(emailMessage);
+            var tmp = await client.SendAsync(emailMessage);
 
             await client.DisconnectAsync(true);
         }

@@ -1,6 +1,10 @@
-﻿namespace Article.Application.UseCases.Query.Articles;
+﻿using Article.Application.Shared.Models.DTOs;
+using Core.Models;
+using MediatR;
 
-public sealed class GetCurrentUserShortArticlesQuery
+namespace Article.Application.UseCases.Query.Articles;
+
+public sealed class GetCurrentUserShortArticlesQuery : IRequest<PaginatedResult<ShortArticleDTO>>
 {
     public int PageNo { get; init; }
 

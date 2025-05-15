@@ -1,11 +1,13 @@
-import Articles from './Articles';
-import Auth from './Auth';
-import Forum from './Forum';
+import ArticlesPage from './Articles';
+import { Login, Register, RegisterConfirm } from './Auth';
+import ForumPage from './Forum';
 import Home from './Home';
 
 export {
-    Articles,
-    Auth,
-    Forum,
+    ArticlesPage,
+    Login,
+    Register,
+    RegisterConfirm,
+    ForumPage,
     Home
 };

@@ -25,13 +25,13 @@ public static class DependencyInjectionExtensions
         {
             options.TokenValidationParameters = new TokenValidationParameters()
             {
-                ValidateActor = true,
                 ValidateIssuer = true,
-                ValidateAudience = false,
-                RequireExpirationTime = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ClockSkew = TimeSpan.Zero,
                 ValidIssuer = jwtOptions.Issuer,
+                ValidAudience = jwtOptions.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
 
             };

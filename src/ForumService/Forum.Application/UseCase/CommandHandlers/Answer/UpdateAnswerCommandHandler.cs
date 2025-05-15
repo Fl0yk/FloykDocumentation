@@ -4,6 +4,7 @@ using Core.Providers.Interfaces;
 using Forum.Application.Shared.Models.DTOs;
 using Forum.Application.UseCase.Command.Answer;
 using Forum.Domain.Abstractions.Repositories;
+using Forum.Domain.Entities;
 using MediatR;
 
 namespace Forum.Application.UseCase.CommandHandlers.Answer;
@@ -63,6 +64,11 @@ public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand, A
 
         await _transactionProvider.Commit(cancellationToken);
 
-        return _mapper.Map<AnswerDTO>(dbAnswer);
+        var res = _mapper.Map<AnswerDTO>(dbAnswer);
+        res.AuthorUsername = currentUser.Username;
+        res.PublicAuthorUsername = currentUser.PublicUsername;
+        res.IsAuthor = true;
+
+        return res;
     }
 }

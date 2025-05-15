@@ -8,4 +8,6 @@ public sealed class UrlsOption
     public string ApiGatewayUrl { get; set; } = null!;
 
     public string ArticleUrl { get; set; } = null!;
+
+    public string ClientUrl { get; set; } = null!;
 }

@@ -25,7 +25,7 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.ConfigureMassTransit();
+        services.ConfigureMassTransit("identity");
 
         services.AddDbContext<ApplicationDbContext>((sp, cfg) => {
             cfg.UseNpgsql(connectionString);
@@ -35,7 +35,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void ConfigureMassTransit(this IServiceCollection services)
+    private static void ConfigureMassTransit(this IServiceCollection services, string prefix)
     {
         services.AddMassTransit(conf =>
         {
@@ -45,6 +45,8 @@ public static class DependencyInjection
 
             conf.UsingRabbitMq((context, cfg) =>
             {
+                cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(prefix, includeNamespace: false));
+
                 cfg.Host("rabbitmq", "/", h => {
                     h.Username("guest");
                     h.Password("guest");

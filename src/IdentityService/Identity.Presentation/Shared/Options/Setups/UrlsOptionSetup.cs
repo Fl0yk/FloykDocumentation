@@ -20,5 +20,6 @@ public class UrlsOptionSetup : IConfigureOptions<UrlsOption>
         options.ForumUrl = urls.ForumUrl;
         options.ArticleUrl = urls.ArticleUrl;
         options.ApiGatewayUrl = urls.ApiGatewayUrl;
+        options.ClientUrl = urls.ClientUrl;
     }
 }

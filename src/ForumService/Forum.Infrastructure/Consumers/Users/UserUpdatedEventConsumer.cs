@@ -3,6 +3,7 @@ using AutoMapper;
 using Core.Exceptions;
 using Core.Models.Events;
 using MassTransit;
+using Core.Providers.Interfaces;
 
 namespace Forum.Infrastructure.Consumers.Users;
 
@@ -10,17 +11,22 @@ public class UserUpdatedEventConsumer : IConsumer<UserUpdatedEvent>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ITransactionProvider _transactionProvider;
 
     public UserUpdatedEventConsumer(
         IUnitOfWork unitOfWork,
-        IMapper mapper)
+        IMapper mapper,
+        ITransactionProvider transactionProvider)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _transactionProvider = transactionProvider;
     }
 
     public async Task Consume(ConsumeContext<UserUpdatedEvent> context)
     {
+        await _transactionProvider.OpenTransaction(context.CancellationToken);
+
         var user = await _unitOfWork.UserRepository.GetByIdAsync(context.Message.Id, context.CancellationToken);
 
         if (user is null)
@@ -33,5 +39,7 @@ public class UserUpdatedEventConsumer : IConsumer<UserUpdatedEvent>
         await _unitOfWork.UserRepository.UpdateAsync(user, context.CancellationToken);
 
         await _unitOfWork.SaveChangesAsync(context.CancellationToken);
+
+        await _transactionProvider.Commit(context.CancellationToken);
     }
 }

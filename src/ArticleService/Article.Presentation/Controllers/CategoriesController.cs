@@ -1,4 +1,5 @@
-﻿using Article.Application.UseCases.Query.Categories;
+﻿using Article.Application.Shared.Models.DTOs;
+using Article.Application.UseCases.Query.Categories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CategoryDTO>))]
     public async Task<IActionResult> GetAllCategories(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllCategoriesQuery(), cancellationToken);

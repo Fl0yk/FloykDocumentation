@@ -6,9 +6,6 @@ using Identity.Domain.Abstractions.Managers;
 using Identity.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Text;
-using System.Text.Unicode;
-using System.Threading;
 
 namespace Identity.Application.UseCases.CommandHandlers.Identity;
 
@@ -43,6 +40,8 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
         }
         else if (dbUser is not null)
         {
+            await CheckEmail(request.Email, cancellationToken);
+
             await _userManager.SetEmailAsync(dbUser, request.Email);
 
             await _userManager.UpdateAsync(dbUser);
@@ -54,12 +53,7 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
             return;
         }
 
-        dbUser = await _userManager.FindByEmailAsync(request.Email);
-
-        if (dbUser is not null)
-        {
-            throw new GuardArgumentException($"User with email {request.Email} already exists");
-        }
+        await CheckEmail(request.Email, cancellationToken);
 
         User user = _mapper.Map<User>(request);
 
@@ -80,5 +74,15 @@ internal sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand>
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
         await _emailManager.SendRegistrationCompleteEmailAsync(email, token, user.Id);
+    }
+
+    private async Task CheckEmail(string email, CancellationToken cancellationToken)
+    {
+        var dbUser = await _userManager.FindByEmailAsync(email);
+
+        if (dbUser is not null && dbUser.EmailConfirmed)
+        {
+            throw new GuardArgumentException($"User with email {email} already exists");
+        }
     }
 }

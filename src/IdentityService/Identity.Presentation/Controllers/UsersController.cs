@@ -33,7 +33,7 @@ public class UsersController : ControllerBase
 
     [HttpGet("current/info")]
     [Authorize]
-    public async Task<IActionResult> GetCurrentUserInfo([FromRoute] string username, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCurrentUserInfo(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetCurrentUserInfoQuery(), cancellationToken);
 
