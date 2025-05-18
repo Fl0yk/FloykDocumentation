@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
 
-internal sealed class DeleteBlockCommandHandler : IRequestHandler<DeleteBlockCommand>
+public sealed class DeleteBlockCommandHandler : IRequestHandler<DeleteBlockCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBaseCurrentUserProvider _currentUserProvider;

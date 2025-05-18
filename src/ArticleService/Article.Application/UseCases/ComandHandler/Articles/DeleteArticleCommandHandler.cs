@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
 
-internal sealed class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
+public sealed class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBaseCurrentUserProvider _currentUserProvider;

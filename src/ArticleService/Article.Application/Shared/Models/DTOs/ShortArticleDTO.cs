@@ -8,7 +8,7 @@ public class ShortArticleDTO
 
     public Guid AuthorId { get; set; }
 
-    public required Guid CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
 
     public string AuthorUsername { get; set; } = null!;
 

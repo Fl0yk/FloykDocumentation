@@ -73,7 +73,7 @@ public class AddAnswerCommandHandler : IRequestHandler<AddAnswerCommand, AnswerD
             answer.Level = dbParent.Level + 1;
         }
 
-        await _unitOfWork.AnswerRepository.CreateAswerAsync(answer, cancellationToken);
+        await _unitOfWork.AnswerRepository.CreateAnswerAsync(answer, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

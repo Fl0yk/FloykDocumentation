@@ -13,7 +13,7 @@ public class InnerAnswerDTO
 
     public Guid? ParentId { get; set; }
 
-    public required string Text { get; set; }
+    public string Text { get; set; } = null!;
 
     public DateTimeOffset TimeOfCreation { get; set; }
 }

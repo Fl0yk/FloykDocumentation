@@ -3,29 +3,25 @@ using Article.Domain.Abstractions.Repositories;
 using Article.Domain.Entities;
 using AutoMapper;
 using Core.Exceptions;
-using Core.Managers;
 using Core.Providers.Interfaces;
 using MediatR;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
 
-internal sealed class AppendBlockCommandHandler : IRequestHandler<AppendBlockCommand>
+public sealed class AppendBlockCommandHandler : IRequestHandler<AppendBlockCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IBaseCurrentUserProvider _currentUserProvider;
-    private readonly IImageManager _imageManager;
 
     public AppendBlockCommandHandler(
         IUnitOfWork unitOfWork, 
         IMapper mapper,
-        IBaseCurrentUserProvider currentUserProvider,
-        IImageManager imageManager)
+        IBaseCurrentUserProvider currentUserProvider)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUserProvider = currentUserProvider;
-        _imageManager = imageManager;
     }
 
     public async Task Handle(AppendBlockCommand request, CancellationToken cancellationToken)

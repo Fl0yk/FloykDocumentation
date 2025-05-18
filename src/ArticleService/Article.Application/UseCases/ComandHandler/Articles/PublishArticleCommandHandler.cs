@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
 
-internal sealed class PublishArticleCommandHandler : IRequestHandler<PublishArticleCommand>
+public sealed class PublishArticleCommandHandler : IRequestHandler<PublishArticleCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBaseCurrentUserProvider _currentUserProvider;

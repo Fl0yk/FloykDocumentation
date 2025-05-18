@@ -20,7 +20,7 @@ public class ArticleDTO
 
     public DateTimeOffset? DateOfPublication { get; set; }
 
-    public required Guid CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
 
     public ICollection<Block> Blocks { get; set; } = null!;
 }

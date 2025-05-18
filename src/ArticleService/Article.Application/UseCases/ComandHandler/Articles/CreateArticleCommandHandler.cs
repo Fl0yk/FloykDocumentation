@@ -9,7 +9,7 @@ using ArticleModel = Article.Domain.Entities.Article;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
 
-internal sealed class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand, Guid>
+public sealed class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;

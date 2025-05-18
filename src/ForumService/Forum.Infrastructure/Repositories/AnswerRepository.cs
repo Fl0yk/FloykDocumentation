@@ -22,7 +22,7 @@ public class AnswerRepository : IAnswerRepository
     public Task<Answer?> FirstOrDefaultByIdWithChildrenAsync(Guid id, CancellationToken cancellationToken = default) =>
                             ApplySpecification(new GetAnswerByIdWithChildrenSpecification(id)).FirstOrDefaultAsync(cancellationToken);
 
-    public Task<Guid> CreateAswerAsync(Answer answer, CancellationToken cancellationToken)
+    public Task<Guid> CreateAnswerAsync(Answer answer, CancellationToken cancellationToken)
     {
         _answers.Add(answer);
 
