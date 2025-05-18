@@ -3,5 +3,7 @@
 public sealed class UpdateArticleRequestDTO
 {
     public Guid Id { get; set; }
-    public string NewTitle { get; set; } = null!;  
+    public string NewTitle { get; set; } = null!;
+
+    public string NewShortDescription { get; set; } = null!;
 }

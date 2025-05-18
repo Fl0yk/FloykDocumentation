@@ -1,5 +1,6 @@
 ﻿using Core.Api.Extensions;
 using Core.Api.Models.Options;
+using Core.Managers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Identity.Domain.Abstractions.Managers;
@@ -26,13 +27,13 @@ public static class DependencyInjection
 
         services.ConfigureOptions();
 
-        services.ConfigureAuthorization(configuration);
-
         services
-            .AddIdentity<User, IdentityRole<Guid>>(opt => opt.User.RequireUniqueEmail = true)
+            .AddIdentity<User, IdentityRole<Guid>>(opt => { opt.User.RequireUniqueEmail = true; })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider)
             .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>();
+
+        services.ConfigureAuthorization(configuration);
 
         services.AddControllers();
 

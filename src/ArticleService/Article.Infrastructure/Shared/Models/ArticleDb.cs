@@ -13,9 +13,15 @@ public class ArticleDb
 
     public bool IsPublished { get; set; }
 
+    public bool IsDocumentation { get; set; }
+
     public bool IsShouldBeApproved { get; set; }
 
     public DateTimeOffset? DateOfPublication { get; set; }
+
+    public long VisitCount { get; set; }
+
+    public string ShortDescription { get; set; } = null!;
 
     public Guid CategoryId { get; set; }
 

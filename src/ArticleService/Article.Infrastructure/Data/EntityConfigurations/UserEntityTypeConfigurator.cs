@@ -1,4 +1,5 @@
 ﻿using Article.Domain.Entities;
+using Article.Infrastructure.Data.Seeders;
 using Core.Infrastructure.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -26,5 +27,7 @@ internal sealed class UserEntityTypeConfigurator : BaseEntityTypeConfiguration<U
             .HasColumnName("public_username");
 
         builder.HasIndex(x => new { x.IsDeleted, x.Username });
+
+        builder.SeedUsers();
     }
 }

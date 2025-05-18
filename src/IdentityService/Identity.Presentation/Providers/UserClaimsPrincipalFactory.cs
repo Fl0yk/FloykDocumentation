@@ -18,8 +18,16 @@ public class UserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User>
     {
         var identity = await base.GenerateClaimsAsync(user);
         //Get the data from EF core
+        var roles = await UserManager.GetRolesAsync(user);
+
+        foreach (var role in roles)
+        {
+            identity.AddClaim(new Claim(ClaimTypes.Role, role));
+        }
 
         identity.AddClaim(new Claim("PublicUsername", user.PublicUsername));
+        identity.AddClaim(new Claim("roles", string.Join(',', identity.FindAll(ClaimTypes.Role).Select(x => x.Value))));
+
         return identity;
     }
 }

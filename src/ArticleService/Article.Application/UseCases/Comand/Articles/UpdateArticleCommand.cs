@@ -7,4 +7,6 @@ public sealed class UpdateArticleCommand : IRequest
     public Guid Id { get; init; }
 
     public string NewTitle { get; init; } = null!;
+
+    public string NewShortDescription { get; set; } = null!;
 }

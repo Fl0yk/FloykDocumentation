@@ -1,4 +1,4 @@
-﻿using Identity.Domain.Abstractions.Managers;
+﻿using Core.Managers;
 using Identity.Presentation.Shared.Options.Models;
 using Microsoft.Extensions.Options;
 
@@ -27,17 +27,17 @@ public class ImageManager : IImageManager
         string extension = Path.GetExtension(fileName);
         string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), extension);
 
-        string filePath = Path.Combine(_options.WebRootPath, "Images", newFileName);
+        string filePath = Path.Combine(_options.WebRootPath, newFileName);
 
         using Stream fileStream = new FileStream(filePath, FileMode.Create);
         await source.CopyToAsync(fileStream, token);
 
-        return $"{_options.Host}/Images/{newFileName}";
+        return $"{_options.Host}/{newFileName}";
     }
 
     private void RemoveImage(string imageUrl)
     {
-        string? file = Directory.EnumerateFiles(Path.Combine(_options.WebRootPath, "Images"))
+        string? file = Directory.EnumerateFiles(Path.Combine(_options.WebRootPath))
                                         .FirstOrDefault(f => imageUrl.Contains(Path.GetFileName(f)));
 
         if (file != default)

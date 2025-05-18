@@ -37,8 +37,8 @@ services:
       context: .
       dockerfile: src/IdentityService/Identity.Presentation/Dockerfile
     ports:
-        - "6000:8080"
-        - "6001:8081"
+        - "6001:8080"
+        - "6002:8081"
     depends_on:
         - identity.db
         - rabbitmq
@@ -84,7 +84,7 @@ services:
   rabbitmq:
     image: masstransit/rabbitmq:latest
     ports:
-      - "9008:5672"
+      - "6011:5672"
       - "15672:15672"
 
 

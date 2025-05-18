@@ -4,3 +4,4 @@ export const LOGIN_ROUTE = '/login';
 export const REGISTER_ROUTE = '/register';
 export const REGISTER_CONFIRM_ROUTE = '/registration-confirm';
 export const FORUM_ROUTE = '/forum';
+export const PROFILE_ROUTE = '/profile';

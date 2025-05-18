@@ -8,7 +8,5 @@ public class PublishArticleRequestDTOValidator : AbstractValidator<PublishArticl
     public PublishArticleRequestDTOValidator()
     {
         RuleFor(r => r.ArticleId).NotEmpty();
-
-        RuleFor(r => r.CurrentUserName).NotEmpty();
     }
 }

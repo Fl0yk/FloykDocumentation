@@ -4,7 +4,8 @@ import {
   ARTICLES_ROUTE,
   LOGIN_ROUTE,
   REGISTER_ROUTE,
-  FORUM_ROUTE
+  FORUM_ROUTE,
+  PROFILE_ROUTE
 } from '../../utils/constants';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
@@ -89,7 +90,13 @@ const NavBar = () => {
           <div className="navbar-auth">
             {isAuthenticated ? (
               <>
-                <span className="navbar-username">Привет, {username}</span>
+                <Link to={PROFILE_ROUTE} className="navbar-profile-link">
+                  <img 
+                    src="/user.svg" 
+                    alt="Профиль" 
+                    className="navbar-user-icon" 
+                  />
+                </Link>
                 <button className="navbar-button logout" onClick={handleLogout}>
                   Выйти
                 </button>

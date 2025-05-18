@@ -8,14 +8,17 @@ public class ArticleDTO
 
     public string Title { get; set; } = null!;
 
-    //TODO: мб инфо об авторе?
     public Guid AuthorId { get; set; }
 
     public bool IsPublished { get; set; }
 
+    public bool IsDocumentation { get; set; }
+
+    public string ShortDescription { get; set; } = null!;
+
     public bool IsShouldBeApproved { get; set; }
 
-    public DateTime? DateOfPublication { get; set; }
+    public DateTimeOffset? DateOfPublication { get; set; }
 
     public required Guid CategoryId { get; set; }
 

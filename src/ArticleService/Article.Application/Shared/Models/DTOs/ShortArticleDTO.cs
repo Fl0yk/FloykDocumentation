@@ -6,12 +6,21 @@ public class ShortArticleDTO
 
     public string Title { get; set; } = null!;
 
-    //TODO: мб инфо об авторе?
     public Guid AuthorId { get; set; }
+
+    public required Guid CategoryId { get; set; }
+
+    public string AuthorUsername { get; set; } = null!;
+
+    public string AuthorPublicUsername { get; set; } = null!;
+
+    public string ShortDescription { get; set; } = null!;
 
     public bool IsPublished { get; set; }
 
+    public bool IsDocumentation { get; set; }
+
     public bool IsShouldBeApproved { get; set; }
 
-    public DateTime DateOfPublication { get; set; }
+    public DateTimeOffset? DateOfPublication { get; set; }
 }

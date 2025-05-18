@@ -77,9 +77,9 @@ public class UsersController : ControllerBase
             FileName = formFile.FileName,
         };
 
-        await _mediator.Send(command, cancellationToken);
+        var res = await _mediator.Send(command, cancellationToken);
 
-        return NoContent();
+        return Ok(res);
     }
 
     [HttpGet("{username}")]

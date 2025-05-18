@@ -9,7 +9,7 @@ using ArticleModel = Article.Domain.Entities.Article;
 
 namespace Article.Application.UseCases.ComandHandler.Articles;
 
-internal sealed class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand>
+internal sealed class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ internal sealed class CreateArticleCommandHandler : IRequestHandler<CreateArticl
         _currentUserProvider = currentUserProvider;
     }
 
-    public async Task Handle(CreateArticleCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateArticleCommand request, CancellationToken cancellationToken)
     {
         var currentUser = _currentUserProvider.GetCurrentUser();
 
@@ -48,9 +48,18 @@ internal sealed class CreateArticleCommandHandler : IRequestHandler<CreateArticl
             throw new GuardNotFoundException($"Category whit id {request.CategoryId} was not found");
         }
 
+        var dbArticle = await _unitOfWork.ArticleRepository.GetArticleByIdAsync(request.Id, cancellationToken);
+        
+        if (dbArticle is not null)
+        {
+            throw new GuardArgumentException("Article id alreafy exist");
+        }
+
         var article = _mapper.Map<ArticleModel>(request);
         article.AuthorId = author.Id;
 
         await _unitOfWork.ArticleRepository.CreateArticleAsync(article, cancellationToken);
+
+        return article.Id;
     }
 }

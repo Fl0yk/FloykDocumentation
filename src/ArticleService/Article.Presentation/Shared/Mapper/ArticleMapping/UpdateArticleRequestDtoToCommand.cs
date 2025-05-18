@@ -10,6 +10,7 @@ public class UpdateArticleRequestDtoToCommand : Profile
     {
         CreateMap<UpdateArticleRequestDTO, UpdateArticleCommand>()
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(d => d.NewShortDescription, opt => opt.MapFrom(src => src.NewShortDescription))
             .ForMember(d => d.NewTitle, opt => opt.MapFrom(src => src.NewTitle));
     }
 }

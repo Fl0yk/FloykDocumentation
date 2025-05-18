@@ -3,6 +3,7 @@ using Article.Domain.Abstractions.Repositories;
 using Article.Domain.Entities;
 using AutoMapper;
 using Core.Exceptions;
+using Core.Managers;
 using Core.Providers.Interfaces;
 using MediatR;
 
@@ -13,15 +14,18 @@ internal sealed class AppendBlockCommandHandler : IRequestHandler<AppendBlockCom
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IBaseCurrentUserProvider _currentUserProvider;
+    private readonly IImageManager _imageManager;
 
     public AppendBlockCommandHandler(
         IUnitOfWork unitOfWork, 
         IMapper mapper,
-        IBaseCurrentUserProvider currentUserProvider)
+        IBaseCurrentUserProvider currentUserProvider,
+        IImageManager imageManager)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _currentUserProvider = currentUserProvider;
+        _imageManager = imageManager;
     }
 
     public async Task Handle(AppendBlockCommand request, CancellationToken cancellationToken)
@@ -47,9 +51,9 @@ internal sealed class AppendBlockCommandHandler : IRequestHandler<AppendBlockCom
             throw new GuardForbiddenException($"The user {currentUser.Id} is not author of this article");
         }
 
-        var block = _mapper.Map<Block>(request);
+        var blocks = _mapper.Map<ICollection<Block>>(request.Blocks);
 
-        article.Blocks.Add(block);
+        article.Blocks = blocks;
 
         await _unitOfWork.ArticleRepository.UpdateArticleAsync(article, cancellationToken);
     }

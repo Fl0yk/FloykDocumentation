@@ -4,6 +4,7 @@ using Article.Application.UseCases.Query.Articles;
 using Article.Presentation.Shared.Models.DTOs.Article;
 using AutoMapper;
 using Core.Constants;
+using Core.Managers;
 using Core.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +18,13 @@ public class ArticlesController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly IImageManager _imageManager;
 
-    public ArticlesController(IMediator mediator, IMapper mapper)
+    public ArticlesController(IMediator mediator, IMapper mapper, IImageManager imageManager)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _imageManager = imageManager;
     }
 
     [HttpGet("paginated/date")]
@@ -29,7 +32,7 @@ public class ArticlesController : ControllerBase
     public async Task<IActionResult> GetPaginatedByDate([FromQuery] GetPaginatedByDateArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
-            _mapper.Map< GetPaginatedByDateShortArticlesQuery>(request), 
+            _mapper.Map<GetPaginatedByDateShortArticlesQuery>(request), 
             cancellationToken);
 
         return Ok(result);
@@ -39,6 +42,7 @@ public class ArticlesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<ShortArticleDTO>))]
     public async Task<IActionResult> GetPaginatedByName([FromQuery] GetPaginatedByAuthorArticlesRequestDTO request, CancellationToken cancellationToken)
     {
+        throw new NotImplementedException("Paginated by author in repository work for cuurent users. Method return not published articles");
         var result = await _mediator.Send(
             _mapper.Map<GetPaginatedByAuthorNameShortArticlesQuery>(request), 
             cancellationToken);
@@ -58,12 +62,12 @@ public class ArticlesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("paginated/category")]
+    [HttpGet("paginated/popular")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResult<ShortArticleDTO>))]
-    public async Task<IActionResult> GetPaginatedByCategory([FromQuery] GetPaginatedByCategoryArticlesRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPopularPaginated([FromQuery] GetPopularPaginatedArticlesRequestDTO request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(
-            _mapper.Map<GetPaginatedByCategoryShortArticlesQuery>(request), 
+            _mapper.Map<GetPopularPaginatedShortArticlesQuery>(request), 
             cancellationToken);
 
         return Ok(result);
@@ -82,26 +86,24 @@ public class ArticlesController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateArticle([FromBody] CreateArticleRequestDTO request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(
+        var id = await _mediator.Send(
             _mapper.Map<CreateArticleCommand>(request), 
             cancellationToken);
 
-        return NoContent();
+        return Ok(id);
     }
 
     [HttpPost("block")]
     [Authorize]
-    public async Task<IActionResult> AppendBlock([FromBody] AppendBlockRequestDTO request, CancellationToken cancellationToken)
+    public async Task<IActionResult> AppendBlock([FromBody] AppendBlockCommand request, CancellationToken cancellationToken)
     {
-        await _mediator.Send(
-            _mapper.Map<AppendBlockCommand>(request), 
-            cancellationToken);
+        await _mediator.Send(request, cancellationToken);
 
         return NoContent();
     }
 
     [HttpPost("publish")]
-    [Authorize(Roles = Roles.Author)]
+    [Authorize]
     public async Task<IActionResult> PublishArticle([FromBody] PublishArticleRequestDTO request, CancellationToken cancellationToken)
     {
         await _mediator.Send(
@@ -142,6 +144,17 @@ public class ArticlesController : ControllerBase
             cancellationToken);
 
         return NoContent();
+    }
+
+    [HttpGet("approve")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> GetShouldBeApprovedArticles(CancellationToken cancellationToken)
+    {
+        var res = await _mediator.Send(
+            new GetShouldBeApprovedArticlesQuery(),
+            cancellationToken);
+
+        return Ok(res);
     }
 
     [HttpPost("{articleId:guid}/approve")]
@@ -193,5 +206,13 @@ public class ArticlesController : ControllerBase
         var result = await _mediator.Send(new GetSavedArticlesByUserQuery(), cancellationToken);
 
         return Ok(result);
+    }
+
+    [HttpPost("image")]
+    public async Task<IActionResult> UploadImage([FromQuery] string? oldFileUrl, [FromForm] IFormFile file, CancellationToken cancellationToken)
+    {
+        var url = await _imageManager.SaveImageAsync(file.OpenReadStream(), file.FileName, oldFileUrl, cancellationToken);
+
+        return Ok(url);
     }
 }

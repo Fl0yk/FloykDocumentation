@@ -1,3 +1,9 @@
 import ArticlesPage from './ArticlesPage';
+import ArticleEditor from './ArticleEditor/ArticleEditor';
+import { ArticlePage } from './ArticlePage';
 
-export default ArticlesPage;
+export { 
+    ArticlesPage,
+    ArticleEditor,
+    ArticlePage 
+};

@@ -1,6 +1,7 @@
 ﻿using Article.Application.UseCases.Comand.Articles;
 using Article.Domain.Abstractions.Repositories;
 using Core.Exceptions;
+using Core.Extensions;
 using Core.Providers.Interfaces;
 using MediatR;
 
@@ -45,7 +46,20 @@ internal sealed class PublishArticleCommandHandler : IRequestHandler<PublishArti
             throw new GuardForbiddenException($"The user with id {currentUser.Id} is not author of this article");
         }
 
-        dbArticle.IsPublished = true;
+        if (currentUser.IsAdmin())
+        {
+            dbArticle.IsPublished = true;
+            dbArticle.IsDocumentation = true;
+        }
+        else if (currentUser.IsAuthor())
+        {
+            dbArticle.IsPublished = true;
+        }
+        else
+        {
+            dbArticle.IsShouldBeApproved = true;
+        }
+
         dbArticle.DateOfPublication = DateTimeOffset.UtcNow;
 
         await _unitOfWork.ArticleRepository.UpdateArticleAsync(dbArticle, cancellationToken);

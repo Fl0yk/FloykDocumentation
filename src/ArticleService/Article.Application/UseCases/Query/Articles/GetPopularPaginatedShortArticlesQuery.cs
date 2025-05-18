@@ -4,11 +4,13 @@ using MediatR;
 
 namespace Article.Application.UseCases.Query.Articles;
 
-public sealed class GetPaginatedByCategoryShortArticlesQuery : IRequest<PaginatedResult<ShortArticleDTO>>
+public sealed class GetPopularPaginatedShortArticlesQuery : IRequest<PaginatedResult<ShortArticleDTO>>
 {
-    public Guid CategoryId { get; init; }
-
     public int PageNo { get; init; }
 
     public int PageSize { get; init; }
+
+    public IEnumerable<Guid>? Categories { get; set; }
+
+    public bool? IsDocumentation { get; set; }
 }

@@ -3,11 +3,18 @@ using MediatR;
 
 namespace Article.Application.UseCases.Comand.Articles;
 
-public sealed class AppendBlockCommand : IRequest
+public class AppendBlockCommand : IRequest
 {
-    public string Text { get; init; } = null!;
+    public Guid ArticleId { get; set; }
 
-    public BlockType BlockType { get; init; }
+    public IEnumerable<BlockInfo> Blocks { get; set; } = null!;
+}
 
-    public Guid ArticleId { get; init; }
+public sealed class BlockInfo
+{
+    public Guid Id { get; set; }
+
+    public BlockType BlockType { get; set; }
+
+    public string Data { get; set; } = null!;
 }

@@ -10,6 +10,7 @@ public class UpdateArticleRequestToCommand : Profile
     public UpdateArticleRequestToCommand() 
     {
         CreateMap<UpdateArticleCommand, ArticleModel>()
-            .ForMember(d => d.Title, opt => opt.MapFrom(src => src.NewTitle));
+            .ForMember(d => d.Title, opt => opt.MapFrom(src => src.NewTitle))
+            .ForMember(d => d.ShortDescription, opt => opt.MapFrom(src => src.NewShortDescription));
     }
 }

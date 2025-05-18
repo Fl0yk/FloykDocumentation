@@ -9,7 +9,6 @@ public class PublishArticleDtoToCommand : Profile
     public PublishArticleDtoToCommand()
     {
         CreateMap<PublishArticleRequestDTO, PublishArticleCommand>()
-            .ForMember(d => d.ArticleId, opt => opt.MapFrom(src => src.ArticleId))
-            .ForMember(d => d.AuthorName, opt => opt.MapFrom(src => src.CurrentUserName));
+            .ForMember(d => d.ArticleId, opt => opt.MapFrom(src => src.ArticleId));
     }
 }

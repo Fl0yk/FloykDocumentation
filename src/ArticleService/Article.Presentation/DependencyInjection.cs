@@ -1,7 +1,9 @@
+using Article.Presentation.Managers;
 using Article.Presentation.Shared.Options.Setups;
 using Core.Api.Extensions;
 using Core.Api.Models.Options;
 using Core.Api.Providers.Implementations;
+using Core.Managers;
 using Core.Providers.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -25,6 +27,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddScoped<IBaseCurrentUserProvider, BaseCurrentUserProvider>();
+        services.AddScoped<IImageManager, ImageManager>();
 
         services.AddEndpointsApiExplorer();
         services.ConfigureSwaggerGen();
@@ -40,6 +43,7 @@ public static class DependencyInjection
     {
         // KEEP launchSettings.json and applicatoinSettings.json in sync
         services.ConfigureOptions<UrlsOptionSetup>();
+        services.ConfigureOptions<WWWRootOptionsSetup>();
 
         return services;
     }

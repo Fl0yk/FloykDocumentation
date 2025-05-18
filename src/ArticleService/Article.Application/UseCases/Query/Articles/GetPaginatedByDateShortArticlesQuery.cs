@@ -9,4 +9,8 @@ public sealed class GetPaginatedByDateShortArticlesQuery : IRequest<PaginatedRes
     public int PageNo { get; init; }
 
     public int PageSize { get; init; }
+
+    public IEnumerable<Guid>? Categories { get; set; }
+
+    public bool? IsDocumentation { get; set; }
 }

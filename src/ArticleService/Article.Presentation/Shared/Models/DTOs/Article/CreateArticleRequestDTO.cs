@@ -1,3 +1,3 @@
 ﻿namespace Article.Presentation.Shared.Models.DTOs.Article;
 
-public record class CreateArticleRequestDTO(string Title, Guid CategoryId);
+public record class CreateArticleRequestDTO(Guid Id, string Title, string ShortDescription, Guid CategoryId);

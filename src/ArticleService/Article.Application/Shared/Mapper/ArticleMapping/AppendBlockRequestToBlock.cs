@@ -8,8 +8,9 @@ public class AppendBlockRequestToBlock : Profile
 {
     public AppendBlockRequestToBlock()
     {
-        CreateMap<AppendBlockCommand, Block>()
-            .ForMember(d => d.Data, opt => opt.MapFrom(src => src.Text))
+        CreateMap<BlockInfo, Block>()
+            .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(d => d.Data, opt => opt.MapFrom(src => src.Data))
             .ForMember(d => d.Type, opt => opt.MapFrom(src => src.BlockType));
     }
 }

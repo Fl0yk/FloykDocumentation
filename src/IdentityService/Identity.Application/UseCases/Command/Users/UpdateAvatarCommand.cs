@@ -2,7 +2,7 @@
 
 namespace Identity.Application.UseCases.Command.Users;
 
-public sealed class UpdateAvatarCommand : IRequest
+public sealed class UpdateAvatarCommand : IRequest<string>
 {
     public string FileName { get; init; } = null!;
 

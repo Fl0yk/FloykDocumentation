@@ -198,6 +198,35 @@ namespace Article.Infrastructure.Migrations
                     b.HasIndex("IsDeleted", "Username");
 
                     b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ac2d055a-4d0f-41d2-90f9-88393f1b65e7"),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            NormalizedUsername = "ADMIN",
+                            PublicUsername = "Admin",
+                            Username = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("bb2d055a-4d0f-41d2-90f9-88393f1b65e7"),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            NormalizedUsername = "AUTHOR",
+                            PublicUsername = "Author",
+                            Username = "Author"
+                        },
+                        new
+                        {
+                            Id = new Guid("ff2d055a-4d0f-41d2-90f9-88393f1b65e7"),
+                            CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            NormalizedUsername = "FLOYK",
+                            PublicUsername = "Floyk",
+                            Username = "Floyk"
+                        });
                 });
 
             modelBuilder.Entity("Article.Domain.Entities.Category", b =>

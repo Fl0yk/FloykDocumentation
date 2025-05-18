@@ -11,7 +11,10 @@ public class ArticleToShortDTO : Profile
     {
         CreateMap<ArticleModel,  ShortArticleDTO>()
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(d => d.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
             .ForMember(d => d.IsPublished, opt => opt.MapFrom(src => src.IsPublished))
+            .ForMember(d => d.ShortDescription, opt => opt.MapFrom(src => src.ShortDescription))
+            .ForMember(d => d.IsDocumentation, opt => opt.MapFrom(src => src.IsDocumentation))
             .ForMember(d => d.IsShouldBeApproved, opt => opt.MapFrom(src => src.IsShouldBeApproved))
             .ForMember(d => d.DateOfPublication, opt => opt.MapFrom(src => src.DateOfPublication))
             .ForMember(d => d.AuthorId, opt => opt.MapFrom(src => src.AuthorId))

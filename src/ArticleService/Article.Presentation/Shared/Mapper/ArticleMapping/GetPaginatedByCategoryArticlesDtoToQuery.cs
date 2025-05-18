@@ -8,9 +8,10 @@ public class GetPaginatedByCategoryArticlesDtoToQuery : Profile
 {
     public GetPaginatedByCategoryArticlesDtoToQuery()
     {
-        CreateMap<GetPaginatedByCategoryArticlesRequestDTO, GetPaginatedByCategoryShortArticlesQuery>()
-            .ForMember(d => d.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
+        CreateMap<GetPopularPaginatedArticlesRequestDTO, GetPopularPaginatedShortArticlesQuery>()
+            .ForMember(d => d.Categories, opt => opt.MapFrom(src => src.Categories))
             .ForMember(d => d.PageNo, opt => opt.MapFrom(src => src.PageNo))
-            .ForMember(d => d.PageSize, opt => opt.MapFrom(src => src.PageSize));
+            .ForMember(d => d.PageSize, opt => opt.MapFrom(src => src.PageSize))
+            .ForMember(d => d.IsDocumentation, opt => opt.MapFrom(src => src.IsDocumentation));
     }
 }

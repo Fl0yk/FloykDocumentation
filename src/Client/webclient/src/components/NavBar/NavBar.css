@@ -177,3 +177,49 @@
     margin-bottom: 0.5rem;
   }
 }
+
+/* Добавьте в конец файла */
+.navbar-profile-link {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  color: #333;
+  text-decoration: none;
+}
+
+.navbar-user-icon {
+  width: 30px;
+  height: 30px;
+  transition: all 0.3s;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(7%) saturate(749%) hue-rotate(169deg) brightness(93%) contrast(88%);
+}
+
+.navbar-user-icon:hover {
+  filter: brightness(0) saturate(100%) invert(39%) sepia(99%) saturate(2475%) hue-rotate(202deg) brightness(101%) contrast(101%);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .navbar-user-icon {
+    width: 28px;
+    height: 28px;
+    margin: 0 auto;
+  }
+}
+
+.form-group textarea {
+  width: 95%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}

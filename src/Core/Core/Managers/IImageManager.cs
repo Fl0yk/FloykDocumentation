@@ -1,4 +1,4 @@
-﻿namespace Identity.Domain.Abstractions.Managers;
+﻿namespace Core.Managers;
 
 public interface IImageManager
 {

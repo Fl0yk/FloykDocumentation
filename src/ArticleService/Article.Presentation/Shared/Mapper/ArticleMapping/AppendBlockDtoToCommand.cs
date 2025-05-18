@@ -10,7 +10,6 @@ public class AppendBlockDtoToCommand : Profile
     {
         CreateMap<AppendBlockRequestDTO, AppendBlockCommand>()
             .ForMember(d => d.ArticleId, opt => opt.MapFrom(src => src.ArticleId))
-            .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Text))
-            .ForMember(d => d.BlockType, opt => opt.MapFrom(src => src.BlockType));
+            .ForMember(d => d.Blocks,opt => opt.Ignore());
     }
 }

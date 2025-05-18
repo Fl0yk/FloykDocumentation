@@ -4,14 +4,12 @@ using FluentValidation;
 namespace Article.Presentation.Shared.Validators.Article;
 
 public class GetPaginatedByCategoryArticlesRequestDTOValidator 
-    : AbstractValidator<GetPaginatedByCategoryArticlesRequestDTO>
+    : AbstractValidator<GetPopularPaginatedArticlesRequestDTO>
 {
     public GetPaginatedByCategoryArticlesRequestDTOValidator()
     {
         RuleFor(r => r.PageNo).GreaterThan(0);
 
         RuleFor(r => r.PageSize).GreaterThan(0);
-
-        RuleFor(r => r.CategoryId).NotEmpty();
     }
 }

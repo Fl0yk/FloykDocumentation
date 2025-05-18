@@ -33,85 +33,239 @@ public class ArticleRepository : IArticleRepository
     {
         FilterDefinition<ArticleDb> idFilter = Builders<ArticleDb>.Filter.Eq(article => article.Id, article.Id);
 
-        return _articles.DeleteOneAsync(idFilter, cancellationToken: cancellationToken);
+        UpdateDefinition<ArticleDb> updateDefinition = Builders<ArticleDb>.Update
+                                                                            .Set(a => a.IsDeleted, true)
+                                                                            .Set(a => a.DeletedAt, DateTimeOffset.UtcNow);
+
+        return _articles.UpdateOneAsync(idFilter, updateDefinition, cancellationToken: cancellationToken);
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetShouldBeApprovedArticlesAsync(CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> shulBeApprovedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsShouldBeApproved, true);
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
+        ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
+        SortDefinition<ArticleDb> sortDefinition = Builders<ArticleDb>.Sort.Ascending(article => article.CreatedAt);
+
+        var dbArticles = await _articles
+                                .Find(isDeletedFilter & shulBeApprovedFilter)
+                                .Project(shortProjection)
+                                .Sort(sortDefinition)
+                                .ToListAsync(cancellationToken);
+
+        return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
     }
 
     public async Task<ArticleModel?> GetArticleByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         FilterDefinition<ArticleDb> idFilter = Builders<ArticleDb>.Filter.Eq(article => article.Id, id);
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
 
-        var dbArticle = await _articles.Find(idFilter).FirstOrDefaultAsync(cancellationToken);
+        var dbArticle = await _articles.Find(isDeletedFilter & idFilter).FirstOrDefaultAsync(cancellationToken);
 
         return _mapper.Map<ArticleModel>(dbArticle);
     }
 
-    public async Task<long> CountAsync(CancellationToken cancellationToken = default)
+    public async Task<long> CountAsync(bool? isDocumentation, CancellationToken cancellationToken = default)
     {
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
         FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
 
-        return await _articles.CountDocumentsAsync(isPublishedFilter, cancellationToken: cancellationToken);
+        if (isDocumentation is null)
+        {
+            return await _articles.CountDocumentsAsync(isDeletedFilter & isPublishedFilter, cancellationToken: cancellationToken);
+        }
+        else
+        {
+            FilterDefinition<ArticleDb> isDocumentFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDocumentation, isDocumentation);
+
+            return await _articles.CountDocumentsAsync(isDeletedFilter & isPublishedFilter & isDocumentFilter, cancellationToken: cancellationToken);
+        }
     }
 
-    public async Task<long> CountByCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    public async Task<long> CountByCategoryAsync(IEnumerable<Guid> categoriesId, bool? isDocumentation, CancellationToken cancellationToken = default)
     {
-        FilterDefinition<ArticleDb> categoryFilter = Builders<ArticleDb>.Filter.Eq(article => article.CategoryId, categoryId);
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false); 
+        FilterDefinition<ArticleDb> categoriesFilter = Builders<ArticleDb>.Filter.In(a => a.CategoryId, categoriesId);
+        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
 
-        return await _articles.CountDocumentsAsync(categoryFilter, cancellationToken: cancellationToken);
+        if (isDocumentation is null)
+        {
+            return await _articles.CountDocumentsAsync(isDeletedFilter & isPublishedFilter & categoriesFilter, cancellationToken: cancellationToken);
+        }
+        else
+        {
+            FilterDefinition<ArticleDb> isDocumentFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDocumentation, isDocumentation);
+
+            return await _articles.CountDocumentsAsync(isDeletedFilter & isPublishedFilter & isDocumentFilter & categoriesFilter, cancellationToken: cancellationToken);
+        }
     }
 
     public async Task<long> CountByAuthorAsync(Guid authorId, CancellationToken cancellationToken = default)
     {
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
         FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorId, authorId);
 
-        return await _articles.CountDocumentsAsync(authorFilter, cancellationToken: cancellationToken);
+        return await _articles.CountDocumentsAsync(isDeletedFilter & authorFilter, cancellationToken: cancellationToken);
     }
 
     public async Task<IEnumerable<ArticleModel>> GetPaginatedByAuthorWithoutBlocksArticlesAsync(Guid authorId, int pageNo, int pageSize, CancellationToken cancellationToken = default)
     {
         FilterDefinition<ArticleDb> authorFilter = Builders<ArticleDb>.Filter.Eq(article => article.AuthorId, authorId);
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
         ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
+        SortDefinition<ArticleDb> sortDefinition = Builders<ArticleDb>.Sort.Descending(article => article.CreatedAt);
 
         var dbArticles = await _articles
-                            .Find(authorFilter)
-                            .Project(shortProjection)
-                            .Skip((pageNo - 1) * pageSize)
-                            .Limit(pageSize)
-                            .ToListAsync(cancellationToken);
+                                .Find(isDeletedFilter & authorFilter)
+                                .Project(shortProjection)
+                                .Sort(sortDefinition)
+                                .Skip((pageNo - 1) * pageSize)
+                                .Limit(pageSize)
+                                .ToListAsync(cancellationToken);
 
         return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
     }
 
-    public async Task<IEnumerable<ArticleModel>> GetPaginatedByCategoryWithoutBlocksArticlesAsync(Guid categoryId, int pageNo, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ArticleModel>> GetPopularPaginatedWithoutBlocksArticlesAsync(int pageNo, int pageSize, bool? isDocumentation, CancellationToken cancellationToken = default)
     {
-        FilterDefinition<ArticleDb> categoryFilter = Builders<ArticleDb>.Filter.Eq(article => article.CategoryId, categoryId);
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
+        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
+        ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
+        SortDefinition<ArticleDb> sortDefinition = Builders<ArticleDb>.Sort.Descending(article => article.VisitCount);
+
+        if (isDocumentation is null)
+        {
+            var dbArticles = await _articles
+                                .Find(isDeletedFilter & isPublishedFilter)
+                                .Project(shortProjection)
+                                .Sort(sortDefinition)
+                                .Skip((pageNo - 1) * pageSize)
+                                .Limit(pageSize)
+                                .ToListAsync(cancellationToken);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+        else
+        {
+            FilterDefinition<ArticleDb> isDocumentFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDocumentation, isDocumentation);
+            var dbArticles = await _articles
+                                .Find(isDeletedFilter & isPublishedFilter & isDocumentFilter)
+                                .Project(shortProjection)
+                                .Sort(sortDefinition)
+                                .Skip((pageNo - 1) * pageSize)
+                                .Limit(pageSize)
+                                .ToListAsync(cancellationToken);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetPopularPaginatedWithoutBlocksArticlesAsync(int pageNo, int pageSize, IEnumerable<Guid> categories, bool? isDocumentation, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
+        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
+        FilterDefinition<ArticleDb> categoriesFilter = Builders<ArticleDb>.Filter.In(a => a.CategoryId, categories);
+        SortDefinition<ArticleDb> sortDefinition = Builders<ArticleDb>.Sort.Descending(article => article.VisitCount);
+        ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
+
+        if (isDocumentation is null)
+        {
+            var dbArticles = await _articles
+                                .Find(isDeletedFilter & categoriesFilter & isPublishedFilter)
+                                .Project(shortProjection)
+                                .Sort(sortDefinition)
+                                .Skip((pageNo - 1) * pageSize)
+                                .Limit(pageSize)
+                                .ToListAsync(cancellationToken);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+        else
+        {
+            FilterDefinition<ArticleDb> isDocumentFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDocumentation, isDocumentation);
+
+            var dbArticles = await _articles
+                                .Find(isDeletedFilter & categoriesFilter & isPublishedFilter & isDocumentFilter)
+                                .Project(shortProjection)
+                                .Sort(sortDefinition)
+                                .Skip((pageNo - 1) * pageSize)
+                                .Limit(pageSize)
+                                .ToListAsync(cancellationToken);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticlesAsync(int pageNo, int pageSize, bool? isDocumentation, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
+        SortDefinition<ArticleDb> sortByDateDefinition = Builders<ArticleDb>.Sort.Descending(article => article.DateOfPublication);
         FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
         ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
 
-        var dbArticles = await _articles
-                            .Find(categoryFilter & isPublishedFilter)
+        if (isDocumentation is null)
+        { 
+            var dbArticles = await _articles
+                            .Find(isDeletedFilter & isPublishedFilter)
                             .Project(shortProjection)
+                            .Sort(sortByDateDefinition)
                             .Skip((pageNo - 1) * pageSize)
                             .Limit(pageSize)
                             .ToListAsync(cancellationToken);
 
-        return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
-    }
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+        else
+        {
+            FilterDefinition<ArticleDb> isDocumentFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDocumentation, isDocumentation);
 
-    public async Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticlesAsync(int pageNo, int pageSize, CancellationToken cancellationToken = default)
-    {
-        SortDefinition<ArticleDb> sortByDateDefinition = Builders<ArticleDb>.Sort.Ascending(article => article.DateOfPublication);
-        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
-        ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
-
-        var dbArticles = await _articles
-                        .Find(isPublishedFilter)
+            var dbArticles = await _articles
+                        .Find(isDeletedFilter & isPublishedFilter & isDocumentFilter)
                         .Project(shortProjection)
                         .Sort(sortByDateDefinition)
                         .Skip((pageNo - 1) * pageSize)
                         .Limit(pageSize)
                         .ToListAsync(cancellationToken);
 
-        return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+    }
+
+    public async Task<IEnumerable<ArticleModel>> GetPaginatedByDateWithoutBlocksArticlesAsync(int pageNo, int pageSize, IEnumerable<Guid> categoriesId, bool? isDocumentation, CancellationToken cancellationToken = default)
+    {
+        FilterDefinition<ArticleDb> isDeletedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDeleted, false);
+        SortDefinition<ArticleDb> sortByDateDefinition = Builders<ArticleDb>.Sort.Descending(article => article.DateOfPublication);
+        FilterDefinition<ArticleDb> isPublishedFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsPublished, true);
+        FilterDefinition<ArticleDb> categoriesFilter = Builders<ArticleDb>.Filter.In(a => a.CategoryId, categoriesId);
+        ProjectionDefinition<ArticleDb, ArticleDb> shortProjection = Builders<ArticleDb>.Projection.Exclude(article => article.Blocks);
+
+        if (isDocumentation is null)
+        {
+            var dbArticles = await _articles
+                            .Find(isDeletedFilter & categoriesFilter & isPublishedFilter)
+                            .Project(shortProjection)
+                            .Sort(sortByDateDefinition)
+                            .Skip((pageNo - 1) * pageSize)
+                            .Limit(pageSize)
+                            .ToListAsync(cancellationToken);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
+        else
+        {
+            FilterDefinition<ArticleDb> isDocumentFilter = Builders<ArticleDb>.Filter.Eq(article => article.IsDocumentation, isDocumentation);
+
+            var dbArticles = await _articles
+                            .Find(isDeletedFilter & categoriesFilter & isPublishedFilter & isDocumentFilter)
+                            .Project(shortProjection)
+                            .Sort(sortByDateDefinition)
+                            .Skip((pageNo - 1) * pageSize)
+                            .Limit(pageSize)
+                            .ToListAsync(cancellationToken);
+
+            return _mapper.Map<IEnumerable<ArticleModel>>(dbArticles);
+        }
     }
 
     public Task UpdateArticleAsync(ArticleModel article, CancellationToken cancellationToken = default)
@@ -123,10 +277,14 @@ public class ArticleRepository : IArticleRepository
                                                                             .Set(a => a.Title, dbArticle.Title)
                                                                             .Set(a => a.AuthorId, dbArticle.AuthorId)
                                                                             .Set(a => a.CategoryId, dbArticle.CategoryId)
+                                                                            .Set(a => a.VisitCount, dbArticle.VisitCount)
+                                                                            .Set(a => a.IsDocumentation, dbArticle.IsDocumentation)
                                                                             .Set(a => a.Blocks, dbArticle.Blocks)
                                                                             .Set(a => a.IsPublished, dbArticle.IsPublished)
                                                                             .Set(a => a.IsShouldBeApproved, dbArticle.IsShouldBeApproved)
-                                                                            .Set(a => a.DateOfPublication, dbArticle.DateOfPublication);
+                                                                            .Set(a => a.ShortDescription, dbArticle.ShortDescription)
+                                                                            .Set(a => a.DateOfPublication, dbArticle.DateOfPublication)
+                                                                            .Set(a => a.UpdatedAt, DateTimeOffset.UtcNow);
 
         return _articles.UpdateOneAsync(idFilter, updateDefinition, cancellationToken: cancellationToken);
     }

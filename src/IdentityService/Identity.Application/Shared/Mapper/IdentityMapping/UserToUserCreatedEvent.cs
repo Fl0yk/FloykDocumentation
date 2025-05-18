@@ -11,7 +11,7 @@ public sealed class UserToUserCreatedEvent : Profile
         CreateMap<User, UserCreatedEvent>()
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(d => d.Username, opt => opt.MapFrom(src => src.UserName))
-            .ForMember(d => d.NormalizedUsername, opt => opt.MapFrom(src => src.NormalizedEmail))
+            .ForMember(d => d.NormalizedUsername, opt => opt.MapFrom(src => src.NormalizedUserName))
             .ForMember(d => d.PublicUsername, opt => opt.MapFrom(src => src.UserName));
     }
 }

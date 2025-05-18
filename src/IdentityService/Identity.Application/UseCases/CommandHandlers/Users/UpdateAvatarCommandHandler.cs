@@ -1,4 +1,5 @@
 ﻿using Core.Exceptions;
+using Core.Managers;
 using Core.Providers.Interfaces;
 using Identity.Application.UseCases.Command.Users;
 using Identity.Domain.Abstractions.Managers;
@@ -8,7 +9,7 @@ using MediatR;
 
 namespace Identity.Application.UseCases.CommandHandlers.Users;
 
-internal sealed class UpdateAvatarCommandHandler : IRequestHandler<UpdateAvatarCommand>
+internal sealed class UpdateAvatarCommandHandler : IRequestHandler<UpdateAvatarCommand, string>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IImageManager _imageManager;
@@ -27,7 +28,7 @@ internal sealed class UpdateAvatarCommandHandler : IRequestHandler<UpdateAvatarC
         _transactionProvider = transactionProvider;
     }
 
-    public async Task Handle(UpdateAvatarCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(UpdateAvatarCommand request, CancellationToken cancellationToken)
     {
         await _transactionProvider.OpenTransaction(cancellationToken);
 
@@ -52,5 +53,7 @@ internal sealed class UpdateAvatarCommandHandler : IRequestHandler<UpdateAvatarC
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _transactionProvider.Commit(cancellationToken);
+
+        return imagePath;
     }
 }
